@@ -1,3 +1,7 @@
+**DML(Data Manipulation Language)**数据操纵语言，对数据库中的数据进行一些简单操作，如insert、delete、update、select等。DML操作是可以手动控制事务的开启、提交和回滚的。
+
+**DDL(Data Definition Language)**数据定义语言，对数据库中的某些对象(例如database、table)进行管理，如create、alter和drop。DDL操作是隐性提交的，不能rollback。
+
 
 
 ##  1.数据库分类
@@ -121,10 +125,14 @@ update student set name="江江",age=12;#修改全部数据
 #条件删除，删除的是符合条件的全部数据。
 delete from student where age=13;
 #全部删除
-delete from student;
-#注意：一定要带where条件，不然就是删库路   （默认值不清空）
-truncate student;#删除的是表里的所有内容，（默认值也会清空），但还保留着表的结构
-drop table 表名;#就什么都一起删了
+delete from student; #可以使用where，会触发触发器，需要扫描表中的每一行然后根据条件删，删除内容。不删结构 ， 是DML类型语句支持事务回滚和提交， 不释放空间
+#注意：一定要带where条件，不然就是删库路
+
+truncate student;#删除内容。不删结构，不会触发触发器，更快，不能使用where，是DDL类型语句不支持事务回滚和提交 ， 会释放空间
+
+truncate删除数据后重新写数据会从1开始，而delete删除数据后只会从删除前的最后一行续写；内存空间上，truncate省空间
+
+drop table 表名;#结构内容一起删，不触发触发器，不能使用where，是DDL类型语句不支持事务回滚和提交
 
 #like 的使用， 一个'_'代表一个字符， '%'代表任意数目个字符
 #例如：查询姓名为四个字的员工

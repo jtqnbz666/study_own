@@ -1,11 +1,3 @@
-在ip层会分片，为什么还需要在tcp层先分一次？
-
-~~~
-mss是对于tcp层的，mtu是对于ip层的， 如果tcp不分片，假设发送一个很大的数据， 那么如果ip层分片的过程中丢包了，这整个大数据都要重发， 而如果tcp层就分片了，只需要重发丢失的那部分
-~~~
-
-
-
 OSI七层模型、四层模型，其实他们的区分标准在于OSI七层模型是理论上的分层方式，而四层模型是实践过程中的分层模型。
 
 ![](C:\Users\ASUS\Pictures\博客图片\QQ图片20230204225337.png)
@@ -158,6 +150,4 @@ SO_REUSEPORT： i
 grpc 用了protobuf(把IM协议中的message 换成 service)， 功能实现简单，不用自定义协议，不用封装，它都做好了
 
 ![1670589280064](C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\1670589280064.png)
-
-
 

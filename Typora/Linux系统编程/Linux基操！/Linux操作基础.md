@@ -1,3 +1,15 @@
+scp命令
+
+~~~
+scp * -r ubuntu@49.234.61.220:/home/ubuntu
+~~~
+
+
+
+
+
+查看ubuntu版本  cat /etc/issue
+
 静态库编译：
 
 ~~~c
