@@ -11,7 +11,7 @@ for int i = 0; i < 10; i ++ {
     
 }
 //遍历数组类型
-for k, v := range arrar {
+for k, v := range array {
     //k表示索引下表，v是对应的值
 }
 
@@ -35,6 +35,11 @@ for i in "$@" //可以不加""
 do
 	echo "$cnt:$i"
 	((cnt++))
+done
+
+for loop in 1 2 3 4 5
+do
+	echo "the value is: ${loop}"
 done
 
 //遍历普通类型
@@ -164,8 +169,6 @@ for row, v := range a {
     }
 }
 ~~~
-
-
 
 
 

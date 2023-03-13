@@ -35,3 +35,40 @@ netstat -an | grep ESTABLISHED | awk '{print $5}' | cut -d ":" -f1 | sort -n | u
 
 
 ps -aux | wc -l  统计进程数量
+
+
+
+awk
+
+~~~shell
+test.txt内容, 124为空行
+1  
+2
+3  ilovehh
+4
+5  you support
+
+打印test.txt文件内容的每一行的最后一个字符串，如果只有一个字符串，那么就直接打印出来
+awk '{print $NF}' test.txt # ${NF-1}则是倒数第二个
+#ilovehh 
+#support
+
+输出每行数据的列数 
+awk '{print NF}' # 0 0 1 0 3 每行一个数字
+
+输出每行数据的行号
+awk '{print NR}' # 1 2 3 4 5 每行一个数字
+
+打印每行全部内容 
+awk '{print $0}' #'{print $1}'每行第一列内容
+
+定义变量
+awk -v x="jt" -v y=666 '{print x, y}'
+
+
+常用命令
+cat test.txt | awk 'NF%2==0' #过滤掉奇数行
+
+
+~~~
+
