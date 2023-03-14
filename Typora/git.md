@@ -25,7 +25,7 @@ watch -n 0.5 tree  监视tree命令，每0.5秒刷新一下
 **常用命令**：
 
 ~~~
- git add , git commit -m "test" , git push
+git add , git commit -m "test" , git push
 
 git status 看到文件状态
 

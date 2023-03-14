@@ -1,4 +1,6 @@
-**电脑装不上powershell  就换成 windows terminal** 
+查看ubuntu版本  cat /etc/issue
+
+电脑装不上powershell  就换成 windows terminal** 
 
 ## 远程连接密钥
 
