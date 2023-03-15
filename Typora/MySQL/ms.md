@@ -66,7 +66,7 @@ innoDB提供了innodb_autoinc_lock_mode 系统变量，用它决定用AUTO-INC�
 |                                   | create table t2 like t                |
 | insert into t2 values(null, 5, 5) | insert into t2(c,d) select c,d from t |
 
-两个事务同时开启，可能出现insert into t2 values(null, 5, 5)在insert into t2(c,d) select c,d from t进行到id为2时执行，那么本应该主键id为5的数据申请了自增id3，就变到了主键为3， 本该是主键id 为3 和 4 的数据推后去申请自增id，就变成了 4， 5，但binlog并不会知道这些，最终如下图
+两个事务同时开启，可能出现insert into t2 values(null, 5, 5)在insert into t2(c,d) select c,d from t进行到id为2时执行，那么本应该主键id为5的数据申请了自增id3，就变到了主键为3， 本该是主键id 为 3 和 4 的数据推后去申请自增id，就变成了 4， 5，但binlog并不会知道这些，最终如下图
 
 **在从库中：**
 
@@ -208,7 +208,7 @@ B树对于B+树的优点：
 crash-safe: 保证即使数据库发生异常重启，之前提交的记录都不会丢失
 
 redo log 是 InnoDB 引擎特有的；binlog 是 Server 层实现的，所有引擎都可以使用。
-redo log 是**物理日志**，记录的是“在某个数据页上做了什么修改”；binlog 是**逻辑日志**，记录的是这个语句的原始逻辑，比如“给 id=2 这一行的 c 字段加 1 ”但是是以二进制的方式保存的。
+redo log 是**物理日志**，记录的是“在某个数据页上做了什么修改”；binlog 是**逻辑日志**，记录的是这个语句的原始逻辑(前提是statement模式，raw模式则不是)，比如“给 id=2 这一行的 c 字段加 1 ”但是是以二进制的方式保存的。
 redo log 是循环写的，空间固定会用完；binlog 是可以追加写。“追加写”是指 binlog 文件写到一定大小后会切换到下一个，并不会覆盖以前的日志。
 
 **binlog作用**：
@@ -226,7 +226,7 @@ redo log 是循环写的，空间固定会用完；binlog 是可以追加写。�
 
 我们在事务进行中时，会有一个redologbuffer， 会记录我们事务执行过程中的操作，如果commit提交，就会调用write写，这里的写不是真正的刷到磁盘上，而是刷到redolog文件在内核缓冲区保留的缓存(也就是cache page 页缓存上)，再在合适的时机刷到磁盘上。
 
-对于binlog也是一样的有binlog的缓存(每个线程对应一个binlog cache,作用跟redolog一样，但redologbufs只有一个)，当事务提交后(commit)，调用write写，这里的写不是真正的刷到磁盘上，同样是刷到binlog文件在内核缓冲区保留的缓存，合适的时机刷到磁盘上。
+对于binlog也是一样的有binlog的缓存(每个线程对应一个binlog cache,作用跟redolog一样，但redologbuf只有一个)，当事务提交后(commit)，调用write写，这里的写不是真正的刷到磁盘上，同样是刷到binlog文件在内核缓冲区保留的缓存，合适的时机刷到磁盘上。
 
 这里需要注意，为什么每次write是写到redolog或binlog在内核缓冲区的缓存上， 因为如果直接与磁盘上的redolog和binlog操作开销太大，并且事务不一定会提交。他们两个都是在事务提交的时候才调用write。
 
