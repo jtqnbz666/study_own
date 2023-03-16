@@ -73,3 +73,10 @@ git log  查看提交情况， 使用 git reset --hard " hash值" 去到某一�
 
 ~~~
 
+### 当在其他地方提交push， 发生冲突
+
+直接git pull 可能覆盖代码
+
+git stash -> git pull -> git stash pop -> git add. -> git commit -m "" -> git push
+
+如果过程中出现了no branch问题， 说明你在匿名分支下，解决完冲突后， git rebase --continue,  再次重新add. commit push

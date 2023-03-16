@@ -2,9 +2,11 @@ DHCP:八种报文类型，主要掌握四种，discover， offer，request，ack
 
 
 
-ICMP(Internet Control Message Protrol：，翻译过来就是互联网控制信息报文协议，因为它提供了多种类型码，对于在网络上传输出现的错误进行了分类，主要是两大类型， 查询报文类型(ping是其中一中)，和 差错报文类型(transroute(linux)是其中一种)， 通过返回类型我们就能判断一个包是怎么si的，
+ICMP(Internet Control Message Protrol：，翻译过来就是互联网控制信息报文协议，因为它提供了多种类型码，对于在网络上传输出现的错误进行了分类，主要是两大类型， 查询报文类型(ping是其中一中)，和 差错报文类型(transroute(linux)是其中一种，但transroute(windows)不是)， 通过返回类型我们就能判断一个包是怎么si的，
 
 对于transroute(linux)和 trancert(windows)都是刚开始都是把TTL设置成1， 然后通过返回错误，不断增加ttl的值，在这个过程中会记录路由经过的每一个路由的信息(往返时间等)，有一点不同的是tracert是向目标地址发出ICMP请求回显数据包，而traceroute是向目的地址的某个端口(>30000) 发送UDP数据包， 它们的返回结果是不同的，tracert是能够接收到对方的回显的，属于查询类型，而traceroute完全只是为了获取到达目的地的途径，属于差错类型
+
+transroute有三种类型，基于UDP(Linux下默认的)，基于ICMP(windows默认，也就是transcert命令) 和 基于TCP的， 基于UDP和基于ICMP的很像，区别在于发出去的接收的包不同，对于UDP向外发送的是一个UDP数据包，收到的是一个ICMP Destination Unreachable(端口不可达，因为30000以上的端口一般都是不存在的)， 对于ICMP向外发送的是一个发送的是一个ICMP Echo Request， 收到的是一个ICMP Echo Reply， transroute的基于ICMP的这种windows默认方法和ping有有点像，发送和接收的都是同一种类型
 
 ICMP是网络层的，但它依赖于IP协议，ICMP是被封装在IP包里面的， 被ping的对象收到这个包之后也会生成一个ICMP包，对应的ICMP类型字段为0(主动请求的应答)， 序列号设置为发送方发过来的序列号，当我们收到结果的时候用现在的时间减去发送时的时间也就得到了RTT(往返时间)，还能够得到TTL的值(比如ping百度的时候是56，一开始这个值默认是64,说明跳转了8个路由就找到目的地了)，在规定时间内，若没有收到ICMP的应答，则说明目标主机不可达，同时用当前时刻减去发送时刻就是ICMP数据包的延时
 
