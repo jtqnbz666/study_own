@@ -37,7 +37,7 @@ git branch 查看当前分支，git branch -a 查看所有分支， git branch t
 
 但由于现在远程仓库还没有test分支，所以需要把这个test分支同步到远程上
 
-git push original test 即可在远程建立test分支
+git push origin test 即可在远程建立test分支
 ~~~
 
 

@@ -1,0 +1,29 @@
+{
+	"folders": [
+		{
+			"path": "..\\..\\..\\..\\..\\Cjob\\vsCode"
+		},
+		{
+			"path": "..\\..\\..\\..\\..\\Cjob\\redis-unstable"
+		},
+		{
+			"path": "..\\.."
+		},
+		{
+			"path": "..\\..\\..\\..\\..\\Cjob\\win\\15.3Skynet重要组件以及手撕游戏项目\\test-lua"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"exception": "c",
+			"iosfwd": "c",
+			"xlocale": "c",
+			"xlocinfo": "c",
+			"chrono": "c",
+			"future": "c",
+			"memory": "c",
+			"system_error": "c",
+			"xmemory": "c"
+		}
+	}
+}

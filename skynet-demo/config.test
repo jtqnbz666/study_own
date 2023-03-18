@@ -1,0 +1,10 @@
+thread=8 --工作线程数目
+logger=nil
+harbor=0
+root="./"
+start="main" -- 启动第一个服务 
+lua_path="./skynet/lualib/?.lua;".."./skynet/lualib/?/init.lua;".."./lualib/?.lua;"
+luaservice = "./skynet/service/?.lua;".."./test/?.lua;"
+lualoader = "./skynet/lualib/loader.lua"
+cpath = "./skynet/cservice/?.so;".."cservice/?.so;"
+lua_cpath = "./skynet/luaclib/?.so;".."./luaclib/?.so;".."./lualib-src/luafilesystem/src/?.so"
