@@ -1,0 +1,188 @@
+2023-02-12 11:30:05,092 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=7
+2023-02-12 11:30:05,107 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=8
+2023-02-12 11:30:05,107 [INFO  IM] - <RouteConn.cpp>|<137>|<_HandleOnlineUserInfo>,HandleOnlineUserInfo, user_cnt=0
+2023-02-12 11:34:42,130 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=7
+2023-02-12 11:34:42,131 [INFO  IM] - <RouteConn.cpp>|<137>|<_HandleOnlineUserInfo>,HandleOnlineUserInfo, user_cnt=0
+2023-02-12 11:34:42,147 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=8
+2023-02-12 11:37:56,743 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=1, uid=2, client_type=1
+2023-02-12 11:37:56,794 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2023-02-12 11:37:56,811 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2023-02-12 11:37:56,877 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-12 11:37:56,889 [INFO  IM] - <DBPool.cpp>|<190>|<ExecuteQuery>,mysql_real_query failed Duplicate entry '2' for key 'IMUser_State.PRIMARY', sql : insert into IMUser_State values(2,1)
+2023-02-12 11:37:56,891 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-12 11:37:57,260 [INFO  IM] - <RouteConn.cpp>|<238>|<_HandleUsersStatusRequest>,HandleUserStatusReq, req_id=2, query_count=4
+2023-02-12 11:37:57,269 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : unread, list size:2
+2023-02-12 11:37:57,271 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : group_set, list size:2
+2023-02-12 11:37:57,274 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : token, list size:2
+2023-02-12 11:37:57,276 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : sync, list size:2
+2023-02-12 11:37:57,279 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : group_member, list size:2
+2023-02-12 11:37:57,282 [INFO  IM] - <RouteConn.cpp>|<238>|<_HandleUsersStatusRequest>,HandleUserStatusReq, req_id=2, query_count=4
+2023-02-12 11:38:05,023 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=1, uid=1, client_type=1
+2023-02-12 11:38:05,031 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-12 11:38:05,033 [INFO  IM] - <DBPool.cpp>|<190>|<ExecuteQuery>,mysql_real_query failed Duplicate entry '1' for key 'IMUser_State.PRIMARY', sql : insert into IMUser_State values(1,1)
+2023-02-12 11:38:05,033 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-12 11:38:05,199 [INFO  IM] - <RouteConn.cpp>|<238>|<_HandleUsersStatusRequest>,HandleUserStatusReq, req_id=1, query_count=5
+2023-02-12 11:38:05,217 [INFO  IM] - <RouteConn.cpp>|<238>|<_HandleUsersStatusRequest>,HandleUserStatusReq, req_id=1, query_count=5
+2023-02-12 11:57:55,212 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=2, uid=2, client_type=1
+2023-02-12 11:57:55,330 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-12 11:58:05,297 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=2, uid=1, client_type=1
+2023-02-12 11:58:05,322 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-13 07:58:05,362 [INFO  IM] - <RouteConn.cpp>|<92>|<OnTimer>,message server timeout
+2023-02-13 07:58:06,241 [INFO  IM] - <RouteConn.cpp>|<92>|<OnTimer>,message server timeout
+2023-02-13 07:58:06,596 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=7
+2023-02-13 07:58:06,847 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=8
+2023-02-13 07:58:06,854 [INFO  IM] - <RouteConn.cpp>|<137>|<_HandleOnlineUserInfo>,HandleOnlineUserInfo, user_cnt=0
+2023-02-13 08:26:08,924 [INFO  IM] - <RouteConn.cpp>|<92>|<OnTimer>,message server timeout
+2023-02-13 08:26:09,033 [INFO  IM] - <RouteConn.cpp>|<77>|<OnClose>,MsgServer onclose: handle=7
+2023-02-13 08:26:09,373 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=7
+2023-02-13 08:26:09,381 [INFO  IM] - <RouteConn.cpp>|<137>|<_HandleOnlineUserInfo>,HandleOnlineUserInfo, user_cnt=0
+2023-02-13 08:26:09,381 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=8
+2023-02-15 21:46:48,922 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=7
+2023-02-15 21:46:48,923 [INFO  IM] - <RouteConn.cpp>|<137>|<_HandleOnlineUserInfo>,HandleOnlineUserInfo, user_cnt=0
+2023-02-15 21:46:48,969 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=8
+2023-02-15 21:47:15,817 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=7
+2023-02-15 21:47:15,818 [INFO  IM] - <RouteConn.cpp>|<137>|<_HandleOnlineUserInfo>,HandleOnlineUserInfo, user_cnt=0
+2023-02-15 21:47:15,835 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=8
+2023-02-15 21:48:15,630 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=7
+2023-02-15 21:48:15,630 [INFO  IM] - <RouteConn.cpp>|<137>|<_HandleOnlineUserInfo>,HandleOnlineUserInfo, user_cnt=0
+2023-02-15 21:48:15,663 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=8
+2023-02-15 21:48:26,801 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=1, uid=1, client_type=1
+2023-02-15 21:48:26,819 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2023-02-15 21:48:26,836 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2023-02-15 21:48:26,849 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-15 21:48:26,851 [INFO  IM] - <DBPool.cpp>|<190>|<ExecuteQuery>,mysql_real_query failed Duplicate entry '1' for key 'IMUser_State.PRIMARY', sql : insert into IMUser_State values(1,1)
+2023-02-15 21:48:26,851 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-15 21:48:27,103 [INFO  IM] - <RouteConn.cpp>|<238>|<_HandleUsersStatusRequest>,HandleUserStatusReq, req_id=1, query_count=1
+2023-02-15 21:48:27,104 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : unread, list size:2
+2023-02-15 21:48:27,104 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : group_set, list size:2
+2023-02-15 21:48:27,105 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : token, list size:2
+2023-02-15 21:48:27,105 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : sync, list size:2
+2023-02-15 21:48:27,105 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : group_member, list size:2
+2023-02-15 21:48:27,542 [INFO  IM] - <RouteConn.cpp>|<238>|<_HandleUsersStatusRequest>,HandleUserStatusReq, req_id=1, query_count=5
+2023-02-15 21:48:46,931 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=1, uid=2, client_type=1
+2023-02-15 21:48:46,937 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-15 21:48:46,938 [INFO  IM] - <DBPool.cpp>|<190>|<ExecuteQuery>,mysql_real_query failed Duplicate entry '2' for key 'IMUser_State.PRIMARY', sql : insert into IMUser_State values(2,1)
+2023-02-15 21:48:46,939 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-15 21:48:47,002 [INFO  IM] - <RouteConn.cpp>|<238>|<_HandleUsersStatusRequest>,HandleUserStatusReq, req_id=2, query_count=1
+2023-02-15 21:48:47,055 [INFO  IM] - <RouteConn.cpp>|<238>|<_HandleUsersStatusRequest>,HandleUserStatusReq, req_id=2, query_count=4
+2023-02-15 22:18:48,204 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=2, uid=2, client_type=1
+2023-02-15 22:18:48,234 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-15 22:18:55,020 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=1, uid=2, client_type=1
+2023-02-15 22:18:55,032 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-15 22:18:55,042 [INFO  IM] - <DBPool.cpp>|<190>|<ExecuteQuery>,mysql_real_query failed Duplicate entry '2' for key 'IMUser_State.PRIMARY', sql : insert into IMUser_State values(2,1)
+2023-02-15 22:18:55,043 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-15 22:18:55,057 [INFO  IM] - <RouteConn.cpp>|<238>|<_HandleUsersStatusRequest>,HandleUserStatusReq, req_id=2, query_count=1
+2023-02-15 22:18:55,203 [INFO  IM] - <RouteConn.cpp>|<238>|<_HandleUsersStatusRequest>,HandleUserStatusReq, req_id=2, query_count=4
+2023-02-15 22:18:59,307 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=1, uid=1, client_type=1
+2023-02-15 22:18:59,311 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-15 22:18:59,345 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=2, uid=1, client_type=1
+2023-02-15 22:18:59,353 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-15 22:19:07,163 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=2, uid=2, client_type=1
+2023-02-15 22:19:07,175 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-15 22:19:09,419 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=2, uid=1, client_type=1
+2023-02-15 22:19:09,421 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-16 02:44:22,640 [INFO  IM] - <RouteConn.cpp>|<92>|<OnTimer>,message server timeout
+2023-02-16 02:44:22,694 [INFO  IM] - <RouteConn.cpp>|<77>|<OnClose>,MsgServer onclose: handle=7
+2023-02-16 02:44:22,933 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=7
+2023-02-16 02:44:22,933 [INFO  IM] - <RouteConn.cpp>|<137>|<_HandleOnlineUserInfo>,HandleOnlineUserInfo, user_cnt=0
+2023-02-16 02:44:22,996 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=8
+2023-02-20 09:01:04,249 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=7
+2023-02-20 09:01:04,249 [INFO  IM] - <RouteConn.cpp>|<137>|<_HandleOnlineUserInfo>,HandleOnlineUserInfo, user_cnt=0
+2023-02-20 09:01:04,259 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=8
+2023-02-20 09:04:21,750 [ERROR IM] - <BaseSocket.cpp>|<56>|<Listen>,bind failed, err_code=98, server_ip=0.0.0.0, port=8200
+2023-02-20 09:04:32,174 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=7
+2023-02-20 09:04:32,174 [INFO  IM] - <RouteConn.cpp>|<137>|<_HandleOnlineUserInfo>,HandleOnlineUserInfo, user_cnt=0
+2023-02-20 09:04:32,196 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=8
+2023-02-20 09:05:06,829 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=7
+2023-02-20 09:05:06,830 [INFO  IM] - <RouteConn.cpp>|<137>|<_HandleOnlineUserInfo>,HandleOnlineUserInfo, user_cnt=0
+2023-02-20 09:05:06,855 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=8
+2023-02-20 09:05:19,692 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=1, uid=1, client_type=1
+2023-02-20 09:05:19,710 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2023-02-20 09:05:19,735 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2023-02-20 09:05:19,763 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-20 09:05:19,765 [INFO  IM] - <DBPool.cpp>|<190>|<ExecuteQuery>,mysql_real_query failed Duplicate entry '1' for key 'IMUser_State.PRIMARY', sql : insert into IMUser_State values(1,1)
+2023-02-20 09:05:19,766 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-20 09:05:19,800 [INFO  IM] - <RouteConn.cpp>|<238>|<_HandleUsersStatusRequest>,HandleUserStatusReq, req_id=1, query_count=1
+2023-02-20 09:05:19,801 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : unread, list size:2
+2023-02-20 09:05:19,802 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : group_set, list size:2
+2023-02-20 09:05:19,803 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : token, list size:2
+2023-02-20 09:05:19,804 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : sync, list size:2
+2023-02-20 09:05:19,805 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : group_member, list size:2
+2023-02-20 09:05:19,869 [INFO  IM] - <RouteConn.cpp>|<238>|<_HandleUsersStatusRequest>,HandleUserStatusReq, req_id=1, query_count=5
+2023-02-20 09:05:29,772 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=1, uid=2, client_type=1
+2023-02-20 09:05:29,779 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-20 09:05:29,780 [INFO  IM] - <DBPool.cpp>|<190>|<ExecuteQuery>,mysql_real_query failed Duplicate entry '2' for key 'IMUser_State.PRIMARY', sql : insert into IMUser_State values(2,1)
+2023-02-20 09:05:29,781 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-20 09:05:29,815 [INFO  IM] - <RouteConn.cpp>|<238>|<_HandleUsersStatusRequest>,HandleUserStatusReq, req_id=2, query_count=1
+2023-02-20 09:05:29,895 [INFO  IM] - <RouteConn.cpp>|<238>|<_HandleUsersStatusRequest>,HandleUserStatusReq, req_id=2, query_count=4
+2023-02-20 09:05:41,581 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=2, uid=1, client_type=1
+2023-02-20 09:05:41,603 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-20 09:05:42,799 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=2, uid=2, client_type=1
+2023-02-20 09:05:42,809 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-20 09:07:35,145 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=7
+2023-02-20 09:07:35,145 [INFO  IM] - <RouteConn.cpp>|<137>|<_HandleOnlineUserInfo>,HandleOnlineUserInfo, user_cnt=0
+2023-02-20 09:07:35,170 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=8
+2023-02-20 09:08:08,561 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=1, uid=2, client_type=1
+2023-02-20 09:08:08,583 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2023-02-20 09:08:08,610 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2023-02-20 09:08:08,620 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-20 09:08:08,624 [INFO  IM] - <DBPool.cpp>|<190>|<ExecuteQuery>,mysql_real_query failed Duplicate entry '2' for key 'IMUser_State.PRIMARY', sql : insert into IMUser_State values(2,1)
+2023-02-20 09:08:08,626 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-20 09:08:08,645 [INFO  IM] - <RouteConn.cpp>|<238>|<_HandleUsersStatusRequest>,HandleUserStatusReq, req_id=2, query_count=1
+2023-02-20 09:08:08,646 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : unread, list size:2
+2023-02-20 09:08:08,646 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : group_set, list size:2
+2023-02-20 09:08:08,647 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : token, list size:2
+2023-02-20 09:08:08,648 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : sync, list size:2
+2023-02-20 09:08:08,648 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : group_member, list size:2
+2023-02-20 09:08:08,700 [INFO  IM] - <RouteConn.cpp>|<238>|<_HandleUsersStatusRequest>,HandleUserStatusReq, req_id=2, query_count=4
+2023-02-20 09:08:19,786 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=1, uid=1, client_type=1
+2023-02-20 09:08:19,795 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-20 09:08:19,796 [INFO  IM] - <DBPool.cpp>|<190>|<ExecuteQuery>,mysql_real_query failed Duplicate entry '1' for key 'IMUser_State.PRIMARY', sql : insert into IMUser_State values(1,1)
+2023-02-20 09:08:19,797 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-20 09:08:19,817 [INFO  IM] - <RouteConn.cpp>|<238>|<_HandleUsersStatusRequest>,HandleUserStatusReq, req_id=1, query_count=1
+2023-02-20 09:08:19,868 [INFO  IM] - <RouteConn.cpp>|<238>|<_HandleUsersStatusRequest>,HandleUserStatusReq, req_id=1, query_count=5
+2023-02-20 09:09:36,905 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=2, uid=2, client_type=1
+2023-02-20 09:09:36,916 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-20 09:10:24,409 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=2, uid=1, client_type=1
+2023-02-20 09:10:24,420 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-20 14:01:22,623 [INFO  IM] - <RouteConn.cpp>|<77>|<OnClose>,MsgServer onclose: handle=8
+2023-02-20 14:01:22,627 [INFO  IM] - <RouteConn.cpp>|<77>|<OnClose>,MsgServer onclose: handle=7
+2023-02-20 14:01:22,848 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=7
+2023-02-20 14:01:22,878 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=8
+2023-02-20 14:01:22,883 [INFO  IM] - <RouteConn.cpp>|<137>|<_HandleOnlineUserInfo>,HandleOnlineUserInfo, user_cnt=0
+2023-02-20 17:28:48,278 [INFO  IM] - <RouteConn.cpp>|<92>|<OnTimer>,message server timeout
+2023-02-20 17:28:48,314 [INFO  IM] - <RouteConn.cpp>|<77>|<OnClose>,MsgServer onclose: handle=7
+2023-02-20 17:28:48,536 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=8
+2023-02-20 17:28:48,536 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=7
+2023-02-20 17:28:48,537 [INFO  IM] - <RouteConn.cpp>|<137>|<_HandleOnlineUserInfo>,HandleOnlineUserInfo, user_cnt=0
+2023-02-20 17:47:01,290 [INFO  IM] - <RouteConn.cpp>|<92>|<OnTimer>,message server timeout
+2023-02-20 17:47:01,290 [INFO  IM] - <RouteConn.cpp>|<77>|<OnClose>,MsgServer onclose: handle=7
+2023-02-20 17:47:01,592 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=7
+2023-02-20 17:47:01,592 [INFO  IM] - <RouteConn.cpp>|<137>|<_HandleOnlineUserInfo>,HandleOnlineUserInfo, user_cnt=0
+2023-02-20 17:47:01,617 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=8
+2023-02-27 22:07:04,233 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=7
+2023-02-27 22:07:04,236 [INFO  IM] - <RouteConn.cpp>|<137>|<_HandleOnlineUserInfo>,HandleOnlineUserInfo, user_cnt=0
+2023-02-27 22:07:04,266 [INFO  IM] - <RouteConn.cpp>|<225>|<_HandleRoleSet>,HandleRoleSet, master=1, handle=8
+2023-02-27 22:07:23,539 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=1, uid=1, client_type=1
+2023-02-27 22:07:23,567 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2023-02-27 22:07:23,602 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2023-02-27 22:07:23,622 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-27 22:07:23,625 [INFO  IM] - <DBPool.cpp>|<190>|<ExecuteQuery>,mysql_real_query failed Duplicate entry '1' for key 'IMUser_State.PRIMARY', sql : insert into IMUser_State values(1,1)
+2023-02-27 22:07:23,627 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-27 22:07:23,627 [INFO  IM] - <RouteConn.cpp>|<238>|<_HandleUsersStatusRequest>,HandleUserStatusReq, req_id=1, query_count=1
+2023-02-27 22:07:23,629 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : unread, list size:2
+2023-02-27 22:07:23,629 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : group_set, list size:2
+2023-02-27 22:07:23,630 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : token, list size:2
+2023-02-27 22:07:23,631 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : sync, list size:2
+2023-02-27 22:07:23,632 [INFO  IM] - <CachePool.cpp>|<483>|<Init>,cache pool : group_member, list size:2
+2023-02-27 22:07:23,733 [INFO  IM] - <RouteConn.cpp>|<238>|<_HandleUsersStatusRequest>,HandleUserStatusReq, req_id=1, query_count=5
+2023-02-27 22:07:30,702 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=1, uid=2, client_type=1
+2023-02-27 22:07:30,712 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-27 22:07:30,714 [INFO  IM] - <DBPool.cpp>|<190>|<ExecuteQuery>,mysql_real_query failed Duplicate entry '2' for key 'IMUser_State.PRIMARY', sql : insert into IMUser_State values(2,1)
+2023-02-27 22:07:30,716 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-27 22:07:30,753 [INFO  IM] - <RouteConn.cpp>|<238>|<_HandleUsersStatusRequest>,HandleUserStatusReq, req_id=2, query_count=1
+2023-02-27 22:07:30,828 [INFO  IM] - <RouteConn.cpp>|<238>|<_HandleUsersStatusRequest>,HandleUserStatusReq, req_id=2, query_count=4
+2023-02-27 22:58:48,332 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=2, uid=1, client_type=1
+2023-02-27 22:58:48,422 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 
+2023-02-27 22:58:49,743 [INFO  IM] - <RouteConn.cpp>|<151>|<_HandleUserStatusUpdate>,HandleUserStatusUpdate, status=2, uid=2, client_type=1
+2023-02-27 22:58:49,762 [INFO  IM] - <DBPool.cpp>|<195>|<ExecuteQuery>,mysql_store_result failed: 

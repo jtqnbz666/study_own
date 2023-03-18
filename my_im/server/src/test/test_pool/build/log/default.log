@@ -1,0 +1,464 @@
+2022-12-24 17:52:49,866 [INFO  IM] - <DBPool.cpp>|<359>|<Init>,not configure db instance:teamtalk_master
+2022-12-24 17:53:14,238 [INFO  IM] - <DBPool.cpp>|<359>|<Init>,not configure db instance:teamtalk_master
+2022-12-24 18:17:27,737 [INFO  IM] - <DBPool.cpp>|<359>|<Init>,not configure db instance:teamtalk_master
+2022-12-24 18:17:43,859 [INFO  IM] - <DBPool.cpp>|<359>|<Init>,not configure db instance:teamtalk_master
+2022-12-24 18:19:22,014 [INFO  IM] - <DBPool.cpp>|<359>|<Init>,not configure db instance:teamtalk_master
+2022-12-24 18:20:35,989 [INFO  IM] - <DBPool.cpp>|<359>|<Init>,not configure db instance:teamtalk_master
+2022-12-24 18:24:10,502 [INFO  IM] - <DBPool.cpp>|<359>|<Init>,not configure db instance:teamtalk_master
+2022-12-24 18:27:06,447 [INFO  IM] - <DBPool.cpp>|<356>|<Init>,not configure db instance: teamtalk_master
+2022-12-24 18:30:21,916 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-24 18:30:21,938 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-24 21:56:20,014 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-24 21:56:20,043 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-24 21:56:20,045 [INFO  IM] - <CachePool.cpp>|<39>|<Init>,redisConnect failed:?
+2022-12-24 21:56:20,045 [INFO  IM] - <CachePool.cpp>|<577>|<Init>,Init cache pool failed
+2022-12-24 22:04:08,009 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-24 22:04:08,035 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-24 22:04:08,036 [INFO  IM] - <CachePool.cpp>|<39>|<Init>,redisConnect failed:?
+2022-12-24 22:04:08,036 [INFO  IM] - <CachePool.cpp>|<577>|<Init>,Init cache pool failed
+2022-12-24 22:31:45,260 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-24 22:31:45,280 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-24 22:31:45,282 [INFO  IM] - <CachePool.cpp>|<39>|<Init>,redisConnect failed:?
+2022-12-24 22:31:45,282 [INFO  IM] - <CachePool.cpp>|<577>|<Init>,Init cache pool failed
+2022-12-24 22:38:11,748 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-24 22:38:11,766 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-24 22:38:11,767 [INFO  IM] - <CachePool.cpp>|<39>|<Init>,redisConnect failed:T
+2022-12-24 22:38:11,767 [INFO  IM] - <CachePool.cpp>|<577>|<Init>,Init cache pool failed
+2022-12-24 22:41:17,726 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-24 22:41:17,744 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-24 22:41:17,745 [INFO  IM] - <CachePool.cpp>|<39>|<Init>,redisConnect failed:{
+2022-12-24 22:41:17,745 [INFO  IM] - <CachePool.cpp>|<579>|<Init>,Init cache pool failed
+2022-12-24 22:43:29,597 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-24 22:43:29,615 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-24 22:43:29,615 [INFO  IM] - <CachePool.cpp>|<40>|<Init>,redisConnect failed: ?
+2022-12-24 22:43:29,615 [INFO  IM] - <CachePool.cpp>|<580>|<Init>,Init cache pool failed
+2022-12-24 22:48:23,544 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-24 22:48:23,561 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-24 22:48:23,561 [INFO  IM] - <CachePool.cpp>|<59>|<Init>,redisConnect failed: ?
+2022-12-24 22:48:23,561 [INFO  IM] - <CachePool.cpp>|<710>|<Init>,Init cache pool failed
+2022-12-24 22:48:44,588 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-24 22:48:44,605 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-24 22:48:44,606 [INFO  IM] - <CachePool.cpp>|<59>|<Init>,redisConnect failed: ?
+2022-12-24 22:48:44,606 [INFO  IM] - <CachePool.cpp>|<710>|<Init>,Init cache pool failed
+2022-12-24 22:52:53,638 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-24 22:52:53,651 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-24 22:52:53,652 [INFO  IM] - <CachePool.cpp>|<59>|<Init>,redisConnect failed: 4
+2022-12-24 22:52:53,652 [INFO  IM] - <CachePool.cpp>|<710>|<Init>,Init cache pool failed
+2022-12-24 22:55:37,719 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-24 22:55:37,735 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-24 22:55:37,736 [INFO  IM] - <CachePool.cpp>|<59>|<Init>,redisConnect failed: ?
+2022-12-24 22:55:37,736 [INFO  IM] - <CachePool.cpp>|<710>|<Init>,Init cache pool failed
+2022-12-24 22:56:01,180 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-24 22:56:01,198 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-24 22:56:01,201 [INFO  IM] - <CachePool.cpp>|<597>|<Init>,cache pool: unread, list size: 2
+2022-12-24 22:56:01,203 [INFO  IM] - <CachePool.cpp>|<597>|<Init>,cache pool: group_set, list size: 2
+2022-12-24 22:56:01,205 [INFO  IM] - <CachePool.cpp>|<597>|<Init>,cache pool: token, list size: 2
+2022-12-24 22:56:01,206 [INFO  IM] - <CachePool.cpp>|<597>|<Init>,cache pool: sync, list size: 2
+2022-12-24 22:56:01,207 [INFO  IM] - <CachePool.cpp>|<597>|<Init>,cache pool: group_member, list size: 2
+2022-12-24 22:56:56,932 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-24 22:56:56,949 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-24 22:56:56,950 [INFO  IM] - <CachePool.cpp>|<597>|<Init>,cache pool: unread, list size: 2
+2022-12-24 22:56:56,951 [INFO  IM] - <CachePool.cpp>|<597>|<Init>,cache pool: group_set, list size: 2
+2022-12-24 22:56:56,952 [INFO  IM] - <CachePool.cpp>|<597>|<Init>,cache pool: token, list size: 2
+2022-12-24 22:56:56,952 [INFO  IM] - <CachePool.cpp>|<597>|<Init>,cache pool: sync, list size: 2
+2022-12-24 22:56:56,952 [INFO  IM] - <CachePool.cpp>|<597>|<Init>,cache pool: group_member, list size: 2
+2022-12-24 23:01:37,060 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-24 23:01:37,083 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-24 23:01:37,088 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-24 23:01:37,089 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-24 23:01:37,090 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-24 23:01:37,090 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-24 23:01:37,091 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-25 21:56:56,791 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 21:56:56,807 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 21:56:56,808 [INFO  IM] - <CachePool.cpp>|<37>|<Init>,redisConnect failed: Connection refused
+2022-12-25 21:56:56,808 [INFO  IM] - <CachePool.cpp>|<576>|<Init>,Init cache pool failed
+2022-12-25 21:57:58,628 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 21:57:58,643 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 21:57:58,644 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-25 21:57:58,645 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-25 21:57:58,645 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-25 21:57:58,646 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-25 21:57:58,646 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-25 22:15:57,037 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 22:15:57,049 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 22:15:57,054 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-25 22:15:57,054 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-25 22:15:57,055 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-25 22:15:57,056 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-25 22:15:57,056 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-25 22:17:28,000 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 22:17:28,016 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 22:17:28,019 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-25 22:17:28,020 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-25 22:17:28,020 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-25 22:17:28,021 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-25 22:17:28,021 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-25 22:17:28,022 [INFO  IM] - <test_dbpool.cpp>|<28>|<main>,thread_1 create!
+2022-12-25 22:21:57,796 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 22:21:57,811 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 22:21:57,813 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-25 22:21:57,813 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-25 22:21:57,814 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-25 22:21:57,814 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-25 22:21:57,814 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-25 22:21:57,814 [INFO  IM] - <test_dbpool.cpp>|<28>|<main>,thread_1 create!
+2022-12-25 22:25:19,153 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 22:25:19,172 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 22:25:19,174 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-25 22:25:19,174 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-25 22:25:19,175 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-25 22:25:19,175 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-25 22:25:19,175 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-25 22:25:19,176 [INFO  IM] - <test_dbpool.cpp>|<28>|<main>,thread_1 create!
+2022-12-25 22:27:10,524 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 22:27:10,541 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 22:27:10,541 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-25 22:27:10,542 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-25 22:27:10,542 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-25 22:27:10,543 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-25 22:27:10,543 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-25 22:28:20,463 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 22:28:20,476 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 22:28:20,477 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-25 22:28:20,478 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-25 22:28:20,478 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-25 22:28:20,478 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-25 22:28:20,479 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-25 22:28:51,431 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 22:28:51,445 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 22:28:51,446 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-25 22:28:51,446 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-25 22:28:51,447 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-25 22:28:51,447 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-25 22:28:51,448 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-25 22:31:28,466 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 22:31:28,482 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 22:31:28,482 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-25 22:31:28,483 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-25 22:31:28,484 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-25 22:31:28,484 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-25 22:31:28,484 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-25 22:39:30,387 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 22:39:30,403 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 22:39:30,404 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-25 22:39:30,405 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-25 22:39:30,405 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-25 22:39:30,406 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-25 22:39:30,406 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-25 22:40:04,346 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 22:40:04,364 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 22:40:04,365 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-25 22:40:04,365 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-25 22:40:04,366 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-25 22:40:04,366 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-25 22:40:04,366 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-25 22:41:38,465 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 22:41:38,479 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 22:41:38,481 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-25 22:41:38,481 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-25 22:41:38,482 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-25 22:41:38,482 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-25 22:41:38,485 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-25 22:41:38,486 [INFO  IM] - <test_dbpool.cpp>|<31>|<main>,error threadpool_init!
+2022-12-25 22:45:55,019 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 22:45:55,032 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 22:45:55,035 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-25 22:45:55,035 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-25 22:45:55,036 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-25 22:45:55,036 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-25 22:45:55,036 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-25 22:45:55,042 [INFO  IM] - <test_dbpool.cpp>|<31>|<main>,error threadpool_init!
+2022-12-25 22:46:17,092 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 22:46:17,109 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 22:46:17,110 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-25 22:46:17,111 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-25 22:46:17,112 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-25 22:46:17,112 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-25 22:46:17,112 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-25 22:46:17,115 [INFO  IM] - <test_dbpool.cpp>|<31>|<main>,error threadpool_init!
+2022-12-25 22:47:40,721 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 22:47:40,737 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 22:47:40,738 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-25 22:47:40,739 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-25 22:47:40,739 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-25 22:47:40,740 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-25 22:47:40,740 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-25 22:47:52,945 [INFO  IM] - <test_dbpool.cpp>|<31>|<main>,error threadpool_init!
+2022-12-25 22:48:04,897 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 22:48:04,917 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 22:48:04,917 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-25 22:48:04,918 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-25 22:48:04,918 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-25 22:48:04,918 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-25 22:48:04,919 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-25 22:50:35,139 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 22:50:35,154 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 22:50:35,155 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-25 22:50:35,155 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-25 22:50:35,155 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-25 22:50:35,156 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-25 22:50:35,156 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-25 22:57:45,356 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 22:57:45,372 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 23:07:51,621 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 23:07:51,644 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 23:14:24,766 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 23:14:24,781 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 23:15:29,161 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 23:15:29,176 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 23:16:44,567 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 23:16:44,585 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 23:21:24,424 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 23:21:24,440 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 23:22:00,551 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 23:22:00,565 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 23:22:00,575 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-25 23:22:00,577 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-25 23:22:00,578 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-25 23:22:00,579 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-25 23:22:00,581 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-25 23:22:00,581 [INFO  IM] - <ThreadPool.cpp>|<64>|<Init>,test
+2022-12-25 23:22:00,581 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_126621248 create!
+2022-12-25 23:22:00,582 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_118228544 create!
+2022-12-25 23:22:00,582 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_109835840 create!
+2022-12-25 23:22:00,582 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_101434944 create!
+2022-12-25 23:22:00,582 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_93042240 create!
+2022-12-25 23:22:00,582 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_84649536 create!
+2022-12-25 23:22:00,584 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_76248640 create!
+2022-12-25 23:22:00,584 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-268437952 create!
+2022-12-25 23:38:42,387 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 23:38:42,402 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 23:38:42,404 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-25 23:38:42,406 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-25 23:38:42,406 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-25 23:38:42,407 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-25 23:38:42,407 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-25 23:39:06,294 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 23:39:06,313 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 23:39:06,314 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-25 23:39:06,314 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-25 23:39:06,314 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-25 23:39:06,315 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-25 23:39:06,316 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-25 23:52:15,216 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-25 23:52:15,233 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-25 23:52:15,234 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-25 23:52:15,234 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-25 23:52:15,235 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-25 23:52:15,235 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-25 23:52:15,235 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-25 23:52:15,236 [INFO  IM] - <ThreadPool.cpp>|<64>|<Init>,test
+2022-12-25 23:52:15,236 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_814741056 create!
+2022-12-25 23:52:15,236 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_797955648 create!
+2022-12-25 23:52:15,236 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_806348352 create!
+2022-12-25 23:52:15,236 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_789554752 create!
+2022-12-25 23:52:15,236 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_781153856 create!
+2022-12-25 23:52:15,236 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_772761152 create!
+2022-12-25 23:52:15,236 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_764368448 create!
+2022-12-25 23:52:15,236 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_755975744 create!
+2022-12-26 00:01:52,502 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-26 00:01:52,520 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-26 00:01:52,521 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-26 00:01:52,521 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-26 00:01:52,522 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-26 00:01:52,522 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-26 00:01:52,522 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-26 00:01:52,522 [INFO  IM] - <ThreadPool.cpp>|<64>|<Init>,test
+2022-12-26 00:01:52,523 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1791170112 create!
+2022-12-26 00:01:52,523 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1782777408 create!
+2022-12-26 00:01:52,523 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1774384704 create!
+2022-12-26 00:01:52,523 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1765983808 create!
+2022-12-26 00:01:52,523 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1757591104 create!
+2022-12-26 00:01:52,524 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1535108672 create!
+2022-12-26 00:01:52,524 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1543501376 create!
+2022-12-26 00:01:52,524 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1526715968 create!
+2022-12-26 11:14:16,552 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-26 11:14:16,579 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-26 11:14:16,593 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-26 11:14:16,595 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-26 11:14:16,596 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-26 11:14:16,599 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-26 11:14:16,600 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-26 11:14:16,600 [INFO  IM] - <ThreadPool.cpp>|<64>|<Init>,test
+2022-12-26 11:14:16,600 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1260340800 create!
+2022-12-26 11:14:16,600 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1243555392 create!
+2022-12-26 11:14:16,600 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1235154496 create!
+2022-12-26 11:14:16,600 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1226753600 create!
+2022-12-26 11:14:16,600 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1251948096 create!
+2022-12-26 11:14:16,602 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1218360896 create!
+2022-12-26 11:14:16,602 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_864020032 create!
+2022-12-26 11:14:16,602 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_872412736 create!
+2022-12-26 11:58:39,083 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-26 11:58:39,110 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-26 11:58:39,119 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-26 11:58:39,120 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-26 11:58:39,121 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-26 11:58:39,124 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-26 11:58:39,125 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-26 11:58:39,125 [INFO  IM] - <ThreadPool.cpp>|<64>|<Init>,test
+2022-12-26 11:58:39,126 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1221572160 create!
+2022-12-26 11:58:39,126 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1213179456 create!
+2022-12-26 11:58:39,126 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1204786752 create!
+2022-12-26 11:58:39,126 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1196385856 create!
+2022-12-26 11:58:39,126 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1187993152 create!
+2022-12-26 11:58:39,126 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1179600448 create!
+2022-12-26 11:58:39,126 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1171207744 create!
+2022-12-26 11:58:39,126 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1162815040 create!
+2022-12-27 09:12:04,761 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-27 09:12:04,800 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-27 09:12:04,821 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-27 09:12:04,823 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-27 09:12:04,825 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-27 09:12:04,826 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-27 09:12:04,828 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-27 09:12:04,828 [INFO  IM] - <ThreadPool.cpp>|<64>|<Init>,test
+2022-12-27 09:12:04,829 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1969994176 create!
+2022-12-27 09:12:04,829 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1978386880 create!
+2022-12-27 09:12:04,829 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1986779584 create!
+2022-12-27 09:12:04,829 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1995172288 create!
+2022-12-27 09:12:04,830 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-2003564992 create!
+2022-12-27 09:12:04,830 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_2080372288 create!
+2022-12-27 09:12:04,830 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_2063586880 create!
+2022-12-27 09:12:04,830 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_2071979584 create!
+2022-12-27 09:21:32,095 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-27 09:21:32,116 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-27 09:21:32,117 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-27 09:21:32,119 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-27 09:21:32,121 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-27 09:21:32,122 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-27 09:21:32,123 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-27 09:21:32,123 [INFO  IM] - <ThreadPool.cpp>|<64>|<Init>,test
+2022-12-27 09:21:32,123 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-443845056 create!
+2022-12-27 09:21:32,125 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-460630464 create!
+2022-12-27 09:21:32,127 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-452237760 create!
+2022-12-27 09:21:32,127 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-545266112 create!
+2022-12-27 09:21:32,127 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-671091136 create!
+2022-12-27 09:21:32,127 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-536873408 create!
+2022-12-27 09:21:32,127 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-553658816 create!
+2022-12-27 09:21:32,127 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-562051520 create!
+2022-12-27 09:22:04,564 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-27 09:22:04,595 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-27 09:22:04,597 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-27 09:22:04,597 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-27 09:22:04,598 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-27 09:22:04,599 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-27 09:22:04,600 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-27 09:22:04,600 [INFO  IM] - <ThreadPool.cpp>|<64>|<Init>,test
+2022-12-27 09:22:04,601 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1508182464 create!
+2022-12-27 09:22:04,601 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1516575168 create!
+2022-12-27 09:22:04,601 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1524967872 create!
+2022-12-27 09:22:04,602 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1533368768 create!
+2022-12-27 09:22:04,602 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1753225664 create!
+2022-12-27 09:22:04,602 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1761618368 create!
+2022-12-27 09:22:04,602 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1744832960 create!
+2022-12-27 09:22:04,602 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1770011072 create!
+2022-12-27 09:22:12,190 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-27 09:22:12,218 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-27 09:22:12,221 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-27 09:22:12,222 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-27 09:22:12,223 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-27 09:22:12,224 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-27 09:22:12,224 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-27 09:22:12,224 [INFO  IM] - <ThreadPool.cpp>|<64>|<Init>,test
+2022-12-27 09:22:12,225 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_698271296 create!
+2022-12-27 09:22:12,226 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_689878592 create!
+2022-12-27 09:22:12,226 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_603977280 create!
+2022-12-27 09:22:12,226 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_595584576 create!
+2022-12-27 09:22:12,226 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_587191872 create!
+2022-12-27 09:22:12,227 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_578799168 create!
+2022-12-27 09:22:12,227 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_681485888 create!
+2022-12-27 09:22:12,227 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_570406464 create!
+2022-12-28 10:40:38,898 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-28 10:40:38,922 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-28 10:40:38,922 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-28 10:40:38,923 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-28 10:40:38,923 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-28 10:40:38,923 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-28 10:40:38,924 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-28 10:40:38,924 [INFO  IM] - <ThreadPool.cpp>|<64>|<Init>,test
+2022-12-28 10:40:38,925 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_2014094912 create!
+2022-12-28 10:40:38,926 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_2005702208 create!
+2022-12-28 10:40:38,926 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1997309504 create!
+2022-12-28 10:40:38,926 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1988916800 create!
+2022-12-28 10:40:38,926 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1980515904 create!
+2022-12-28 10:40:38,927 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1972123200 create!
+2022-12-28 10:40:38,928 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_1955337792 create!
+2022-12-28 10:40:47,575 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-28 10:40:47,595 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-28 10:40:47,596 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-28 10:40:47,597 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-28 10:40:47,597 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-28 10:40:47,598 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-28 10:40:47,599 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-28 10:40:47,599 [INFO  IM] - <ThreadPool.cpp>|<64>|<Init>,test
+2022-12-28 10:40:47,599 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_898926144 create!
+2022-12-28 10:40:47,599 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_890533440 create!
+2022-12-28 10:40:47,600 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_882140736 create!
+2022-12-28 10:40:47,600 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_671086144 create!
+2022-12-28 10:40:47,600 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_662693440 create!
+2022-12-28 10:40:47,601 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_645908032 create!
+2022-12-28 10:40:47,601 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_637515328 create!
+2022-12-28 10:40:47,601 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_654300736 create!
+2022-12-28 11:16:27,969 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-28 11:16:27,989 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-28 11:16:27,990 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-28 11:16:27,990 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-28 11:16:27,991 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-28 11:16:27,993 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-28 11:16:27,994 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-28 11:16:27,994 [INFO  IM] - <ThreadPool.cpp>|<64>|<Init>,test
+2022-12-28 11:16:27,994 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_112838208 create!
+2022-12-28 11:16:27,995 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_104445504 create!
+2022-12-28 11:16:27,995 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_96052800 create!
+2022-12-28 11:16:27,995 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_87660096 create!
+2022-12-28 11:16:27,996 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-134220224 create!
+2022-12-28 11:16:27,996 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-151005632 create!
+2022-12-28 11:16:27,997 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-142612928 create!
+2022-12-28 11:16:27,997 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_79259200 create!
+2022-12-28 11:45:21,209 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-28 11:45:21,230 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-28 11:45:21,240 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-28 11:45:21,241 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-28 11:45:21,241 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-28 11:45:21,243 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-28 11:45:21,244 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-28 11:45:21,244 [INFO  IM] - <ThreadPool.cpp>|<64>|<Init>,test
+2022-12-28 11:45:21,244 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1807452608 create!
+2022-12-28 11:45:21,244 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1815845312 create!
+2022-12-28 11:45:21,245 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1824238016 create!
+2022-12-28 11:45:21,245 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1841031616 create!
+2022-12-28 11:45:21,245 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1832638912 create!
+2022-12-28 11:45:21,245 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1849424320 create!
+2022-12-28 11:45:21,245 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1857825216 create!
+2022-12-28 11:45:21,245 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1866217920 create!
+2022-12-31 08:21:07,605 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-31 08:21:07,621 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-31 08:21:07,638 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-31 08:21:07,641 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-31 08:21:07,642 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-31 08:21:07,643 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-31 08:21:07,644 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-31 08:21:07,644 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_519493184 create!
+2022-12-31 08:21:07,644 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_511100480 create!
+2022-12-31 08:21:07,644 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_502707776 create!
+2022-12-31 08:21:07,644 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_494306880 create!
+2022-12-31 08:21:07,645 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_485914176 create!
+2022-12-31 08:21:07,645 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_260040256 create!
+2022-12-31 08:21:07,646 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_251647552 create!
+2022-12-31 08:21:07,645 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_268432960 create!
+2022-12-31 08:28:00,133 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-31 08:28:00,147 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-31 08:28:00,151 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-31 08:28:00,153 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-31 08:28:00,154 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-31 08:28:00,155 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-31 08:28:00,155 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-31 08:28:00,156 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_932394560 create!
+2022-12-31 08:28:00,156 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_924001856 create!
+2022-12-31 08:28:00,156 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_781391424 create!
+2022-12-31 08:28:00,157 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_915600960 create!
+2022-12-31 08:28:00,157 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_907208256 create!
+2022-12-31 08:28:00,157 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_898815552 create!
+2022-12-31 08:28:00,157 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_890422848 create!
+2022-12-31 08:28:00,157 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_882030144 create!

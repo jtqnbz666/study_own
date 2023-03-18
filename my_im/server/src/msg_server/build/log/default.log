@@ -1,0 +1,32 @@
+2023-02-15 10:42:21,420 [INFO  IM] - <msg_server.cpp>|<35>|<main>,MsgServer max files can open: 1024 
+2023-02-15 10:42:21,426 [INFO  IM] - <FileServConn.cpp>|<112>|<Connect>,Connecting to FileServer 127.0.0.1:8601 
+2023-02-15 10:42:21,427 [INFO  IM] - <DBServConn.cpp>|<68>|<init_db_serv_conn>,DB server connection index for login business: [0, 2), for other business: [2, 4) 
+2023-02-15 10:42:21,427 [INFO  IM] - <DBServConn.cpp>|<144>|<Connect>,Connecting to DB Storage Server 127.0.0.1:10600 
+2023-02-15 10:42:21,428 [INFO  IM] - <DBServConn.cpp>|<144>|<Connect>,Connecting to DB Storage Server 127.0.0.1:10600 
+2023-02-15 10:42:21,428 [INFO  IM] - <DBServConn.cpp>|<144>|<Connect>,Connecting to DB Storage Server 127.0.0.1:10600 
+2023-02-15 10:42:21,428 [INFO  IM] - <DBServConn.cpp>|<144>|<Connect>,Connecting to DB Storage Server 127.0.0.1:10600 
+2023-02-15 10:42:21,428 [INFO  IM] - <LoginServConn.cpp>|<102>|<Connect>,Connecting to LoginServer 127.0.0.1:8100 
+2023-02-15 10:42:21,429 [INFO  IM] - <RouteServConn.cpp>|<139>|<Connect>,Connecting to RouteServer 127.0.0.1:8200 
+2023-02-15 10:42:21,429 [INFO  IM] - <FileServConn.cpp>|<152>|<OnClose>,onclose from file server handle=7 
+2023-02-15 10:42:21,429 [INFO  IM] - <DBServConn.cpp>|<176>|<OnClose>,onclose from db server handle=8
+2023-02-15 10:42:21,429 [INFO  IM] - <DBServConn.cpp>|<176>|<OnClose>,onclose from db server handle=9
+2023-02-15 10:42:21,429 [INFO  IM] - <DBServConn.cpp>|<176>|<OnClose>,onclose from db server handle=10
+2023-02-15 10:42:21,430 [INFO  IM] - <DBServConn.cpp>|<176>|<OnClose>,onclose from db server handle=11
+2023-02-15 10:42:21,430 [INFO  IM] - <LoginServConn.cpp>|<152>|<OnClose>,login server conn onclose, from handle=12 
+2023-02-15 10:42:21,430 [INFO  IM] - <RouteServConn.cpp>|<197>|<OnClose>,onclose from route server handle=13 
+2023-02-15 10:42:26,233 [INFO  IM] - <msg_server.cpp>|<35>|<main>,MsgServer max files can open: 1024 
+2023-02-15 10:42:26,234 [INFO  IM] - <FileServConn.cpp>|<112>|<Connect>,Connecting to FileServer 127.0.0.1:8601 
+2023-02-15 10:42:26,234 [INFO  IM] - <DBServConn.cpp>|<68>|<init_db_serv_conn>,DB server connection index for login business: [0, 2), for other business: [2, 4) 
+2023-02-15 10:42:26,234 [INFO  IM] - <DBServConn.cpp>|<144>|<Connect>,Connecting to DB Storage Server 127.0.0.1:10600 
+2023-02-15 10:42:26,234 [INFO  IM] - <DBServConn.cpp>|<144>|<Connect>,Connecting to DB Storage Server 127.0.0.1:10600 
+2023-02-15 10:42:26,234 [INFO  IM] - <DBServConn.cpp>|<144>|<Connect>,Connecting to DB Storage Server 127.0.0.1:10600 
+2023-02-15 10:42:26,234 [INFO  IM] - <DBServConn.cpp>|<144>|<Connect>,Connecting to DB Storage Server 127.0.0.1:10600 
+2023-02-15 10:42:26,234 [INFO  IM] - <LoginServConn.cpp>|<102>|<Connect>,Connecting to LoginServer 127.0.0.1:8100 
+2023-02-15 10:42:26,234 [INFO  IM] - <RouteServConn.cpp>|<139>|<Connect>,Connecting to RouteServer 127.0.0.1:8200 
+2023-02-15 10:42:26,237 [INFO  IM] - <FileServConn.cpp>|<152>|<OnClose>,onclose from file server handle=7 
+2023-02-15 10:42:26,237 [INFO  IM] - <DBServConn.cpp>|<176>|<OnClose>,onclose from db server handle=8
+2023-02-15 10:42:26,237 [INFO  IM] - <DBServConn.cpp>|<176>|<OnClose>,onclose from db server handle=9
+2023-02-15 10:42:26,238 [INFO  IM] - <DBServConn.cpp>|<176>|<OnClose>,onclose from db server handle=10
+2023-02-15 10:42:26,238 [INFO  IM] - <DBServConn.cpp>|<176>|<OnClose>,onclose from db server handle=11
+2023-02-15 10:42:26,238 [INFO  IM] - <LoginServConn.cpp>|<152>|<OnClose>,login server conn onclose, from handle=12 
+2023-02-15 10:42:26,238 [INFO  IM] - <RouteServConn.cpp>|<197>|<OnClose>,onclose from route server handle=13 

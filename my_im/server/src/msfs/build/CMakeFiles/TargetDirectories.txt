@@ -1,0 +1,3 @@
+/home/jt/my_im/server/src/msfs/build/CMakeFiles/msfs.dir
+/home/jt/my_im/server/src/msfs/build/CMakeFiles/edit_cache.dir
+/home/jt/my_im/server/src/msfs/build/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,3 @@
+/home/jt/my_im/server/src/msg_server/build/CMakeFiles/msg_server.dir
+/home/jt/my_im/server/src/msg_server/build/CMakeFiles/edit_cache.dir
+/home/jt/my_im/server/src/msg_server/build/CMakeFiles/rebuild_cache.dir

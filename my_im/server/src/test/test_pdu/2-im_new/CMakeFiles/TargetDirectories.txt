@@ -1,0 +1,4 @@
+/home/jt/my_im/server/src/test/test_pdu/2-im_new/CMakeFiles/server_im.dir
+/home/jt/my_im/server/src/test/test_pdu/2-im_new/CMakeFiles/client_im.dir
+/home/jt/my_im/server/src/test/test_pdu/2-im_new/CMakeFiles/edit_cache.dir
+/home/jt/my_im/server/src/test/test_pdu/2-im_new/CMakeFiles/rebuild_cache.dir

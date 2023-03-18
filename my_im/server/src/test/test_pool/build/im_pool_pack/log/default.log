@@ -1,0 +1,50 @@
+2022-12-26 11:58:53,221 [ERROR IM] - <ConfigFileReader.cpp>|<40>|<_LoadFile>,can not open dbproxyserver.conf, errno = 2
+2022-12-26 11:58:53,221 [INFO  IM] - <DBPool.cpp>|<331>|<Init>,not configure DBInstances
+2022-12-26 11:59:16,512 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-26 11:59:16,528 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-26 11:59:16,529 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-26 11:59:16,529 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-26 11:59:16,530 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-26 11:59:16,530 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-26 11:59:16,530 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-26 11:59:16,530 [INFO  IM] - <ThreadPool.cpp>|<64>|<Init>,test
+2022-12-26 11:59:16,531 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-404031936 create!
+2022-12-26 11:59:16,531 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-412424640 create!
+2022-12-26 11:59:16,531 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-429218240 create!
+2022-12-26 11:59:16,531 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-437610944 create!
+2022-12-26 11:59:16,531 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-420817344 create!
+2022-12-26 11:59:16,531 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-446011840 create!
+2022-12-26 11:59:16,544 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-454404544 create!
+2022-12-26 11:59:16,544 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-805308864 create!
+2022-12-27 09:22:18,076 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-27 09:22:18,097 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-27 09:22:18,099 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-27 09:22:18,100 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-27 09:22:18,101 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-27 09:22:18,101 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-27 09:22:18,102 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-27 09:22:18,102 [INFO  IM] - <ThreadPool.cpp>|<64>|<Init>,test
+2022-12-27 09:22:18,102 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_79394368 create!
+2022-12-27 09:22:18,102 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_71001664 create!
+2022-12-27 09:22:18,102 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_62608960 create!
+2022-12-27 09:22:18,102 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_54216256 create!
+2022-12-27 09:22:18,103 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_45823552 create!
+2022-12-27 09:22:18,103 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_37430848 create!
+2022-12-27 09:22:18,103 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_29038144 create!
+2022-12-27 09:22:18,103 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_20645440 create!
+2022-12-27 09:22:57,827 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_master, size:2
+2022-12-27 09:22:57,851 [INFO  IM] - <DBPool.cpp>|<259>|<Init>,db pool:teamtalk_slave, size:2
+2022-12-27 09:22:57,853 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : unread, list size:2
+2022-12-27 09:22:57,855 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_set, list size:2
+2022-12-27 09:22:57,856 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : token, list size:2
+2022-12-27 09:22:57,857 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : sync, list size:2
+2022-12-27 09:22:57,857 [INFO  IM] - <CachePool.cpp>|<482>|<Init>,cache pool : group_member, list size:2
+2022-12-27 09:22:57,858 [INFO  IM] - <ThreadPool.cpp>|<64>|<Init>,test
+2022-12-27 09:22:57,858 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1513880000 create!
+2022-12-27 09:22:57,858 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1522272704 create!
+2022-12-27 09:22:57,859 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1530665408 create!
+2022-12-27 09:22:57,860 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1610615232 create!
+2022-12-27 09:22:57,860 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1619007936 create!
+2022-12-27 09:22:57,860 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1627400640 create!
+2022-12-27 09:22:57,860 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1635793344 create!
+2022-12-27 09:22:57,860 [INFO  IM] - <ThreadPool.cpp>|<25>|<Execute>,thread_-1644186048 create!

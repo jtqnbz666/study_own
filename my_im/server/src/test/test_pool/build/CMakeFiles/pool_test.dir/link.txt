@@ -1,0 +1,1 @@
+/usr/bin/c++ -rdynamic CMakeFiles/pool_test.dir/CachePool.cpp.o CMakeFiles/pool_test.dir/DBPool.cpp.o CMakeFiles/pool_test.dir/test_dbpool.cpp.o -o pool_test   -L/usr/lib64/mysql  -Wl,-rpath,/usr/lib64/mysql -lbase -lslog -lmysqlclient -lhiredis -lpthread 

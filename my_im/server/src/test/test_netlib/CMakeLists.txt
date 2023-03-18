@@ -1,0 +1,20 @@
+cmake_minimum_required(VERSION 2.6)
+project(test_netlib)
+
+SET(EXECUTABLE_OUTPUT_PATH  ./)
+#AUX_SOURCE_DIRECTORY(../base SRC_LIST)
+
+ADD_DEFINITIONS( -g -W -Wall -D_REENTRANT -D_FILE_OFFSET_BITS=64 -DAC_HAS_INFO
+-DAC_HAS_WARNING -DAC_HAS_ERROR -DAC_HAS_CRITICAL -DTIXML_USE_STL
+-DAC_HAS_DEBUG -DLINUX_DAEMON -std=c++11 -DENCRYPT)
+
+INCLUDE_DIRECTORIES(../base ../db_proxy_server)
+#LINK_DIRECTORIES(./ ../base ../../base)
+
+ADD_EXECUTABLE(client ./client.cpp )
+ADD_EXECUTABLE(server ./server.cpp )
+
+TARGET_LINK_LIBRARIES(client base slog)
+
+TARGET_LINK_LIBRARIES(server base slog)
+ 

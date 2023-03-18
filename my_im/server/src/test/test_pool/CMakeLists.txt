@@ -1,0 +1,19 @@
+cmake_minimum_required(VERSION 2.6)
+project(test_pool)
+
+AUX_SOURCE_DIRECTORY(./ SRC_LIST)
+
+SET(EXECUTABLE_OUTPUT_PATH ./)
+
+SET(MYSQL_INCLUDE_DIR /usr/include/mysql)
+SET(MYSQL_LIB /usr/lib64/mysql)
+
+ADD_DEFINITIONS( -g -W -Wall -D_REENTRANT -D_FILE_OFFSET_BITS=64 -DAC_HAS_INFO
+-DAC_HAS_WARNING -DAC_HAS_ERROR -DAC_HAS_CRITICAL -DTIXML_USE_STL
+-DAC_HAS_DEBUG -DLINUX_DAEMON -std=c++11 -DENCRYPT)
+
+INCLUDE_DIRECTORIES(../../base ../../db_proxy_server ${MYSQL_INCLUDE_DIR})
+LINK_DIRECTORIES(${MYSQL_LIB})
+
+ADD_EXECUTABLE(pool_test ${SRC_LIST}) 
+TARGET_LINK_LIBRARIES(pool_test base slog mysqlclient hiredis pthread)

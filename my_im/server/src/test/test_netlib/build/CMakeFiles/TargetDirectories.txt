@@ -1,0 +1,4 @@
+/home/jt/my_im/server/src/test_netlib/build/CMakeFiles/client.dir
+/home/jt/my_im/server/src/test_netlib/build/CMakeFiles/server.dir
+/home/jt/my_im/server/src/test_netlib/build/CMakeFiles/edit_cache.dir
+/home/jt/my_im/server/src/test_netlib/build/CMakeFiles/rebuild_cache.dir
