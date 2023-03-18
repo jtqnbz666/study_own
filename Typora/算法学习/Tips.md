@@ -214,3 +214,93 @@ ret_value.append(reply->str, reply->len);
 若在链表中，就遍历链表，找到最大值和最小值，求出平均数，以平均数来分割
 ~~~
 
+14.二维数组输入
+
+~~~c++
+char arr[5][10];
+	int n, m;
+	while ((cin >> n >> m && n != EOF)) {
+		memset(arr, 0, sizeof(arr));
+		for (int i = 0; i < n; i++) {
+			cin >> arr[i];
+		}
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				cout << arr[i][j];
+			}
+		}
+	}
+	
+	/*int n = 0;
+	cin >> n;
+	vector<string>tmp(n);
+	for (int i = 0; i < n; i++) {
+		cin >> tmp[i];
+	}
+	for (auto v : tmp) {
+		cout << v << endl;
+	}*/
+~~~
+
+15.进制转换
+
+~~~c++
+#include <iostream>
+using namespace std;
+
+
+int main() {
+	// 十进制转二进制
+	/*int n;
+	cin >> n;
+	int arr[100];
+	int i = 0;
+	while (n) {
+		arr[i++] = n % 2;
+		n /= 2;
+	}
+	for (int j = i - 1; j >= 0; j--) {
+		cout << arr[j];
+	}*/
+
+// 2进制转10进制
+	/*string b_str;
+	cin >> b_str;
+	int val = 0;
+	for (int i = b_str.size() - 1; i >= 0; i--) {
+		val += (b_str[i] - '0') * pow(2, b_str.size() - i - 1);
+	}
+	cout << val;*/
+
+	//16进制转10进制
+	/*string h_str;
+	cin >> h_str;
+	int val = 0;
+	for (int i = h_str.size() - 1; i >= 0; i--) {
+		if (h_str[i] >= 'A' && h_str[i] <= 'F') {
+			val += (h_str[i] - 'A' + 10) * pow(16, h_str.size() - i - 1);
+		}
+		else {
+			val += (h_str[i] - '0') * pow(16, h_str.size() - i - 1);
+		}
+		
+	}
+	cout << val;*/
+	
+
+	//10进制转16进制
+	/*int n;
+	cin >> n;
+	char arr[100];
+	int i = 0;
+	while (n) {
+		arr[i++] = n % 16 >= 10 ? n % 16 - 10 + 'A' : n % 16 + '0';
+		n /= 16;
+	}
+	for (int j = i - 1; j >= 0; j--) {
+		cout << arr[j];
+	}*/
+	return  0;
+}
+~~~
+

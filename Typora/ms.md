@@ -5,7 +5,7 @@
 Linux高性能服务器：只讲了单时间轮，使用了圈数的统计，不方便更新定时器。
 0voice：定时器结点中用了一个指针指向一个特殊的结点，因为是指针结点，所以不同的定时器结点内可以指向同一个特殊结点，在这个特殊结点上加了一个used变量，每收到一个keepalive，used++, 一定时间后used-- ，当used为0时，清除连接。这种方式用在判断对方是否正常的应用中， 还有一种机制就是IM上的， 每次更新最新时间
 
-redis定时器设计是无序的单链表，任务多的时候使用调表
+redis定时器设计是无序的单链表，任务多的时候使用跳表
 map和set的红黑树键值是唯一的，不能同时处理，但可以设置辅助键值。 nginx用的也是红黑树
 
 
@@ -380,6 +380,61 @@ kill命令调用了send_signals(这里面又调用了kill), 这个kill函数就�
 
 无论gcc 还是 g++， 对于 extern “C” 没有区别，都是以C的命名方式来命名，因为c++的特性在取名字时会结合参数一起
 
-__cplusplus是c++定义的宏，如果gcc在编译cpp文件时或者g++在编译c和cpp文件时，extern c声明会有效， 如果是gcc在编译.c文件时， 那么extern c 声明无效
+`__cplusplus`是用到c++时定义的宏，如果gcc在编译cpp文件时或者g++在编译c和cpp文件时，extern c声明会有效(这种情况下定义了`__cplusplus`这个宏)， 如果是gcc在编译.c文件时， 那么extern c 声明无效(因为这种情况下没有定义`__cplusplus`这个宏)
 
 ### c++ lambda 实现 go 中的defer
+
+~~~c++
+#include <functional>
+
+using namespace std;
+
+typedef std::function<void()> fnDefer;
+class Defer
+{
+public:
+	Defer(fnDefer fn) : m_fn(fn)
+	{
+	}
+	~Defer()
+	{
+		if (m_fn)
+			m_fn();
+	}
+private:
+	fnDefer m_fn;
+};
+
+#define defer1(a,b) a##b
+#define defer2(a, b) defer1(a, b)
+#define defer(expr) Defer defer2(__Defer__,__COUNTER__) ([&](){expr;})
+
+class Test
+{
+public:
+	void f(int i)
+	{
+		printf("f:%d %p\n", i, this);
+	}
+};
+
+int main(int argc, char* argv[])
+{
+	Test t;
+	printf("test:%p\n", &t);
+	defer(t.f(1));
+	defer(t.f(2));
+	defer(t.f(3));
+
+	return 0;
+}
+
+~~~
+
+### c++访问其他文件对象的方式
+
+对于变量 extern int c;
+
+对于函数可以 不同extern，因为默认加了extern， 但需要声明一下，所以我们一般把声明放在头文件，大家都引用它就行了。
+
+使用静态指针的方法，就像MFC中访问主窗口一样，类和函数一样，如果在其他文件需要用到，都需要声明一下，通过 类名::静态对象，  对象在初始化的时候把这个指针指向它， 然后就可以用这个静态指针访问这个对象。
