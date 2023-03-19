@@ -1,3 +1,35 @@
+SQL操作牢记
+
+~~~
+去重  distinct,  或者 group by
+是否在某一个区间
+where age bettwen 1 and 2 
+where age > 10 and name = "jt"
+不为某一个值
+where age is not null
+where age != 10
+是否在指定区间
+where age in(1, 2, 3)
+
+SELECT d.deptno FROM  dept d 
+WHERE NOT EXISTS (SELECT deptno FROM emp WHERE deptno=d.deptno); // 如果成立exists返回1，反之0
+
+模糊查询  
+where name like "%jt" // %表示一段，  而.表示一个
+
+常用函数 max, count(*), AVG(val) ,函数一般都是在where筛选过后才执行的
+
+groupby a, b  表示根据多个字段分组 ,如果接着后边还需要判断，可以用having字段， 如select count(age) from emp where age = 10 group by male having coutn(age), where不能用聚合函数(别名也不行), having可以，相当于对where的补充
+
+
+多表查询
+SELECT DISTINCT e.empno,e.ename,e.job,e.deptno
+FROM emp e JOIN emp mgr
+ON e.empno=mgr.mgr;
+~~~
+
+
+
 ## 红黑树、B树、B+树、hash常问
 
 比如普通搜索树，如果是有序的一串数字(并且插入顺序是有序的)，那么就退化成了链表的形式，后来出现了平衡树，但平衡时调整代价太大，因为平衡要求太高。

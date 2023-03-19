@@ -99,7 +99,9 @@ alter table 表名 add constraint `c_s` foreign key(col_id) references college(i
 
 ## 二、表关系
 
-1.一对多
+注意：外键不一定是另外一个表的主键， 但一定是一个唯一字段。
+
+1.多对一
 
 创建学院表：
 
@@ -117,19 +119,17 @@ alter table 表名 add constraint `c_s` foreign key(col_id) references college(i
 
 
 
-学院--学生
+学生表，学生-->学院
 
 ~~~mysql
 create table student(
 	-> id int primary key auto_increment,
     -> name varchar(20) not null,
     -> col_id int,
-    #这里是一对多,所以col_id 不需要唯一约束。
+    #这里是多对一,所以col_id 不需要唯一约束。
     -> constraint `c_s` foreign key(col_id) references college(id)#这里注意外键是加在学院身上的
     -> on delete set null);
 ~~~
-
-
 
 2.一对一
 
@@ -178,6 +178,8 @@ create table student(
 ~~~
 
 ![](C:\Users\ASUS\Pictures\博客图片\QQ图片20211217205338.png)
+
+
 
 ## 三、范式
 
