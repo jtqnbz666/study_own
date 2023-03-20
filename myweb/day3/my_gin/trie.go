@@ -19,6 +19,8 @@ func (n *node) String() string {
 //height表示 路径的第几层级， pattern表示完整路径，parts装着路径拆分后的段
 //这个函数主要是相当于把路径树 构建出来
 func (n *node) insert(pattern string, parts []string, height int) {
+	// 比如root["GET"]方法的那个节点就已经是最顶层节点了， ，比如这里的 v1 就会存在那个结点中。
+
 	//一般都是从height = 0传进来的
 	if len(parts) == height {
 		n.pattern = pattern
@@ -29,7 +31,7 @@ func (n *node) insert(pattern string, parts []string, height int) {
 
 	//判断当前层级是否已经含有该层级 如当height=1 时，就判断是否有[v1, zoo, xm]中的zoo层级
 	child := n.matchChild(part)
-	if child == nil {
+	if child == nil { //没有就创建一个
 		child = &node{
 			part:   part,
 			isWild: part[0] == ':' || part[0] == '*',
@@ -49,7 +51,7 @@ func (n *node) matchChild(part string) *node {
 	return nil
 }
 
-// 返回符合当前层级的所有node， 比如/v1/hello, /v1/jt  则返回hello和jt节点
+// 返回符合当前层级的所有node， 比如/v1 和 * ，
 func (n *node) matchChildren(part string) []*node {
 	nodes := make([]*node, 0)
 	for _, child := range n.children {
