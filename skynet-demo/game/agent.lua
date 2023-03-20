@@ -144,7 +144,7 @@ end
 local function process_socket_events()
     while true do
         local data = socket.readline(clientfd)-- "\n" read = 0
-        if not data then
+        if not data then        -- 客户端退出，那么read读到的就是0 
             print("断开网络 "..clientfd)
             client_quit()
             return

@@ -2,5 +2,12 @@
     "lua.targetVersion": "5.3",
     "files.associations": {
         "skynet.h": "c"
-    }
+    },
+    "Lua.diagnostics.globals": [
+        "lfs"
+    ],
+    "Lua.workspace.library": [
+        "${3rd}/lfs/library",
+        "${3rd}/skynet/library"
+    ]
 }

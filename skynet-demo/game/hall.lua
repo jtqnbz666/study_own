@@ -27,13 +27,13 @@ function CMD.ready(client)
         return skynet.retpack(false, "重复准备")
     end
     tinsert(queues, 1, client)
-    resps[client.name] = skynet.response()
+    resps[client.name] = skynet.response()  -- 细节延时返回，返回值是一个函数
     if #queues >= 3 then
         local roomd = skynet.newservice("room")
         local members = {tremove(queues), tremove(queues), tremove(queues)}
         for i=1, 3 do
             local cli = members[i]
-            resps[cli.name](true, roomd)
+            resps[cli.name](true, roomd) -- true 发送应答， PTYPE_RESPINSE;
             resps[cli.name] = nil
         end
         skynet.send(roomd, "lua", "start", members)
