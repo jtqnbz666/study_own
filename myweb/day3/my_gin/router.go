@@ -44,8 +44,8 @@ func parsePattern(pattern string) []string {
 func (r *router) AddRoute(method string, pattern string, handler HandlerFunc) {
 	parts := parsePattern(pattern) //解析出来后，parts数组是不包含空字符的
 	key := method + "-" + pattern
-	_, ok := r.roots[method]
-	if !ok {
+	_, ok := r.roots[method] // 以GET PUT 为键值
+	if !ok {                 // 之前没有这种方法
 		r.roots[method] = &node{} // root是一个 map[string]*node 类型
 	}
 

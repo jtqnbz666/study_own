@@ -48,7 +48,7 @@ func (c *Context) SetHeader(key string, value string) {
 }
 
 func (c *Context) String(code int, format string, values ...interface{}) {
-	c.SetHeader("Content-Type", "text/plain")
+	c.SetHeader("Content-Type", "text/plain") //明文的意思
 	c.Status(code)
 	c.Writer.Write([]byte(fmt.Sprintf(format, values...)))
 }

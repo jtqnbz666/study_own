@@ -27,7 +27,7 @@ func (n *node) insert(pattern string, parts []string, height int) {
 	//比如传入 part为[v1, zoo, xm] ,pattern为/v1/zoo/xm
 	part := parts[height]
 
-	//判断当前层级是否已经含有该层级 如当height= 时，就判断是否有[v1, zoo, xm]中的zoo层级
+	//判断当前层级是否已经含有该层级 如当height=1 时，就判断是否有[v1, zoo, xm]中的zoo层级
 	child := n.matchChild(part)
 	if child == nil {
 		child = &node{

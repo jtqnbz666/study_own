@@ -247,6 +247,7 @@ second
 
 ~~~go
 // 参数形式
+变参的本质其实是slice
 func add(a int, val ...int) int {
 	var sum int = a;
 	for i := 0; i < len(arg); i ++ {
