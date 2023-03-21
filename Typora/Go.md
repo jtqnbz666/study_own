@@ -10,6 +10,11 @@ go  中
 for int i = 0; i < 10; i ++ {
     
 }
+
+for {		//无线循环
+    
+}
+
 //遍历数组类型
 for k, v := range array {
     //k表示索引下表，v是对应的值
@@ -48,6 +53,109 @@ do
 	...
 done
 ~~~
+
+### map方法
+
+~~~go
+var a1 map[string]string
+var b1 map[interface{}]interface{}
+var m1 map[[]byte]string //报错,不支持以[]byte作为key
+~~~
+
+### 输入参数解析flag.String()
+
+~~~go
+test.go文件
+ backup_dir := flag.String("b", "/home/default_dir", "backup path")
+ debug_mode := flag.Bool("d", false, "debug mode")
+
+ flag.Parse()
+
+fmt.Println("backup_dir: ", *backup_dir)
+fmt.Println("debug_mode: ", *debug_mode)
+
+// 第一个，命令行参数名称，如-b -help，这里就是 -docDownloadUrl.  第二个是默认值。 如果输入-help 或者 其他的就会以第三个参数的内容提示你
+
+比如
+ go run test.go -b /home/jt
+那么就是输出 
+dir:  /home/jt
+mod ; false
+
+再比如
+go run test.go -help // 或者其他不认识的 -..  就输出下边的提示
+  -b string
+        backup path (default "/home/default_dir") //第三个参数提示
+  -d    debug mode							   //第三个参数提示
+~~~
+
+
+
+
+
+### 字节序和字符串相互转换
+
+~~~go
+var s1 = "hello world" 
+var b = []byte(s1)
+var s2 = string(b)
+fmt.Println(b)	//[104 101 108 108 111 32 119 111 114 108 100]
+fmt.Println(s2) //hello world
+~~~
+
+### go协程
+
+~~~go
+func hello(name string) {
+    for {
+        fmt.Println("hello world:", name)
+        time.Sleep(1 * time.Second)
+    }
+}
+go hello("jt") // 加上go 的关键字, 把函数放到协程中执行
+~~~
+
+### 异常捕获
+
+~~~go
+//以保护方式运行一个函数
+func protectRun(entry func()) {
+    defer func() {
+        //捕获异常
+        err := recover()
+        switch err.(type) {
+        case runtime.Error:
+            fmt.Println("runtime error", err)
+        default:	//非运行时错误
+            fmt.Println("error:", err)  
+        }
+    }()
+    entry()
+}
+
+//定义一个崩溃时传递的上下文信息
+type panicCtx struct {
+    function string 
+}
+
+//手动触发panic
+protectRun(func() {
+    //使用panic传递上下文
+    panic(&panicCtx {		//error: &{手动触发panic}
+        "手动触发panic"
+    })
+  
+})
+
+//故意制造空指针访问错误
+protectRun(func() {
+  var a *int
+  *a = 1// 对空指针操作,触发异常
+// runtime error: invalid memory address or nil pointer dereference
+})
+~~~
+
+
 
 
 
@@ -99,6 +207,11 @@ case 2:
  	fallthrough  //通过它就能继续执行下一个case
 case 3:
     fmt.Println("3")
+}
+
+// 检测异常错误时
+switch err.(type) {
+	
 }
 ~~~
 
@@ -438,7 +551,7 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, req *http.Request) {}
 
 
 
-### 编译问题
+### 编译跳转问题
 
 vscode上
 
@@ -677,8 +790,8 @@ typeof和valueof 方法的相似之处
 ~~~go
 它们都有Field方法
 s := {age:18, name : "jt"}
-v := reflect.ValueOf(s)
-t := reflect.TypeOf(s)
+v := reflect.ValueOf(s)	//值的方式不是引用
+t := reflect.TypeOf(s) //值的方式不是引用
 
 对于TypeOf ：t.Field(1) 表示获取到(age 和 int 这一行), 此时对应的就是， t.Field(1).name 为 age , t.Field(1).Type 为 int
 
@@ -713,7 +826,7 @@ v.Elem().Field(0).SetString("tt")
 v.Elem().Field(1).SetInt(20)
 ~~~
 
-打印结构体反射对象的值
+打印结构体反射对象(引用)的值
 
 ~~~go
 以下说的都是反射一个对象的引用类型，而不是值类型
