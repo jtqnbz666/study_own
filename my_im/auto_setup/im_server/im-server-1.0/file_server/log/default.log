@@ -1,0 +1,98 @@
+2023-02-12 11:30:05,104 [INFO  IM] - <file_msg_server_conn.cpp>|<153>|<_HandleGetServerAddressReq>,Upload file_client_conn addr info, ip=127.0.0.1, port=8600
+2023-02-12 11:34:38,605 [INFO  IM] - <file_msg_server_conn.cpp>|<61>|<OnClose>,Client onclose: handle=8
+2023-02-12 11:34:38,607 [INFO  IM] - <file_msg_server_conn.cpp>|<44>|<Close>,Close client, handle 8
+2023-02-12 11:34:46,368 [INFO  IM] - <file_msg_server_conn.cpp>|<153>|<_HandleGetServerAddressReq>,Upload file_client_conn addr info, ip=127.0.0.1, port=8600
+2023-02-12 11:38:15,852 [INFO  IM] - <file_msg_server_conn.cpp>|<120>|<_HandleMsgFileTransferReq>,trams_mode=1, task_id=6147724c-4309-4a9f-a1aa-0f8e533c4327, from_id=1, to_id=2, file_name=C:/Users/ASUS/Pictures/BMP/7.bmp, file_size=100856
+2023-02-12 11:38:15,855 [INFO  IM] - <file_msg_server_conn.cpp>|<137>|<_HandleMsgFileTransferReq>,Create task succeed, task id 6147724c-4309-4a9f-a1aa-0f8e533c4327, task type 1, from user 1, to user 2
+2023-02-12 11:38:16,862 [INFO  IM] - <file_client_conn.cpp>|<137>|<_HandleClientFileLoginReq>,client login, user_id=2, task_id=6147724c-4309-4a9f-a1aa-0f8e533c4327, file_role=2
+2023-02-12 11:38:16,862 [INFO  IM] - <file_client_conn.cpp>|<137>|<_HandleClientFileLoginReq>,client login, user_id=1, task_id=6147724c-4309-4a9f-a1aa-0f8e533c4327, file_role=1
+2023-02-12 11:38:16,863 [INFO  IM] - <file_client_conn.cpp>|<402>|<_StatesNotify>,notify to user 1 state 0 task 6147724c-4309-4a9f-a1aa-0f8e533c4327
+2023-02-12 11:38:18,940 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=6147724c-4309-4a9f-a1aa-0f8e533c4327, file_role=1, offset=0, datasize=34816
+2023-02-12 11:38:19,402 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=6147724c-4309-4a9f-a1aa-0f8e533c4327, user_id=1, offset=0, data_size=34816
+2023-02-12 11:38:19,445 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=6147724c-4309-4a9f-a1aa-0f8e533c4327, file_role=1, offset=34816, datasize=34816
+2023-02-12 11:38:19,862 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=6147724c-4309-4a9f-a1aa-0f8e533c4327, user_id=1, offset=34816, data_size=34816
+2023-02-12 11:38:19,923 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=6147724c-4309-4a9f-a1aa-0f8e533c4327, file_role=1, offset=69632, datasize=31224
+2023-02-12 11:38:20,322 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=6147724c-4309-4a9f-a1aa-0f8e533c4327, user_id=1, offset=69632, data_size=31224
+2023-02-12 11:38:20,323 [INFO  IM] - <file_client_conn.cpp>|<229>|<_HandleClientFileStates>,recv filestate,user_id=2, task_id=6147724c-4309-4a9f-a1aa-0f8e533c4327, file_stat=3
+2023-02-12 11:38:20,324 [INFO  IM] - <file_client_conn.cpp>|<252>|<_HandleClientFileStates>,Task 6147724c-4309-4a9f-a1aa-0f8e533c4327 3 by user_id:2 notify 1, erased
+2023-02-12 11:38:20,324 [INFO  IM] - <file_client_conn.cpp>|<44>|<Close>,close client, handle 9
+2023-02-12 11:38:21,239 [INFO  IM] - <file_client_conn.cpp>|<86>|<OnTimer>,Close another online conn, user_id=1
+2023-02-12 11:38:21,239 [INFO  IM] - <file_client_conn.cpp>|<44>|<Close>,close client, handle 10
+2023-02-13 07:58:05,518 [INFO  IM] - <file_msg_server_conn.cpp>|<67>|<OnTimer>,msg server timeout
+2023-02-13 07:58:07,028 [INFO  IM] - <file_msg_server_conn.cpp>|<44>|<Close>,Close client, handle 8
+2023-02-13 07:58:07,219 [INFO  IM] - <file_msg_server_conn.cpp>|<153>|<_HandleGetServerAddressReq>,Upload file_client_conn addr info, ip=127.0.0.1, port=8600
+2023-02-13 08:26:08,919 [INFO  IM] - <file_msg_server_conn.cpp>|<61>|<OnClose>,Client onclose: handle=8
+2023-02-13 08:26:08,940 [INFO  IM] - <file_msg_server_conn.cpp>|<44>|<Close>,Close client, handle 8
+2023-02-13 08:26:09,354 [INFO  IM] - <file_msg_server_conn.cpp>|<153>|<_HandleGetServerAddressReq>,Upload file_client_conn addr info, ip=127.0.0.1, port=8600
+2023-02-15 21:46:48,909 [INFO  IM] - <file_msg_server_conn.cpp>|<153>|<_HandleGetServerAddressReq>,Upload file_client_conn addr info, ip=127.0.0.1, port=8600
+2023-02-15 21:47:19,828 [INFO  IM] - <file_msg_server_conn.cpp>|<153>|<_HandleGetServerAddressReq>,Upload file_client_conn addr info, ip=127.0.0.1, port=8600
+2023-02-15 21:48:19,637 [INFO  IM] - <file_msg_server_conn.cpp>|<153>|<_HandleGetServerAddressReq>,Upload file_client_conn addr info, ip=127.0.0.1, port=8600
+2023-02-16 02:44:22,709 [INFO  IM] - <file_msg_server_conn.cpp>|<61>|<OnClose>,Client onclose: handle=8
+2023-02-16 02:44:22,769 [INFO  IM] - <file_msg_server_conn.cpp>|<44>|<Close>,Close client, handle 8
+2023-02-16 02:44:22,948 [INFO  IM] - <file_msg_server_conn.cpp>|<153>|<_HandleGetServerAddressReq>,Upload file_client_conn addr info, ip=127.0.0.1, port=8600
+2023-02-20 09:01:04,249 [INFO  IM] - <file_msg_server_conn.cpp>|<153>|<_HandleGetServerAddressReq>,Upload file_client_conn addr info, ip=127.0.0.1, port=8600
+2023-02-20 09:04:21,765 [ERROR IM] - <BaseSocket.cpp>|<56>|<Listen>,bind failed, err_code=98, server_ip=0.0.0.0, port=8600
+2023-02-20 09:04:36,182 [INFO  IM] - <file_msg_server_conn.cpp>|<153>|<_HandleGetServerAddressReq>,Upload file_client_conn addr info, ip=127.0.0.1, port=8600
+2023-02-20 09:05:10,836 [INFO  IM] - <file_msg_server_conn.cpp>|<153>|<_HandleGetServerAddressReq>,Upload file_client_conn addr info, ip=127.0.0.1, port=8600
+2023-02-20 09:07:34,878 [INFO  IM] - <file_msg_server_conn.cpp>|<61>|<OnClose>,Client onclose: handle=8
+2023-02-20 09:07:34,878 [INFO  IM] - <file_msg_server_conn.cpp>|<44>|<Close>,Close client, handle 8
+2023-02-20 09:07:39,155 [INFO  IM] - <file_msg_server_conn.cpp>|<153>|<_HandleGetServerAddressReq>,Upload file_client_conn addr info, ip=127.0.0.1, port=8600
+2023-02-20 09:09:24,667 [INFO  IM] - <file_msg_server_conn.cpp>|<120>|<_HandleMsgFileTransferReq>,trams_mode=1, task_id=07006cd6-7046-45b2-831e-163921ee2d28, from_id=1, to_id=2, file_name=C:/Users/ASUS/Pictures/BMP/8.bmp, file_size=100856
+2023-02-20 09:09:24,667 [INFO  IM] - <file_msg_server_conn.cpp>|<137>|<_HandleMsgFileTransferReq>,Create task succeed, task id 07006cd6-7046-45b2-831e-163921ee2d28, task type 1, from user 1, to user 2
+2023-02-20 09:09:24,681 [INFO  IM] - <file_client_conn.cpp>|<137>|<_HandleClientFileLoginReq>,client login, user_id=1, task_id=07006cd6-7046-45b2-831e-163921ee2d28, file_role=1
+2023-02-20 09:09:25,669 [INFO  IM] - <file_client_conn.cpp>|<137>|<_HandleClientFileLoginReq>,client login, user_id=2, task_id=07006cd6-7046-45b2-831e-163921ee2d28, file_role=2
+2023-02-20 09:09:25,669 [INFO  IM] - <file_client_conn.cpp>|<402>|<_StatesNotify>,notify to user 1 state 0 task 07006cd6-7046-45b2-831e-163921ee2d28
+2023-02-20 09:09:26,453 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=07006cd6-7046-45b2-831e-163921ee2d28, file_role=1, offset=0, datasize=34816
+2023-02-20 09:09:26,504 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=07006cd6-7046-45b2-831e-163921ee2d28, user_id=1, offset=0, data_size=34816
+2023-02-20 09:09:26,533 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=07006cd6-7046-45b2-831e-163921ee2d28, file_role=1, offset=34816, datasize=34816
+2023-02-20 09:09:26,574 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=07006cd6-7046-45b2-831e-163921ee2d28, user_id=1, offset=34816, data_size=34816
+2023-02-20 09:09:26,591 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=07006cd6-7046-45b2-831e-163921ee2d28, file_role=1, offset=69632, datasize=31224
+2023-02-20 09:09:26,634 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=07006cd6-7046-45b2-831e-163921ee2d28, user_id=1, offset=69632, data_size=31224
+2023-02-20 09:09:26,636 [INFO  IM] - <file_client_conn.cpp>|<229>|<_HandleClientFileStates>,recv filestate,user_id=2, task_id=07006cd6-7046-45b2-831e-163921ee2d28, file_stat=3
+2023-02-20 09:09:26,636 [INFO  IM] - <file_client_conn.cpp>|<252>|<_HandleClientFileStates>,Task 07006cd6-7046-45b2-831e-163921ee2d28 3 by user_id:2 notify 1, erased
+2023-02-20 09:09:26,636 [INFO  IM] - <file_client_conn.cpp>|<44>|<Close>,close client, handle 9
+2023-02-20 09:09:27,237 [INFO  IM] - <file_client_conn.cpp>|<86>|<OnTimer>,Close another online conn, user_id=1
+2023-02-20 09:09:27,237 [INFO  IM] - <file_client_conn.cpp>|<44>|<Close>,close client, handle 10
+2023-02-20 09:09:51,098 [INFO  IM] - <file_msg_server_conn.cpp>|<120>|<_HandleMsgFileTransferReq>,trams_mode=2, task_id=f6c84798-95cd-459d-b634-27b32161ac49, from_id=1, to_id=2, file_name=C:/Users/ASUS/Pictures/BMP/1.bmp, file_size=100856
+2023-02-20 09:09:51,099 [INFO  IM] - <file_msg_server_conn.cpp>|<137>|<_HandleMsgFileTransferReq>,Create task succeed, task id f6c84798-95cd-459d-b634-27b32161ac49, task type 2, from user 1, to user 2
+2023-02-20 09:09:51,103 [INFO  IM] - <file_client_conn.cpp>|<137>|<_HandleClientFileLoginReq>,client login, user_id=1, task_id=f6c84798-95cd-459d-b634-27b32161ac49, file_role=3
+2023-02-20 09:09:51,103 [INFO  IM] - <file_client_conn.cpp>|<211>|<_HandleClientFileLoginReq>,pull data req
+2023-02-20 09:09:51,165 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=f6c84798-95cd-459d-b634-27b32161ac49, user_id=1, offset=0, data_size=32768
+2023-02-20 09:09:51,165 [INFO  IM] - <transfer_task.cpp>|<328>|<DoRecvData>,Ready recv data, offset=0, data_size=32768, segment_size=4
+2023-02-20 09:09:51,165 [INFO  IM] - <transfer_task.cpp>|<31>|<GetCurrentOfflinePath>,save offline files to /home/jt/my_im/auto_setup/im_server/im-server-1.0/file_server/offline_file
+2023-02-20 09:10:10,316 [INFO  IM] - <file_msg_server_conn.cpp>|<120>|<_HandleMsgFileTransferReq>,trams_mode=2, task_id=05c41201-a492-4d03-8a77-19e81c88addc, from_id=1, to_id=2, file_name=C:/Users/ASUS/Pictures/BMP/7.bmp, file_size=100856
+2023-02-20 09:10:10,316 [INFO  IM] - <file_msg_server_conn.cpp>|<137>|<_HandleMsgFileTransferReq>,Create task succeed, task id 05c41201-a492-4d03-8a77-19e81c88addc, task type 2, from user 1, to user 2
+2023-02-20 09:10:10,323 [INFO  IM] - <file_client_conn.cpp>|<137>|<_HandleClientFileLoginReq>,client login, user_id=1, task_id=05c41201-a492-4d03-8a77-19e81c88addc, file_role=3
+2023-02-20 09:10:10,324 [INFO  IM] - <file_client_conn.cpp>|<211>|<_HandleClientFileLoginReq>,pull data req
+2023-02-20 09:10:10,374 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=05c41201-a492-4d03-8a77-19e81c88addc, user_id=1, offset=0, data_size=32768
+2023-02-20 09:10:10,375 [INFO  IM] - <transfer_task.cpp>|<328>|<DoRecvData>,Ready recv data, offset=0, data_size=32768, segment_size=4
+2023-02-20 09:10:24,522 [INFO  IM] - <file_client_conn.cpp>|<79>|<OnClose>,client onclose:handle=11
+2023-02-20 09:10:24,522 [INFO  IM] - <file_client_conn.cpp>|<44>|<Close>,close client, handle 11
+2023-02-20 09:10:24,522 [INFO  IM] - <file_client_conn.cpp>|<79>|<OnClose>,client onclose:handle=9
+2023-02-20 09:10:24,522 [INFO  IM] - <file_client_conn.cpp>|<44>|<Close>,close client, handle 9
+2023-02-20 14:01:22,617 [INFO  IM] - <file_msg_server_conn.cpp>|<61>|<OnClose>,Client onclose: handle=8
+2023-02-20 14:01:22,624 [INFO  IM] - <file_msg_server_conn.cpp>|<44>|<Close>,Close client, handle 8
+2023-02-20 14:01:22,886 [INFO  IM] - <file_msg_server_conn.cpp>|<153>|<_HandleGetServerAddressReq>,Upload file_client_conn addr info, ip=127.0.0.1, port=8600
+2023-02-20 17:28:48,279 [INFO  IM] - <file_msg_server_conn.cpp>|<61>|<OnClose>,Client onclose: handle=8
+2023-02-20 17:28:48,327 [INFO  IM] - <file_msg_server_conn.cpp>|<44>|<Close>,Close client, handle 8
+2023-02-20 17:28:48,461 [INFO  IM] - <file_msg_server_conn.cpp>|<153>|<_HandleGetServerAddressReq>,Upload file_client_conn addr info, ip=127.0.0.1, port=8600
+2023-02-20 17:47:01,289 [INFO  IM] - <file_msg_server_conn.cpp>|<61>|<OnClose>,Client onclose: handle=8
+2023-02-20 17:47:01,289 [INFO  IM] - <file_msg_server_conn.cpp>|<44>|<Close>,Close client, handle 8
+2023-02-20 17:47:01,601 [INFO  IM] - <file_msg_server_conn.cpp>|<153>|<_HandleGetServerAddressReq>,Upload file_client_conn addr info, ip=127.0.0.1, port=8600
+2023-02-27 22:07:08,240 [INFO  IM] - <file_msg_server_conn.cpp>|<153>|<_HandleGetServerAddressReq>,Upload file_client_conn addr info, ip=127.0.0.1, port=8600
+2023-02-27 22:10:20,373 [INFO  IM] - <file_msg_server_conn.cpp>|<120>|<_HandleMsgFileTransferReq>,trams_mode=1, task_id=adab15b5-4e0b-48c7-b9d6-479b85330df5, from_id=2, to_id=1, file_name=C:/Users/ASUS/Pictures/BMP/2.bmp, file_size=100856
+2023-02-27 22:10:20,374 [INFO  IM] - <file_msg_server_conn.cpp>|<137>|<_HandleMsgFileTransferReq>,Create task succeed, task id adab15b5-4e0b-48c7-b9d6-479b85330df5, task type 1, from user 2, to user 1
+2023-02-27 22:10:21,377 [INFO  IM] - <file_client_conn.cpp>|<137>|<_HandleClientFileLoginReq>,client login, user_id=1, task_id=adab15b5-4e0b-48c7-b9d6-479b85330df5, file_role=2
+2023-02-27 22:10:21,378 [INFO  IM] - <file_client_conn.cpp>|<137>|<_HandleClientFileLoginReq>,client login, user_id=2, task_id=adab15b5-4e0b-48c7-b9d6-479b85330df5, file_role=1
+2023-02-27 22:10:21,378 [INFO  IM] - <file_client_conn.cpp>|<402>|<_StatesNotify>,notify to user 2 state 0 task adab15b5-4e0b-48c7-b9d6-479b85330df5
+2023-02-27 22:10:23,260 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=1, task_id=adab15b5-4e0b-48c7-b9d6-479b85330df5, file_role=1, offset=0, datasize=34816
+2023-02-27 22:10:23,304 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=adab15b5-4e0b-48c7-b9d6-479b85330df5, user_id=2, offset=0, data_size=34816
+2023-02-27 22:10:23,318 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=1, task_id=adab15b5-4e0b-48c7-b9d6-479b85330df5, file_role=1, offset=34816, datasize=34816
+2023-02-27 22:10:23,363 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=adab15b5-4e0b-48c7-b9d6-479b85330df5, user_id=2, offset=34816, data_size=34816
+2023-02-27 22:10:23,366 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=1, task_id=adab15b5-4e0b-48c7-b9d6-479b85330df5, file_role=1, offset=69632, datasize=31224
+2023-02-27 22:10:23,413 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=adab15b5-4e0b-48c7-b9d6-479b85330df5, user_id=2, offset=69632, data_size=31224
+2023-02-27 22:10:23,414 [INFO  IM] - <file_client_conn.cpp>|<229>|<_HandleClientFileStates>,recv filestate,user_id=1, task_id=adab15b5-4e0b-48c7-b9d6-479b85330df5, file_stat=3
+2023-02-27 22:10:23,414 [INFO  IM] - <file_client_conn.cpp>|<252>|<_HandleClientFileStates>,Task adab15b5-4e0b-48c7-b9d6-479b85330df5 3 by user_id:1 notify 2, erased
+2023-02-27 22:10:23,414 [INFO  IM] - <file_client_conn.cpp>|<44>|<Close>,close client, handle 9
+2023-02-27 22:10:24,316 [INFO  IM] - <file_client_conn.cpp>|<86>|<OnTimer>,Close another online conn, user_id=2
+2023-02-27 22:10:24,316 [INFO  IM] - <file_client_conn.cpp>|<44>|<Close>,close client, handle 10

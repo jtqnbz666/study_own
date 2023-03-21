@@ -257,7 +257,7 @@ name字段：名称
 value字段：cookie的值
 
 //以下都是一些控制权限相关的配置
-domain字段：cookie的不可跨域名性：即百度不可以用谷歌的cookie，反之也不行，**但是**可以通过cookie的domain字段支持跨域名的访问，例如将domain属性设置为".shuaige.com"，那么"a.shauige.com" 和 "b.shuaige.com"都可以访问该cookie
+domain字段：cookie的不可跨域名性：即百度不可以用谷歌的cookie，反之也不行，**但是**可以通过cookie的domain字段支持跨域名的访问，例如将domain属性设置为".shuaige.com"，那么"a.shauige.com" 和 "b.shuaige.com"都可以访问该cookie， 这也就是为什么不能的网页只要登录其中一个， 其他的也能自动登录
 
 path字段：为可以访问此cookie的页面路径。 比如domain是abc.com,path是/test，那么只有/test路径下的页面可以读取此cookie。
 Size字段：设置cookie的大小
@@ -561,5 +561,38 @@ int main(int argc, char* argv[])
 
 快排是相同数量级的所有排序算法中， 平均性能最好的.
 
+### xml， json， protobuf区别
 
+xml和json 是自描描述的， 而protobuf不是
+
+protobuf更加安全因为是二进制的形式
+
+protobuf更小，因为采用二进制压缩，进而消耗的网络流量就更少
+
+但采用protobuf这种方式也有一个相对不好的地方就是无法对一个序列的数值进行随机查找，因为每个数字所占用的存储空间不是等长的，所以要获取序列中的第N个数字，无法通过计算偏移量的方式，而必须从头开始顺序查找
+
+protobuf有一种编码方式叫varints， 最多可以编码8字节的数据，这是因为现代计算机最高支持处理64位的整型， varints能对整数(这个整数的类型不仅是int32,int64, 还有sint32， sint64， bool，enum)进行编码， 采用的是大端的编码方式(这里拓展htonl，htons 函数，本地和网络的编码区别)， 但是有一个问题， 对于一个负数，比如是sint64, 如果是-1 ，那么依然需要消耗10个字节的长度， 浪费大量空间，因为有一个符号位在那，为了解决这种问题还有一种编码方式叫zigzag(移位和异或的方式) 将负数转化为正数来进行编码
+
+再来说说字符串的编码方式
+
+![](../pic/f001e71862765659b4bf3f1db272d965.jpeg)
+
+- 蓝色，表示字符串采用 UTF-8 编码后字节流的**长度**（bytes），采用 Base 128 Varints 进行编码。
+- 白色，字符串用 UTF-8 编码后的字节流。
+
+**protobuf消息结构**
+
+~~~
+message Search {
+	string query = 1;
+	int32 page_number = 2;
+	int32 result = 3;
+}
+~~~
+
+试想这样一种情况，发送方在更新protobuf的协议字段后，加了更多的字段， 而接收方并不知道， 但接收方仍想接受自己还能接收的字段， 所以对于每个成员都有一个**类似赋值**的操作，但其实不是赋值，它相当于是给每个字段附带了一个key， 当接收方读取到未知的key时，则跳过这个key对应的value， 这样也就能兼容了， 所以其实服务器与接收端的成员命名是可以不一致的，因为它主要是靠这个key来匹配字段的，但为了规范，一般都写成一样的字段名
+
+protobuf是支持嵌套消息的，对于嵌套消息，首先要将嵌套的消息编码成字节流， 然后就像对待string类型一样， 再将整体编码为字节流，最后再字节流的前边加入以Varints编码的长度即可
+
+我自己做过相关的序列化耗时对比，最终的出来的结论， protobuf > jsoncpp 略大于 cjson > xml
 
