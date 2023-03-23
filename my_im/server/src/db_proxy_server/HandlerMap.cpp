@@ -1,14 +1,3 @@
-/*================================================================
- *     Copyright (c) 2014年 lanhu. All rights reserved.
- *
- *   文件名称：HandlerMap.cpp
- *   创 建 者：Zhang Yuanhao
- *   邮    箱：bluefoxah@gmail.com
- *   创建日期：2014年12月02日
- *   描    述：
- *
- ================================================================*/
-
 #include "HandlerMap.h"
 
 #include "business/Login.h"
@@ -62,12 +51,12 @@ CHandlerMap* CHandlerMap::getInstance()
  */
 void CHandlerMap::Init()
 {
-	// Login validate
+	// 登录验证
 	m_handler_map.insert(make_pair(uint32_t(CID_OTHER_VALIDATE_REQ), DB_PROXY::doLogin));
     m_handler_map.insert(make_pair(uint32_t(CID_LOGIN_REQ_PUSH_SHIELD), DB_PROXY::doPushShield));
     m_handler_map.insert(make_pair(uint32_t(CID_LOGIN_REQ_QUERY_PUSH_SHIELD), DB_PROXY::doQueryPushShield));
     
-    // recent session
+    // 最近会话
     m_handler_map.insert(make_pair(uint32_t(CID_BUDDY_LIST_RECENT_CONTACT_SESSION_REQUEST), DB_PROXY::getRecentSession));
     m_handler_map.insert(make_pair(uint32_t(CID_BUDDY_LIST_REMOVE_SESSION_REQ), DB_PROXY::deleteRecentSession));
     
@@ -90,7 +79,7 @@ void CHandlerMap::Init()
     m_handler_map.insert(make_pair(uint32_t(CID_LOGIN_REQ_DEVICETOKEN), DB_PROXY::setDevicesToken));
     m_handler_map.insert(make_pair(uint32_t(CID_OTHER_GET_DEVICE_TOKEN_REQ), DB_PROXY::getDevicesToken));
     
-    //push 推送设置
+    //push 推送设置，但不要了
     m_handler_map.insert(make_pair(uint32_t(CID_GROUP_SHIELD_GROUP_REQUEST), DB_PROXY::setGroupPush));
     m_handler_map.insert(make_pair(uint32_t(CID_OTHER_GET_SHIELD_REQ), DB_PROXY::getGroupPush));
     

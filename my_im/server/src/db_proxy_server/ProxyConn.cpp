@@ -62,7 +62,7 @@ static void sig_handler(int sig_no) {
 
 int init_proxy_conn(uint32_t thread_num) {
     s_handler_map = CHandlerMap::getInstance();
-    g_thread_pool.Init(thread_num);
+    g_thread_pool.Init(thread_num); //初始化线程池
     netlib_add_loop(proxy_loop_callback, NULL); //主线程发包
     signal(SIGTERM, sig_handler);
     return netlib_register_timer(proxy_timer_callback, NULL, 1000); //心跳包处理

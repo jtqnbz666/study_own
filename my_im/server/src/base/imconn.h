@@ -25,7 +25,7 @@ public:
     virtual void OnRead();
     virtual void OnWrite();
     virtual void OnClose() {}
-    virtual void OnTimer(uint64_t curr_tick) {} 
+    virtual void OnTimer(uint64_t curr_tick) {} //心跳包设计
     virtual void OnWriteCompelete() {}
     virtual void HandlePdu(CImPdu* pPdu) {}
 

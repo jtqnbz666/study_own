@@ -1,10 +1,3 @@
-/*
- * db_proxy_server.cpp
- *
- *  Created on: 2014年7月21日
- *      Author: ziteng
- */
-
 #include "netlib.h"
 #include "ConfigFileReader.h"
 #include "version.h"
@@ -47,7 +40,7 @@ int main(int argc, char* argv[])
 		return 0;
 	}
 
-	signal(SIGPIPE, SIG_IGN);
+	signal(SIGPIPE, SIG_IGN);//忽视
 	srand(time(NULL));
 
 	CacheManager* pCacheManager = CacheManager::getInstance();
@@ -116,7 +109,7 @@ puts("db init success");
         return -2;
     }
     string strAesKey(str_aes_key, 32);
-    CAes cAes = CAes(strAesKey);
+    CAes cAes = CAes(strAesKey); //对称加密， RSA非对称加密
     string strAudio = "[语音]";
     char* pAudioEnc;
     uint32_t nOutLen;

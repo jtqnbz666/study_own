@@ -53,7 +53,7 @@ CImConn::~CImConn() {
 }
 
 int CImConn::Send(void* data, int len) {
-    //因为发送数据了，所以更新
+    //因为发送数据了，所以更新， 发送心跳包也是根据它设计的
     m_last_send_tick = get_tick_count();
     if(m_busy) {
         m_out_buf.Write(data, len); //如果在忙，就直接写进m_out_buf
