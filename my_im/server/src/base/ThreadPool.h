@@ -25,7 +25,7 @@ private:
     uint32_t        m_task_cnt;
     pthread_t       m_thread_id;
     CThreadNotify   m_thread_notify;
-    list<CTask*>    m_task_list;
+    list<CTask*>    m_task_list;    //每个线程都有自己的任务队列
 };
 
 class CThreadPool {
