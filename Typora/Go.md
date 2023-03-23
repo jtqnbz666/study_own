@@ -54,6 +54,61 @@ do
 done
 ~~~
 
+### sync.Once 
+
+~~~go
+var once sync.Once
+
+func once1() {
+    fmt.Println("once1")
+}
+func once2() {
+    fmt.Println("once2")
+}
+for i := 0; i < 5; i ++ {
+    once.Do(once1) //只有它会执行
+    once.Do(once1) 
+    once.Do(once2)
+}
+~~~
+
+### sync.WaitGroup
+
+~~~go
+配合上下文一起使用
+var wg sync.WaitGroup
+//主要有两个操作 wg.Add()  和 wg.Done()
+
+//上下文
+ctx, cancel := context.WithTimeout(context.Background(), 10 * time.Second)
+//返回的ctx是上下文，cancel是用于中断上下文的函数， 也可以等超时后自动调用cancel， 效果就是会触发 ctx.Done(), 那么就可以用select来监听这个事件，当出现这个时间的时候，表示时间到期或者手动cancel取消了上下文。
+
+每次开一个任务的时候都会执行wg.Add() , 任务执行完后 都执行wg.Done， 当wg.Wait()等于0时，结束阻塞
+
+//上下文还可以嵌套，比如ctx1 依赖 ctx， ctx2 依赖 ctx1， ctx3 依赖 ctx2， 那么当ctx1这个上下文中断后，ctx2 和 ctx3 都会跟着中断， 但是ctx 不会受到影响
+~~~
+
+### select多路复用
+
+~~~go
+//与上边的sync.WaitGroup 和 context.Context 结合使用
+func work(ctx context.Context, str string) {
+    for {
+        select {
+        case <- ctx.Done(): 
+        // 触发它的时间有两种，要么手动cancel取消，要么超时
+            fmt.Println("退出", str)
+            return 
+        default://默认走这里，否则就会阻塞在上边ctx.Done()
+            fmt.Println("循环中")
+            time.Sleep(time.Second)
+        }
+    }
+}
+~~~
+
+
+
 ### map方法
 
 ~~~go
@@ -562,7 +617,9 @@ ctrl + shift + p 输入setting， 找到Docs Tool 改成guru
 
 ### 包管理方式
 
-像fmt等包都在GOROOT/src里面找， 若设置了GO111MODULE = auto，当使用go mod 时， 就不会去GOPATH目录(但会搜索GOROOT)， 如果不使用go mod，就会同时去GOPATH  和 GOROOT 下寻找， 这种情况下，使用go get 下载的资源放在GOPATH目录下
+像fmt等包都在GOROOT/src里面找， 若设置了GO111MODULE = auto，当使用go mod 时， 就不会去GOPATH目录(但会搜索GOROOT)， 如果不使用go mod，就会同时去GOPATH  和 GOROOT 下寻找， 这种情况下，使用go get 下载的资源放在GOPATH/src目录下
+
+**当找不到问题的时候，去看看GOROOT和GOPATH是否配置错误，把GOROOT改成自己的用户路径**
 
 
 

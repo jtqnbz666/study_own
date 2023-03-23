@@ -80,3 +80,7 @@ git log  查看提交情况， 使用 git reset --hard " hash值" 去到某一�
 git stash -> git pull -> git stash pop -> git add. -> git commit -m "" -> git push
 
 如果过程中出现了no branch问题， 说明你在匿名分支下，解决完冲突后， git rebase --continue,  再次重新add. commit push
+
+
+
+可以使用 git push -f  表示强制以当前代码覆盖之前提交的
