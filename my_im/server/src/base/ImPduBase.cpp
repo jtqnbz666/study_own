@@ -33,7 +33,7 @@ uint32_t CImPdu::GetBodyLength() {
 void CImPdu::WriteHeader() {
     uchar_t* buf = GetBuffer();
 
-    CByteStream::WriteInt32(buf, GetLength());
+    CByteStream::WriteInt32(buf, GetLength()); //每次发送的数据都是包头+包体的内容
     CByteStream::WriteUint16(buf + 4, m_pdu_header.version);
     CByteStream::WriteUint16(buf + 6, m_pdu_header.flag);
     CByteStream::WriteUint16(buf + 8, m_pdu_header.service_id);
@@ -112,7 +112,7 @@ CImPdu* CImPdu::ReadPdu(uchar_t* buf, uint32_t len) {
 
 bool CImPdu::IsPduAvailable(uchar_t* buf, uint32_t len, uint32_t& pdu_len) {
     if(len < IM_PDU_HEADER_LEN) return false;
-    pdu_len = CByteStream::ReadUint32(buf);
+    pdu_len = CByteStream::ReadUint32(buf); //第一个字节就是长度
     if(pdu_len > len) return false;
     if(0 == pdu_len) {
         throw CPduException(1, "pdu_len is 0");
@@ -123,7 +123,7 @@ bool CImPdu::IsPduAvailable(uchar_t* buf, uint32_t len, uint32_t& pdu_len) {
 void CImPdu::SetPBMsg(const google::protobuf::MessageLite* msg) {
     //设置包， 需要重置空间
     m_buf.Read(NULL, m_buf.GetWriteOffset());   //清空包
-    m_buf.Write(NULL, sizeof(PduHeader_t));
+    m_buf.Write(NULL, sizeof(PduHeader_t)); //预留包头大小
     uint32_t msg_size = msg->ByteSize();
     uchar_t* szData = new uchar_t[msg_size];
     if(!msg->SerializeToArray(szData, msg_size)) {

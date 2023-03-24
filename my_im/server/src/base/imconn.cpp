@@ -75,7 +75,7 @@ int CImConn::Send(void* data, int len) {
         remain -= ret;
     }
     if(remain > 0) {
-        m_out_buf.Write((char*)data + offset, remain);  //如果没有发送完的数据，就写到这里
+        m_out_buf.Write((char*)data + offset, remain);  //如果网络等原因没有发送完的数据，就写到这里
         m_busy = true;
         log_debug("send busy, remain=%d", m_out_buf.GetWriteOffset());
     } else {
@@ -121,11 +121,11 @@ void CImConn::OnRead() {
     }
 }
 
-void CImConn::OnWrite() {
+void CImConn::OnWrite() { //按理来说正常发数据是在Send中,但如果有没发送的数据,当写时间触发时完成
     if(!m_busy) return; //!m_busy 则表示没有数据在m_out_buf
     while(m_out_buf.GetWriteOffset() > 0) {
         int send_size = m_out_buf.GetWriteOffset();
-        if(send_size > NETLIB_MAX_SOCKET_BUF_SIZE) { //128k
+        if(send_size > NETLIB_MAX_SOCKET_BUF_SIZE) { //128k,单次只能发这么多
             send_size = NETLIB_MAX_SOCKET_BUF_SIZE;
         }
         int ret = netlib_send(m_handle, m_out_buf.GetBuffer(), send_size);
@@ -133,7 +133,7 @@ void CImConn::OnWrite() {
             ret = 0;
             break;          //出错了就退出，比如网络繁忙
         }
-        m_out_buf.Read(NULL, ret); //读多少，就清理多少
+        m_out_buf.Read(NULL, ret); //读多少，就清理多少,memmove
     }
     if(m_out_buf.GetWriteOffset() == 0) {
         m_busy = false;

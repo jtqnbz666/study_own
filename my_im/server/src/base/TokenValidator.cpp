@@ -1,10 +1,3 @@
-/*
- * TokenValidator.cpp
- *
- *  Created on: 2013-10-2
- *      Author: ziteng@mogujie.com
- */
-
 #include "TokenValidator.h"
 
 #define AUTH_ENCRYPT_KEY "Mgj!@#123"

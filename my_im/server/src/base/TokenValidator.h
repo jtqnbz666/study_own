@@ -1,10 +1,3 @@
-/*
- * TokenValidator.h
- *
- *  Created on: 2013-10-2
- *      Author: ziteng@mogujie.com
- */
-
 #ifndef TOKENVALIDATOR_H_
 #define TOKENVALIDATOR_H_
 

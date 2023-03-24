@@ -18,7 +18,7 @@ public:
     virtual void OnConnect(net_handle_t handle);
     virtual void OnRead();
     virtual void OnClose();
-    virtual void OnTimer(uint64_t curr_tick);
+    virtual void OnTimer(uint64_t curr_tick);//心跳包设计
 
     void HandlePduBuf(uchar_t* pdu_buf, uint32_t pdu_len);
     

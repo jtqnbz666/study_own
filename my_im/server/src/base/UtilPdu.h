@@ -67,10 +67,10 @@ public:
     uint32_t Write(void* buf, uint32_t len);
     uint32_t Read(void* buf, uint32_t len); 
 private:
-    uchar_t*        m_buffer;
-    uint32_t        m_alloc_size;
-    uint32_t        m_write_offset;
-    struct mp_pool_s* m_mmpool;
+    uchar_t*        m_buffer;       //实际buffer
+    uint32_t        m_alloc_size;   //分配大小
+    uint32_t        m_write_offset; //当前偏移量
+    struct mp_pool_s* m_mmpool;     //内存池
 };
 
 class CByteStream {

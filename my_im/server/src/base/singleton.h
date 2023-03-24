@@ -35,7 +35,7 @@ protected:
 
 private:
     static T* CreateInstance() {
-        return new T();
+        return new T();     //所以新的类得把singleton类作为友元类，不然无法构造对象
     }
     
     static void DestroyInstance(T* p) {
@@ -51,6 +51,7 @@ private:
 };
 
 //在头文件初始化，则这个头文件只能被包含一次，这里使用了预处理判断可以忽略这句话
+//因为这里相当于定义.
 template<typename T>
 T* Singleton<T>::s_instance = nullptr;
 #endif

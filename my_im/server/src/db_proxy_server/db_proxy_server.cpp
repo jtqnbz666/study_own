@@ -18,7 +18,7 @@
 #include "SyncCenter.h"
 
 string strAudioEnc;
-// this callback will be replaced by imconn_callback() in OnConnect()
+//相当于accept回调函数
 void proxy_serv_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)
 {
 	if (msg == NETLIB_MSG_CONNECT)
