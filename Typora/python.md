@@ -24,3 +24,38 @@ str.strip(); 删除字符串前后的空格或特殊字符
 lstrip 左边， rstrip 右边
 
 line.split("\t", 1)  以"\t"进行分割， 仅分割一次
+
+
+
+json和字符串转换
+
+~~~python
+字符串转json
+json_list = json.loads(string)
+
+json转字符串
+new_string = json.dumps(json_list,ensure_ascii=False,indent=2)
+#ensure_ascii=False是为了防止中文乱码， indent=2打印好看
+
+import json
+
+str = '''
+[{
+    "name": "Tom",
+    "gender": "male"
+}, {
+    "name": "Jack",
+    "gender": "male"   
+}]
+'''
+#将字符串转为json格式
+print(type(str))
+data = json.loads(str)
+print(type(data))
+data["江涛"]="666"
+str = json.dumps(data, ensure_ascii=False)
+print(data)
+print(str)
+
+~~~
+
