@@ -77,6 +77,6 @@ void CThreadPool::Destory() {
 }
 
 void CThreadPool::AddTask(CTask* pTask) {
-    uint32_t thread_idx = random() % m_worker_size;
+    uint32_t thread_idx = random() % m_worker_size; //随机
     m_worker_list[thread_idx].PushTask(pTask);
 }

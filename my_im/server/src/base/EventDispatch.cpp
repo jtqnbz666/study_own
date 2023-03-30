@@ -57,7 +57,7 @@ void CEventDispatch::_CheckTimer() {
         TimerItem* pItem = *it;
         it ++;
         if(curr_tick >= pItem->next_tick) {
-            //这里就是为什么需要interval字段的原因
+            //这里就是为什么需要interval字段的原因，因为是循环的  
             pItem->next_tick += pItem->interval;
             pItem->callback(pItem->user_data, NETLIB_MSG_TIMER, 0, NULL);
         }

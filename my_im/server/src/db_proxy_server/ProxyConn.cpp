@@ -171,6 +171,8 @@ void CProxyConn::HandlePduBuf(uchar_t* pdu_buf, uint32_t pdu_len) {
 // 一些静态方法
 
 //这个是工作线程调用， 当处理完数据后， 将需要回复的数据放到链表中，让主线程处理
+//试想多线程操作同一个套接字， 同时发数据，或者有一个线程把socket关闭了
+//这与memcached中并不一样，memcached虽然也是多线程，但保证了每个线程只处理自己的一部分socket。不会出现多个线程操作同一个socket
 void CProxyConn::AddResponsePdu(uint32_t conn_uuid, CImPdu* pPdu) {
     ResponsePdu_t* pResp = new ResponsePdu_t;
     pResp->conn_uuid = conn_uuid;

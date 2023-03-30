@@ -12,7 +12,7 @@ typedef struct {
     string      server_ip;
     uint16_t    server_port;
     uint32_t    idle_cnt;
-    uint32_t    reconnect_cnt;
+    uint32_t    reconnect_cnt; //重连时间，超过60从2开始
     CImConn*    serv_conn;
 } serv_info_t;
 

@@ -110,7 +110,7 @@ char* CConfigFileReader::_TrimSpace(char* name) {
     //remove ending space or tab
     char* end_pos = name + strlen(name) - 1;
     while((*end_pos == ' ') || (*end_pos == '\t')) {
-        *end_pos = 0;
+        *end_pos = 0;  //表示清理这个位置
         end_pos --;
     }
 

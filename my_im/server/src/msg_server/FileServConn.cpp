@@ -30,7 +30,7 @@ void file_server_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t 
 		pConn->OnTimer(cur_time);
 	}
     
-	// reconnect FileServer
+	// 重连机制
 	serv_check_reconnect<CFileServConn>(g_file_server_list, g_file_server_count);
 }
 

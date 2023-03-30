@@ -132,7 +132,7 @@ puts("db init success");
 		return ret;
     
     curl_global_init(CURL_GLOBAL_ALL);
-	init_proxy_conn(thread_num);
+	init_proxy_conn(thread_num); //初始化线程池
     CSyncCenter::getInstance()->init();
     CSyncCenter::getInstance()->startSync();
 
