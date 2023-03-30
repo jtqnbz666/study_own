@@ -168,7 +168,7 @@ void perfectForward(T && t) { //既可以传左值， 又可以传右值
 #define min(a,b)  ((a) < (b) ? (a) : (b))
 
 ~~~c
-    int a1=3;
+	int a1=3;
     int a2=87;
     int a=min(a1++,a2); 则a1加了两次， 变为5
 ~~~
@@ -179,6 +179,16 @@ void perfectForward(T && t) { //既可以传左值， 又可以传右值
 int sum = 2 + MIN(3, 4);
 因为宏函数只是展开。
 ```
+
+define小细节
+
+~~~c++
+do {cout << "test" << endl;}while(0)
+    
+因为如果有是if语句的时候执行一段语句按道理是不能在最后出现; 的
+~~~
+
+
 
 ## 友元的细节
 

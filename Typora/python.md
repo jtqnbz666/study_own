@@ -59,3 +59,53 @@ print(str)
 
 ~~~
 
+4. 删除最后两个字符
+
+~~~python
+str = "test\r\n"
+str = str[:-2]
+print(str) # "test" ,\r\n 分别算一个字符
+~~~
+
+5. json处理数据转化为str类型
+
+~~~python
+str1=1
+str2=str(str1) # "1"
+~~~
+
+6. 递归处理json串
+
+~~~python
+import json
+#json文件发送形式
+SendRegisterVerificationCodejson_txt = """
+{
+  "header":{
+    "funcNo": "IF010002",
+  },
+  "payload": {
+    "mobileTel": "13817120001"
+  }
+}
+"""
+date_json = json.loads(SendRegisterVerificationCodejson_txt)
+print(date_json)
+print("*"*10)
+
+dic ={}
+def json_txt(dic_json):
+    if isinstance(dic_json,dict): #判断是否是字典类型isinstance 返回True false
+        for key in dic_json:
+            if isinstance(dic_json[key],dict):#如果dic_json[key]依旧是字典类型
+                print("****key--：%s value--: %s"%(key,dic_json[key]))
+                json_txt(dic_json[key])
+                dic[key] = dic_json[key]
+            else:
+                print("****key--：%s value--: %s"%(key,dic_json[key]))
+                dic[key] = dic_json[key]
+
+json_txt(date_json)
+print("dic ---: "+str(dic))
+~~~
+
