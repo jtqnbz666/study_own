@@ -67,11 +67,20 @@ str = str[:-2]
 print(str) # "test" ,\r\n 分别算一个字符
 ~~~
 
-5. json处理数据转化为str类型
+5.  str 和 int类型的转换, and 和 or的使用， 多条件判断
 
 ~~~python
 str1=1
 str2=str(str1) # "1"
+
+if (int(str2) > 10 and  int(str) > 12):
+    print("666")
+
+if (int(str2) > 10 or  int(str) > 12):
+    print("666")
+
+if (int(str2) > 10 and  int(str) > 12) or (int(str2) > 10 and  int(str) > 12):
+    print("666")
 ~~~
 
 6. 递归处理json串

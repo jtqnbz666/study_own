@@ -1,3 +1,5 @@
+mongo和mysql区别：mysql是规范的，结构化很清楚， mysql中可以多表联合查询，mongo数据通常存储在单个集合中，使用嵌入式文档将其分隔开，没有联合的概念
+
  mongosh 运行命令
 use database_name
 
@@ -7,20 +9,39 @@ db.dropDatabase() 删除当前数据库
 
 
 
+插入一条数据
 
-docker教程： https://pengfeixc.com/tutorial/docker/docker-guide
-		https://docker.easydoc.net/doc/81170005/cCewZWoN/AWOEX9XM
+db.info.insert( { "姓名" : "江涛" "age" : 12}) //info是表的名字，没有就自动创建
 
-docker pull mongo 
+mongoDB中一条记录的主键为 " _id " 字段，如果不显式添加，则会默认为你加上
 
-docker run -p 27017:27017 --name mongodb -d mongo    //启动容器， 第一个端口号是host的，第二个是container中的
+插入多条数据
 
-docker exec -it mongodb	mongosh  admin   //mongodb是容器名，mongosh是sh， admin是用户表(不加也可以)，默认还有config和local
+~~~mongo
+var myEmploy = 
+[
+{
+"name" : "jt",
+"age" : 18
+},
+{
+"name" : "wh",
+"age" : 19
+},
+];
 
-docker exec mongodb bash  	//表示执行mongodb容器中的bash命令， 加上 -it 表示绑定， 相当于就能进入mongodb日期的bash终端
+db.info.insert(myEmploy);
+~~~
 
 
-docker start mongodb	启动容器
 
-持久化数据
-docker run -it -v mongo_volume:/data/db/mongo -p 27017:27017 --name mongodb -d mongo   mongo_volume是挂载的名字， /data/db/mongo是具体路径
+查询数据（json的方式）
+
+db.info.find().forEach(printjson)   // 必须是forEach不能是foreach
+
+
+
+查询指定条件的数据
+
+db.info.find({"name" : "jt"}).forEach(printjson)
+db.info.find({"age": {$gt : 12}}).forEach(printjson)  //>=12岁的人
