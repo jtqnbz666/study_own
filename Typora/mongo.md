@@ -6,6 +6,7 @@ use database_name
 show dbs 	查看所有数据库
 db		查看当前数据库
 db.dropDatabase() 删除当前数据库
+show tables  查看所有集合(表)
 
 
 
