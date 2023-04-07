@@ -54,6 +54,27 @@ do
 done
 ~~~
 
+### 日志打印
+
+~~~go
+import "log"
+ 
+func main() {
+	log.SetPrefix("[logusage]")
+	
+    //日期和文件完整路径
+    log.SetFlags(log.Ldate|log.Llongfile)
+ 	
+	log.Println("i am log")
+	log.Fatalln("i am fatal")
+}
+打印结果：
+[logusage]2020/07/02 F:/go/src/algorithm/logusage/main.go:9: i am log
+[logusage]2020/07/02 F:/go/src/algorithm/logusage/main.go:10: i am fatal
+~~~
+
+
+
 ### sync.Once 
 
 ~~~go
@@ -759,6 +780,10 @@ Field(i),从0开始获取结构体对象所包含的key
 示例代码：
 
 ~~~go
+细节就是 对象.Name(), 对象.Kind()
+// student,  struct
+针对对象的某一个字段. 对象.field(i).name, 对象.field(i).type
+// name  string
 package main
 
 import (
@@ -780,7 +805,12 @@ func main() {
 
 	// 获取目标对象
 	t := reflect.TypeOf(s)
-    fmt.Println( "Type is", t.Name(), "and kind is", t.Kind())
+    fmt.Println( "Name is", t.Name(), "and kind is", t.Kind())
+    
+    //如果把上边s 换成 &s
+    t := reflect.TypeOf(&s)
+    fmt.Println( "Name is", t.Elem().Name(), "and kind is", t.Elem().Kind())
+    
 	//打印结果
     //Type is Student and kind is struct
     
@@ -788,6 +818,7 @@ func main() {
 
 	// 获取目标对象的值类型
 	v := reflect.ValueOf(s)
+    
 	// .NumField()来获取其包含的字段的总数
     //注意这里是t， 不是 v 的 NumField()
 	for i := 0; i < t.NumField(); i++ {
@@ -798,12 +829,15 @@ func main() {
 		value := v.Field(i).Interface()
 
 		fmt.Printf("第%d个字段是：%s:%v = %v \n", i+1, key.Name, key.Type, value)
+        //第1个字段是：Id:int = 1 
+	   //第2个字段是：Name:string = 咖啡色的羊驼
 	}
 
 	// 通过.NumMethod()来获取Student里头的方法
 	for i:=0;i<t.NumMethod(); i++ {
 		m := t.Method(i)
 		fmt.Printf("第%d个方法是：%s:%v\n", i+1, m.Name, m.Type)
+        //第1个方法是：Hello:func(main.Student)
 	}
 }
 

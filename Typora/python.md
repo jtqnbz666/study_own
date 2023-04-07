@@ -23,9 +23,8 @@ python中的 () 和 [] 所以可以通过下标0开始
 str.strip(); 删除字符串前后的空格或特殊字符
 lstrip 左边， rstrip 右边
 
-line.split("\t", 1)  以"\t"进行分割， 仅分割一次
-
-
+splice = line.split("\t", 1)  以"\t"进行分割， 仅分割一次
+line = splice[2]
 
 json和字符串转换
 
