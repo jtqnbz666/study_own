@@ -39,8 +39,8 @@ func (m *methodType) newReplyv() reflect.Value {
 }
 
 type service struct {
-	name   string        //映射的结构体的名字，比如 student是一个结构体对象， 那么name就是student
-	typ    reflect.Type  //type 是结构体的类型
-	rec    reflect.Value // receiver是结构体的实例本身， 作为调用时的第0个参数
-	method map[string]*methodType
+	name   string                 //映射的结构体的名字，比如 student是一个结构体对象， 那么name就是student
+	typ    reflect.Type           //type 是结构体的类型
+	rec    reflect.Value          // receiver是结构体的实例本身， 作为调用时的第0个参数
+	method map[string]*methodType //
 }
