@@ -12,19 +12,31 @@
 
 在机器2上 ：vim /etc/ssh/sshd_config 
 
+~~~
 #PasswordAuthentication yes //关闭密码连接
 passwordAuthentication yes  //允许密钥
+~~~
 
 退出保存，重启服务，systemctl  restart  sshd
-
-
-
-
 
 ```typescript
 git config --global user.name "你的用户名" 
 git config --global user.email "你的邮箱"
 ```
+
+## ssh：connect to host ...  port 22 : connection refused
+
+~~~
+在~/.ssh 目录下
+vim config
+输入
+Host github.com
+User 454193896@qq.com
+PreferredAuthentications publickey
+IdentityFile ~/.ssh/id_rsa
+Port 443
+
+~~~
 
 
 
