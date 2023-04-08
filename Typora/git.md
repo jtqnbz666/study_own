@@ -81,6 +81,16 @@ git stash -> git pull -> git stash pop -> git add. -> git commit -m "" -> git pu
 
 如果过程中出现了no branch问题， 说明你在匿名分支下，解决完冲突后， git rebase --continue,  再次重新add. commit push
 
-
-
 可以使用 git push -f  表示强制以当前代码覆盖之前提交的
+
+
+
+**如果出现git pull 拉不下来的情况，因为同时修改了一个文件**
+
+~~~
+git pull origin main --rebase 		//main是当前分支
+
+情况需要再执行一个
+git rebase --continue
+~~~
+
