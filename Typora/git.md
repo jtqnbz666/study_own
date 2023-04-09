@@ -50,7 +50,7 @@ git push original test 即可在远程建立test分支
 
 git checkout 文件， 会用暂存器的文件来替换工作区的这个文件的内容，比如工作区这个文件的内容是6666， 而暂存区是666，则会将工作区内容更改为666
 
-git checkout HEAD 文件， 会用本地仓库的这个文件来替换**工作区和暂存区**的这个文件的内容
+git checkout HEAD 文件名， 会用本地仓库的这个文件来替换**工作区和暂存区**的这个文件的内容， 把文件名换为 点 表示所有文件
 
 git reset HEAD 文件， 表示把本地仓库的文件同步到暂存区，但**不影响工作区内容**。
 **不存在 git reset --hard HEAD 文件** ，这种方式是错误的。
@@ -81,16 +81,24 @@ git stash -> git pull -> git stash pop -> git add. -> git commit -m "" -> git pu
 
 如果过程中出现了no branch问题， 说明你在匿名分支下，解决完冲突后， git rebase --continue,  再次重新add. commit push
 
-可以使用 git push -f  表示强制以当前代码覆盖之前提交的
+**可以使用 git push -f  表示强制以当前代码覆盖之前提交的**
 
 
 
-**如果出现git pull 拉不下来的情况，因为同时修改了一个文件**
+### 如果出现git pull 拉不下来的情况，因为同时修改了一个文件
 
 ~~~
-git pull origin main --rebase 		//main是当前分支
+git pull origin main --rebase 		//main是当前处理的分支名
 
 情况需要再执行一个
 git rebase --continue
+~~~
+
+### 有时候出现bug，git pull
+
+~~~
+显示最新，却不是最新， 比如你打开typora，然后git pull， 关闭typora的时候一定要点不保存，不然出bug， 这时候
+git reset --hard HEAD^ 
+再git pull
 ~~~
 
