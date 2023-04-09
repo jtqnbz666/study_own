@@ -54,6 +54,36 @@ do
 done
 ~~~
 
+### c++和go定义对象的区别 
+
+~~~go
+c++
+struct student {
+    int age
+    string name
+}
+
+go 
+type student struct {
+    age int
+    name string
+}
+
+c++ 定义对象
+student a = {18, "jt"};
+
+go 定义对象
+a := student {
+    age : 18,
+    name : "jt",
+}
+
+
+为什么go需要在 {} 前边加上 结构体名字， 因为它前边没有加类型
+~~~
+
+
+
 ### 日志打印
 
 ~~~go
@@ -750,21 +780,15 @@ reflect.valueof 获取数据的值如果为空返回0  ,
 
  reflect.typeof 获取值的类型，如果为空返回nil
 
-~~~
+~~~go
 对于 reflect.ValueOf 
 
 若要修改对象的值:
 var a int = 10;
 reflect.Valueof(&a)
 v := a.Elem();
-v.SetInt(19)D
-
-Kind方法
-type MyInt int
-var x MyInt = 5
-v := reflect.ValueOf(x)
-v.Kind()  //int, 而不是MyInt
-
+v.SetInt(19)
+// 以上两句可合并为 a.Elem().SetInt(19)
 
 
 
@@ -777,13 +801,130 @@ Field(i),从0开始获取结构体对象所包含的key
 
 ~~~
 
+
+
+### 普通对象反射
+
+~~~go
+x := 5
+v := reflect.ValueOf(x)
+fmt.Println(v.Kind()) //int
+fmt.Println(v.Name()) // 错误，没有这种写法
+
+t := reflect.TypeOf(x)
+fmt.Println(t.Kind()) //int
+fmt.Println(t.Name()) // int
+
+
+type MyInt int
+var x MyInt = 5
+v := reflect.TypeOf(x)
+fmt.Println(v.Kind())	// int
+fmt.Println(v.Name())   // MyInt
+
+v := reflect.ValueOf(x)
+fmt.Println(v.Kind())	// int
+fmt.Println(v.Name())   // 错误，没有这种写法
+~~~
+
+
+
+### 结构体对象的反射
+
+~~~go
+//对于结构体对象
+s := student{
+    Name : "jt"
+    Age : 18,
+}
+v := reflect.ValueOf(s)
+fmt.Println(v.Kind()) //struct 
+fmt.Println(v.Name()) // 错误，没有这种写法
+
+t := reflect.TypeOf(s)
+fmt.Println(t.Kind()) //struct 
+fmt.Println(t.Name()) // student
+
+如果把t := reflect.TypeOf(s)中的s换为 &s
+v := reflect.ValueOf(&s)
+fmt.Println(v.Kind()) //ptr
+fmt.Println(v.Name()) // 错误，没有这种写法
+
+t := reflect.TypeOf(s)
+fmt.Println(t.Kind()) //ptr
+fmt.Println(t.Name()) // 空白
+
+
+对于TypeOf
+//针对对象的某一个字段. 对象.Field(i).Name, 对象.Field(i).Type， 这里要注意只有Typeof对象的某一个字段有这两个方法，ValueOf没有。
+// Name  string
+v := reflect.TypeOf(s) //若换成&s,就没有下边的方法,除非加上Elem()
+fmt.Println(v.Field(0).Name) // Name
+fmt.Println(v.Field(0).Type) // string
+
+对于ValueOf
+//可以 v.Interface.(student)， 将reflect.Value对象转化为student
+v := reflect.ValueOf(s) //和上边一样，若换成&s,就没有下边的方法,除非加上Elem()
+fmt.Println(v.Field(0)) // jt
+fmt.Println(v.Field(0).Interface()) // jt , 也对
+fmt.Println(v.Field(1)) // 18
+
+
+
+//不管是结构体对象还是普通对象， 如果是引用类型的对象， 那么就在对象后边跟上Elem()，就和 非引用 的情况一样。
+//有一个使用Elem()的细节
+
+typ := reflect.TypeOf(a)
+val := reflect.New(typ).Elem()
+//val := reflect.ValueOf(&a).Elem(), 这句和上边的两句等效，区别在于，上边两句是借助a对象的类型，也就是创建了一个student结构体类型的新对象， 而这句是直接用了a对象本身。
+
+val.FieldByName("Name").SetString("jtsg")// 正确
+val.FieldByName("Age").SetInt(20)// 正确
+
+tp := val.Interface().(student) //必须借助一个临时对象转换一下，因为下边用到tp.Name, tp.Age， 这里有一个细节，如果上边没有加Elem(),这里就得变成val.Elem().Interface().(student) 
+fmt.Println(tp.Name, tp.Age)
+
+//如果把上边的注释打开， 就相当于修改了a的本体
+//fmt.Println(a.Name, a.Age) // "jtsg", 20 这样我们就修改了a本体
+
+如果把上边的
+val := reflect.New(typ).Elem()
+//val := reflect.ValueOf(&a).Elem()
+换成
+val := reflect.New(typ)
+//val := reflect.ValueOf(&a)
+
+那么
+val.FieldByName("Name").SetString("jtsg")// 正确
+就得换成
+val.Elem().FieldByName("Name").SetString("jtsg")// 正确
+
+~~~
+
+**对比以上两种不同类型的反射**
+
+~~~go
+细节就是ValueOf出来的，没有Name()方法，所以一般直接用TypeOf方法来获取对象的类型(Kind()) 和 名字(Name())
+
+不管对象是一个指针还是普通对象
+Typeof都有Name(), Kind() 方法， 而ValueOf只有Kind()方法
+如果是TypeOf的普通对象 //Name()表示student, Kind()表示student
+如果是TypeOf的指针对象//Name()表示空白, Kind()表示ptr
+如果是ValueOf的普通对象 //Name()报错, Kind()表示student
+如果是ValueOf的指针对象//Name()报错, Kind()表示ptr
+
+针对对象内的某一个字段 Filed(i)
+TypeOf对象，Field(i).Type 和 Field(i).Name, 如果是指针对象，必须在前边加上Elem()，否则报错
+ValueOf对象一样的道理，并且只能获取到具体的值，Filed(i) 或者 Filed(i).Interface()都可以， 如果是指针对象，就在前边加上Elem()
+~~~
+
+
+
+
+
 示例代码：
 
 ~~~go
-细节就是 对象.Name(), 对象.Kind()
-// student,  struct
-针对对象的某一个字段. 对象.field(i).name, 对象.field(i).type
-// name  string
 package main
 
 import (
@@ -868,9 +1009,10 @@ func (v Value) Interface() interface{}
 **以下所有实例都是以这个结构体演示**
 
 ~~~go
+//注意Name Age 首字母大写， 不然访问不到
 type student struct {
-	name string
-    age int
+	Name string		
+    Age int
 }
 ~~~
 
@@ -886,7 +1028,9 @@ t := reflect.TypeOf(s) //值的方式不是引用
 
 对于TypeOf ：t.Field(1) 表示获取到(age 和 int 这一行), 此时对应的就是， t.Field(1).name 为 age , t.Field(1).Type 为 int
 
-对于ValueOf: v.Field(1) 表示 age的具体值，但需要使用v.Field(1).Interface() 转换出来才行
+对于ValueOf: v.Field(1) 表示 age的具体值，这里特别需要注意，不需要使用v.Field(1).Interface()转换， v.Feild(1)已经表示具体得age得值了，如果加上Interface()反而报错。
+
+如果把值的方式换成引用的方式，就需要再Filed()前边加上 Elem()
 ~~~
 
 
@@ -895,17 +1039,18 @@ t := reflect.TypeOf(s) //值的方式不是引用
 
 
 
-将Type对象转为Value对象
+使用New创建一个Type类型的Value对象
 
 ~~~go
-obj := Student{"name", 18}
+obj := Student{"jt", 18}
 t := reflect.TypeOf(obj)
 //此时t是Type类型
 
-v := reflect.New(t) // v是一个Value类型，New的传参必须是Type类型
+v := reflect.New(t) // v是一个Type类型的Value对象，t必须是一个非引用的Type类型， 假设上边是&obj,这里得把t改为t.Elem()
 
 //这里需要特别注意New的作用相当于
 v := reflect.ValueOf(&obj) //  注意这个&
+//区别在于，上边两句是借助obj对象的类型，也就是创建了一个Student结构体类型的新对象， 而这句是直接用了obj对象本身。
 
 ~~~
 
@@ -913,8 +1058,20 @@ v := reflect.ValueOf(&obj) //  注意这个&
 
 ~~~go
 // v 接上边部分
-v.Elem().Field(0).SetString("tt")
+//错误演示
+v.Elem().Field(0).SetString("tt")	
 v.Elem().Field(1).SetInt(20)
+
+//正确方式 特别需要注意，成员首字母必须大写，不然访问不到
+v.Elem().FieldByName("Name").SetString("tt")
+v.Elem().FieldByName("Age").SetInt(20)
+
+//第二种方式，把上边的
+v := reflect.ValueOf(&obj) 
+//换成
+v := reflect.ValueOf(&obj.Name) // 这样就相当于只是反射了一个字符串， Age同理
+//就可以
+v.Elem().SetString("tt") // 直接这样就可以修改值了
 ~~~
 
 打印结构体反射对象(引用)的值
