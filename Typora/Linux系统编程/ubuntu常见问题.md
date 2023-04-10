@@ -1,5 +1,3 @@
-
-
 电脑装不上powershell  就换成 windows terminal** 
 
 ## 远程连接密钥
@@ -35,7 +33,6 @@ User 454193896@qq.com
 PreferredAuthentications publickey
 IdentityFile ~/.ssh/id_rsa
 Port 443
-
 ~~~
 
 

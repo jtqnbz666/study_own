@@ -1,10 +1,4 @@
-全选vim， v + gg + G
-复制全部  ggyG
-删除全部  ggdG
 
-移动行首 home , 行尾 end
-
-查看ubuntu版本  cat /etc/issue
 
 # 一、基础必备cd命令详细使用方法 
 

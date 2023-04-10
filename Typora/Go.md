@@ -298,6 +298,31 @@ mapStringInt := make(map[strint]int) //加了数字也没用
 ch 	:= make(chan int, 4)
 ~~~
 
+### chanel管道使用
+
+~~~go
+1.不能向一个已关闭的管道写数据
+2.可以向一个已关闭的管道读数据
+3.从空管道读数据不会阻塞而是返回0。
+4.若管道的大小为1， 那么如果没有把里面的这个元素读取出来，但仍然往里面写就会阻塞。
+
+
+5.不能直接往一个大小为0的管道写入数据， 但如果这个大小为0的管道存在一个读它的协程， 那么这种情况是可以向大小为0的管道写数据的。
+func receive(ch chan int) {
+	value := <-ch // 读管道
+	fmt.Println(value)
+}
+
+func main() {
+	ch := make(chan int) //大小为0
+	go receive(ch)
+	ch <- 1.0 //写管道   如果把它和上一行的位置交换就报错
+    
+    
+6.确保管道写安全的最好方式就是由负责写管道的协程自己来关闭管道
+7.
+~~~
+
 
 
 
@@ -540,14 +565,6 @@ for i := 0; i < 10; i ++ {
 ~~~
 bytes := []byte("I love hh")
 str := string(bytes)
-~~~
-
-
-
-### make使用方法
-
-~~~go
-a := make(chan int, 1, 2) ,1表示元素个数， 2表示cap容量 
 ~~~
 
 
