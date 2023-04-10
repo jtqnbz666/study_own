@@ -600,3 +600,39 @@ protobuf是支持嵌套消息的，对于嵌套消息，首先要将嵌套的消
 ### linux 输入一条命令的执行过程
 
 先检查是否包含路径-->  再判断是否是一个别名 --> 判断是内部命令(pwd, ls)还是外部命令(path) -->  若是外部命令则去path下面找
+
+### 32位和64位的区别
+
+64位通用寄存器的位宽增加一倍， 可以一次性处理64bit的整型数据， 也就是说一次处理两个int类型整数，何乐而不为
+
+32位cpu地址总线限制了寻址范围， 理论上只能访问4GB的内存大小(PAE,Physical Address Extension 物理地址拓展技术将地址拓展到了36位，可以访问64G)，
+
+如果内存条大于4G内存， 则建议安装64位操作系统，意味32位无法访问4G内存外的空间(不考虑PAE技术)
+
+64位系统是可以向下兼容的(大部分，不是所有，比如许多杀毒软件，或者使用于32位系统的设备驱动程序)，但32位不能向上兼容
+
+可以拉扯一点Linux下64位系统long类型占8字节，其他情况均占4字节
+
+### c++链式调用
+
+~~~c++
+#include <iostream>
+using namespace std;
+class test{
+    
+    test(int age) : age(age) {}
+	test& tt(test a) {
+        age += a.age;
+        return *this;
+    }    
+private:
+    int age;
+}
+int main() {
+    test dage(10);
+    dage.test(dage).test(dage).test(dage);
+    
+    return 0;
+}
+~~~
+
