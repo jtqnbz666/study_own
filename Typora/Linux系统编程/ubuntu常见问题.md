@@ -1,3 +1,75 @@
+### 安装telnet服务
+
+~~~
+1.sudo apt-get install xinetd telnetd
+2.sudo vim /etc/inetd.conf  并加入内容:  telnet stream tcp nowait telnetd /usr/sbin/tcpd /usr/sbin/in.telnetd
+
+3.sudo vim /etc/xinetd.conf 加入以下内容
+# Simple configuration file for xinetd
+
+# Some defaults, and include /etc/xinetd.d/
+
+defaults
+
+{
+
+# Please note that you need a log_type line to be able to use log_on_success
+
+# and log_on_failure. The default is the following :
+
+# log_type = SYSLOG daemon info
+
+instances =
+
+log_type = SYSLOG authpriv
+
+log_on_success = HOST PID
+
+log_on_failure = HOST
+
+cps =
+
+}
+
+includedir /etc/xinetd.d
+
+sudo vim /etc/xinetd.d/telnet并加入以下内容：
+
+# default: on
+
+# description: The telnet server serves telnet sessions; it uses \
+
+# unencrypted username/password pairs for authentication.
+
+service telnet
+
+{
+
+disable = no
+
+flags = REUSE
+
+socket_type = stream
+
+wait = no
+
+user = root
+
+server = /usr/sbin/in.telnetd
+
+log_on_failure += USERID
+
+}
+
+
+重启机器或重启网络服务sudo /etc/init.d/xinetd restart
+
+telnet 127.0.0.1 8888
+
+~~~
+
+
+
 电脑装不上powershell  就换成 windows terminal** 
 
 ## 远程连接密钥

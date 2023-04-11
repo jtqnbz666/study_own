@@ -83,16 +83,64 @@ git stash -> git pull -> git stash pop -> git add. -> git commit -m "" -> git pu
 
 **可以使用 git push -f  表示强制以当前代码覆盖之前提交的**
 
+### 解决git冲突：
+**方式一**：当两个地方同时发生改变， A 先提交， B再git pull 就会报错， 此时B应该git stash 一下缓存下来自己的更改， 
+再git pull 拉取下来， 此时可以看到A提交的最新情况，但看不到B的更改，此时B执行git stash pop，就可以看到二者的冲突了。
+其实这上边的git stash操作可以替换为 (git add 文件 + git commit 文件)， 那么执行git pull的时候就会发生冲突，此时可以同时
+看到A和B的更改，并且有相应的标注。
+**方式二**:  
+当A提交代码， B执行git add. --> git commit -m "jt" --> git push(报错)
+git pull --rebase	//此时会进入一个临时的分支， 若不加 --rebase 默认是 merge方式
+//这个过程就可以看到拉下来的最新代码以及自己的冲突代码， 自己去做一些调整
+git add .	//上边调整好后，执行git add .
+git rebase --continue	//因为刚才是在一个临时分支解决冲突，现在回归到我们原来的分支
+// 到这里为止， git log查看一下commit记录， 可以发现，包含了远程分支的最新commit，以及自己刚才的那条commit记录
+// 已经解决冲突了，此时git push 推送最新内容即可
+git push orign/master
 
 
-### 如果出现git pull 拉不下来的情况，因为同时修改了一个文件
+上述的两种方式，git pull 和 git pull --rebase的区别在于
+git pull 会将远程分支的最新commit 与自己刚才的commit记录合并，即只能看到自己刚才的最新commit记录
+而git pull --rebase 会将远程分支的最新commit 与自己刚才的commit记录 都保留，即能看到两条commit记录
 
-~~~
-git pull origin main --rebase 		//main是当前处理的分支名
 
-情况需要再执行一个
-git rebase --continue
-~~~
+
+git pull = git fetch + git merge
+git pull -rebase = git fetch + git rebase
+
+git pull 有这么几种配置
+git config pull.rebase false  // 这是默认的，也就是merge方式
+git config pull.rebase true  //这表明当前使用rebase方式
+
+git fetch: 这将更新git remote中所有远程仓库所包含分支的最新commit -id,将其记录到.git/FETCH_HEAD文件中
+
+git pull: 首先基于本地的FETCH_HEAD记录，对比本地的FETCH_HEAD记录与远程仓库的版本号，然后git fetch 获得当前指向的远程分支的后续版本的数据，
+然后再利用git merge将其与本地的当前分支合并
+git pull 后不加参数的时候，和git push一样， 默认就是git pull origin 当前分支名， 如果远程仓库没有跟本地当前分支名一样的分支就肯定会报错。
+比如再本地master分支执行git pull 的时候， 其实就是执行git pull origin master
+
+
+将远程的origin仓库的xx分支合并到本地的yy分支有两种方式
+1. 传统做法
+git fetch origin 目标分支名字 // 会将远程的这个目标分支的最新commit -id记录到 ./git/FETCH_HEAD这个文件， 可以查看，只是一条commit -id记录
+git checkout 要被合并的分支名 //切换到要被合并的分支
+git merge FETCH_HEAD //将目标分支的最新commit记录合并到当前分支
+举例：将远程origin仓库的xx分支合并到本地的yy分支
+git fetch origin xx
+git checkout yy
+git merge FETCH_HEAD  //直接就是FECTCH_HEAD
+
+2.使用git pull (因为它默认是合并了git fetch + git merge)
+git checkout yy
+git pull origin xx
+
+3.第三种思路是把远程的xx分支拉下来， 即合并本地的xx 和 yy分支
+git checkout xx
+git pull  //拉取xx 到本地
+git checkout yy //切换到yy
+git merge xx // 合并本地的xx 到 yy分支， 可以加上 --no-ff参数，即git merge --no-ff xx
+
+
 
 ### 有时候出现bug，git pull
 
