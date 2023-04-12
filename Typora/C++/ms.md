@@ -201,7 +201,7 @@ do {cout << "test" << endl;}while(0)
        
 ~~~
 
-
+2.模板类的单例模式， 通过父类来构造子类的对象，那么子类必须把父类设置为友元。
 
 ## decltype 和 auto
 
@@ -452,5 +452,47 @@ int i;
 union Un un;
 //计算连个变量的大小
 printf("%d\n", sizeof(un)); //结果为4
+~~~
+
+### 智能指针
+
+shared_ptr
+
+~~~c++
+shared_ptr 存在循环引用问题
+构造对象:
+shared_ptr<int>INum(new int(10));
+shared_ptr<int>INum2 = make_shared<B>();
+~~~
+
+weak_ptr
+
+~~~c++
+weak_ptr 是为了解决shared_ptr的循环引用问题而诞生的，
+构造对象:weak_ptr<int>INum2(new int(10)); 是错误的
+必须通过shared_ptr对象或者weak_ptr对象来构造
+比如weak_ptr<int>INum2(INum);
+weak_ptr<int>INum3(INum2);
+
+可以使用use_count()获取当前对象的引用计数，reset()释放自己对这个对象的管理
+
+并且weak_ptr 不能使用* 和 -> 访问对象， 但可以使用lock()获得一个shared_ptr对象来管理自己，从而访问对象内容
+举例：
+shared_ptr<int>pShare(new int(100));
+weak_ptr<int>pWeak(pShare);
+shared_ptr<int>temp = pWeak.lock();
+cout << *temp.get() << endl; //100
+~~~
+
+unique_ptr
+
+~~~c++
+unique_ptr 删除了拷贝构造和拷贝赋值函数
+构造对象: unique_ptr<int>INum4(new int(10));
+或者 unique_ptr<int>INum5 = make_unique<int>();
+make_unique<int>里面用了完美转发，相当于给了一个右值出来，也就是跟下边的move一个效果，其实这里用RVO机制也可以。
+
+只能通过 1.move 2.release + reset 来交换对象的所有权。
+
 ~~~
 
