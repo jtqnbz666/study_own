@@ -359,3 +359,98 @@ int main() {
 //在gcc上不会报错。
 ~~~
 
+###  子类指针指向父类
+
+抓住一个核心就是：到底调用哪个函数要根据指针的原型来确定，而不是根据指针实际指向的对象类型确定
+
+父类指针指向子类对象，看的是子类的虚表
+
+子类指针指向父类对象，看的是父类的虚表
+
+子转父不安全的原因:  比如子类有一个元素val， 当将这个子类指针转化为父类指针时，去访问这个val就会越界错误， 而反过来父转子就不会。
+
+~~~c++
+#include <iostream>
+using namespace std;
+class Fa {
+public:
+    //如果去掉这个virtual， 下方dynamic进行下行转换报错
+	virtual void hha() {
+		cout << "fa_hha" << endl;
+	}
+	
+};
+
+class Son : public Fa {
+public:
+	void hha () {
+		cout << "son_hha" << endl;
+	}
+	void test() {
+		cout << "son_test" << endl;
+	}
+};
+int main() {
+    
+//1.子转父
+Fa *fa = new Fa();
+Son* s = (Son*)fa;	//子转父，必须显式转换，不然报错
+//Son *s = (Son*)new Fa();
+Son* s1 = static_cast<Son*>(fa);
+    
+//如果Fa中没有虚函数，这里会报错，而static_cast不会
+//因为dynamic_cast为动态类型检查，需要检查运行时需要的信息，也就是虚表
+Son* s2 = dynamic_cast<Son*>(fa);
+s->hha();	//fa_hha，说明子转父这种情况用的是父类的虚表
+s->test();	//son_test
+static_cast<Fa*>(s)->hha();//fa_hha
+//static_cast<Fa*>(s)->test(); //报错，因为Fa类中没有test
+//所以子类指向父类是不安全的。
+
+    
+//2.父转子
+Fa* ff = new Son();
+static_cast<Son*>(ff)->hha(); //son_hha
+static_cast<Son*>(ff)->test();//son_test
+Fa* f1 = static_cast<Fa*>((Son*)fa);
+Fa* f2 = dynamic_cast<Fa*>((Son*)fa);
+return 0;
+}
+
+~~~
+
+### 枚举和联合体
+
+枚举 ，有类型检查，而define没有
+
+~~~c++
+enum Color//颜色
+{
+	RED=10,		//注意以逗号分割，默认为0
+	GREEN,	
+	BLUE
+};
+int main()
+{
+	printf("%d",RED);//10
+	printf("%d",GREEN);//11
+	printf("%d",BLUE);//12
+	return 0;
+}
+~~~
+
+联合体
+
+~~~c++
+//联合类型的声明
+union Un
+{
+char c;
+int i;
+};
+//联合变量的定义
+union Un un;
+//计算连个变量的大小
+printf("%d\n", sizeof(un)); //结果为4
+~~~
+
