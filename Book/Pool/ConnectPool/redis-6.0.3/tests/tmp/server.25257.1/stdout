@@ -1,7 +1,0 @@
-### Starting server for test 
-25289:C 15 Apr 2023 15:55:48.453 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
-25289:C 15 Apr 2023 15:55:48.453 # Redis version=6.2.7, bits=64, commit=efab47f8, modified=0, pid=25289, just started
-25289:C 15 Apr 2023 15:55:48.453 # Configuration loaded
-25289:M 15 Apr 2023 15:55:48.454 * Increased maximum number of open files to 10032 (it was originally set to 1024).
-25289:M 15 Apr 2023 15:55:48.454 * monotonic clock: POSIX clock_gettime
-25289:M 15 Apr 2023 15:55:48.454 # Opening Unix socket: bind: Operation not supported
