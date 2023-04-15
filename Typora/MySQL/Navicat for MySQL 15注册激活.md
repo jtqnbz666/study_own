@@ -8,7 +8,7 @@ https://www.navicat.com.cn/download/navicat-for-mysql
 
 https://pan.baidu.com/s/1QxxM72CC51lFuOld_GwQlA 提取码 j649
 
-3.安装Mavicat，按步骤安装即可，安装完毕后先不要打开软件，<font style="color:red">断开网络连接</font>，将激活工具复制到Navicat安装路径下，以管理员身份运行。
+3.安装Navicat，按步骤安装即可，安装完毕后先不要打开软件，<font style="color:red">断开网络连接</font>，将激活工具复制到Navicat安装路径下，以管理员身份运行。
 
 ![image-20211026175741121](assets/image-20211026175741121.png)
 
@@ -30,6 +30,6 @@ https://pan.baidu.com/s/1QxxM72CC51lFuOld_GwQlA 提取码 j649
 
 7.将请求码复制到激活工具的文本框中，点击Generate激活码会自动填写到Navicat激活码文本框中，点击激活即可。
 
-![img](https://img2020.cnblogs.com/blog/805178/202005/805178-20200529135324934-1040400855.png)
+![img](../../pic/805178-20200529135324934-1040400855.png)
 
 ![image-20211026182443502](assets/image-20211026182443502.png)

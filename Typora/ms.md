@@ -93,15 +93,15 @@ quic首次连接需要1RTT，服务器通过CA证书私钥加密后，返回给�
 - 快在哪里
   没有使用任何系统调用接口，完全是用户层实现，无需建立/关闭连接。很多影响速度的参数都可配(RTO等)。
 
-![1664456986316](C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\1664456986316.png)
+![1664456986316](..\pic/1664456986316.png)
 
-![1664457144073](C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\1664457144073.png)
+![1664457144073](..\pic\1664457144073.png)
 
-![1669087655015](C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\1669087655015.png)
+![1669087655015](..\pic\1669087655015.png)
 
-![1669089123061](C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\1669089123061.png)
+![1669089123061](..\pic\1669089123061.png)
 
-![这里写图片描述](https://img-blog.csdn.net/20180520115026701?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM0MDIxOTIw/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+![这里写图片描述](../pic/20180520115026701.png)
 
 ##  ## 设计者模式
 

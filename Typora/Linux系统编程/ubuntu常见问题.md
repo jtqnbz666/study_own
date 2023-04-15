@@ -143,9 +143,9 @@ nmcli n on
 
 ## 克隆机ip相同
 
-![img](https://img-blog.csdnimg.cn/b16e12687c944ea08f6dc43bba45405e.png)
+![img](../../pic/b16e12687c944ea08f6dc43bba45405e.png)
 
-![img](https://img-blog.csdnimg.cn/a56ac73828244ef3b669d4e166c87fda.png)
+![img](../../pic/a56ac73828244ef3b669d4e166c87fda.png)
 
 使用cd  /etc/netplan进入netplan文件夹中，ls   命令可以看到netplan文件夹中只有01-network-manager-all.yaml这一个文件
 
@@ -197,9 +197,9 @@ root用户下执行：vmhgfs-fuse .host:/ /mnt/hgfs
 
 另一个内核级的fd限制，Linux系统下，所有进程允许打开的最大fd数量，我们把1048576加入系统配置文件/etc/sysctl.conf里面然后运行sysctl -p使其生效。
 
-![](C:\Users\ASUS\Pictures\博客图片\20201203162557980.png) 
+![](../../pic/20201203162557980.png) 
 
-![](C:\Users\ASUS\Pictures\博客图片\20201203174438692.png)
+![](../../pic/20201203174438692.png)
 
 最后一行参数设置的是一个机器最大的connect 数量，默认是65535，用于测试百万并发中。
 

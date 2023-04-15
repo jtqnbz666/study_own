@@ -257,6 +257,8 @@ B树对于B+树的优点：
 
 ![](../../pic/v2-544cd81d665e47ef99c2d0bea86045f3_1440w.webp)
 
+这个流程图不准确， 写undo log前会先写redo log
+
 因为最开始 MySQL 里并没有 InnoDB 引擎。MySQL 自带的引擎是 MyISAM，但是 MyISAM 没有 crash-safe(崩溃恢复) 的能力，binlog 日志只能用于归档。
 而 InnoDB 是另一个公司以插件形式引入 MySQL 的，只依靠 binlog 是没有 crash-safe 能力的，所以 InnoDB 使用另外一套日志系统—— redo log 来实现 crash-safe 能力。
 crash-safe: 保证即使数据库发生异常重启，之前提交的记录都不会丢失
@@ -315,7 +317,7 @@ undolog多版本链+ReadView机制实现mvcc多版本并发控制
 
 原文链接：https://blog.csdn.net/LT11hka/article/details/122260034
 
-![](C:\Users\ASUS\Pictures\博客图片\bdbb19325c504296bb8dc40d9ee4bbe9.png)
+![](../../pic/bdbb19325c504296bb8dc40d9ee4bbe9.png)
 ReadView是什么？
 
 简单来讲，ReadView就是执行一个事务时，会生成一个ReadView，这里面会有比较关键的4个字段：
@@ -355,7 +357,7 @@ RC、RR 两种隔离级别的事务在执行普通的读操作时，通过访问
 
 **锁机制**
 
-![](C:\Users\ASUS\Pictures\博客图片\20210419144810954.jpg)
+![](../../pic/20210419144810954.jpg)
 
 由于每种隔离级别的写(增删改)操作都加上X锁， 所以不管是哪种隔离级别都能避免脏读问题
 
@@ -384,7 +386,7 @@ RC、RR 两种隔离级别的事务在执行普通的读操作时，通过访问
 
 锁并不是事务一开始就加，而是执行到对应的语句(DML)才加相应的锁， 当事务执行commit或rollback才释放锁(AUTO-INC有点特殊)
 
-![](C:\Users\ASUS\Pictures\思维导图\事务.jpg)
+![](../../pic/事务.jpg)
 
  **意向共享锁，意向排他锁**
 

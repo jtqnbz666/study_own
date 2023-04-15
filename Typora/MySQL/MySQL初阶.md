@@ -615,7 +615,7 @@ SELECT INET_NTOA(3232235521)
 
 实现：在多的一方建立外键，关联另一方的主键
 
-![image-20220311141247079](C:/Users/ASUS/Desktop/MySql%E8%AF%BE%E4%BB%B6/06%20%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2/assets/image-20220311141247079.png)
+![image-20220311141247079](../../pic/image-20220311141247079.png)
 
 ### 多对多
 
@@ -625,7 +625,7 @@ SELECT INET_NTOA(3232235521)
 
 实现：建立第三张中间表，中间表至少包含两个外键，分别关联两方主键
 
-![image-20220311134035938](C:/Users/ASUS/Desktop/MySql%E8%AF%BE%E4%BB%B6/06%20%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2/assets/image-20220311134035938.png)
+![image-20220311134035938](../../pic/image-20220311134035938.png)
 
 
 
@@ -635,11 +635,11 @@ SELECT INET_NTOA(3232235521)
 
 关系：一对一关系，多用于单表拆分，将一张表的基础字段放在一张表中，其他详情字段放在另一张表中，以提升操作效率。
 
-![image-20220311134456593](C:/Users/ASUS/Desktop/MySql%E8%AF%BE%E4%BB%B6/06%20%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2/assets/image-20220311134456593.png)
+![image-20220311134456593](../../pic/image-20220311134456593.png)
 
 实现：在任意一方加入一个外键，关联另一方的主键，并且设置外键为唯一约束
 
-![image-20220311134608853](C:/Users/ASUS/Desktop/MySql%E8%AF%BE%E4%BB%B6/06%20%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2/assets/image-20220311134608853.png)
+![image-20220311134608853](../../pic/image-20220311134608853.png)
 
 
 
@@ -813,7 +813,7 @@ SELECT e.ename,e.mgr,me.ename 领导 FROM emp e,emp me WHERE e.mgr=me.empno;
 
 ## 七种JOINS实现
 
-![](C:\Users\ASUS\Pictures\博客图片\QQ图片20220811000803.png)
+![](../../pic/QQ图片20220811000803.png)
 
 ## 集合运算
 
@@ -823,7 +823,7 @@ MySQL支持并集运算。
 
 > 并集即两个集合所有部分
 
-![](C:\Users\ASUS\Pictures\博客图片\QQ图片20220811003618.png)
+![](../../pic/QQ图片20220811003618.png)
 
 **UNION DISTINCT** 
 
@@ -1318,7 +1318,7 @@ FROM dept d;
 
 相关子查询按照一行接一行的顺序指针，主查询的每一行都指向一次子查询。
 
-![image-20220321154622164](C:/Users/ASUS/Desktop/MySql%E8%AF%BE%E4%BB%B6/07%20%E5%AD%90%E6%9F%A5%E8%AF%A2/assets/image-20220321154622164.png)
+
 
 ## 查询需求
 
@@ -1439,7 +1439,7 @@ WHERE NOT EXISTS (SELECT deptno FROM emp WHERE deptno=d.deptno);
 - 视图是一种`虚拟表` ，本身是`不具有数据` 的，占用很少的内存空间，它是 SQL 中的一个重要概念。
 - 视图建立在已有表的基础上， 视图赖以建立的这些表称为**基表**。
 
-![image-20220421182549882](C:/Users/ASUS/Desktop/tools/MySql%E5%88%A0%E5%BA%93%E8%B7%91%E8%B7%AF-%E8%AF%BE%E4%BB%B6/12%20%E8%A7%86%E5%9B%BE/assets/image-20220421182549882.png)
+![image-20220421182549882](../../pic/image-20220421181315463.png)
 
 - 视图的创建和删除只影响视图本身，不影响对应的基表。但是当对视图中的数据进行增加、删除和修改操作时，基表中的数据会相应地发生变化，反之亦然。
 - 向视图提供数据内容的语句为SELECT语句，可以将视图理解为存储起来的SELECT语句
@@ -2273,8 +2273,6 @@ DROP FUNCTION getsal;
 系统变量分为**全局系统变量**（需要添加`global`关键字）以及会话系统变量（需要添加`session`关键字），有时也把全局系统变量简称为全局变量，有时也把会话系统变量称为local变量。**如果不写，默认是会话级别。**静态变量（在 MySQL 服务实例运行期间它们的值不能使用 set 动态修改）属于特殊的全局系统变量。
 
 每一个MySQL客户机成功连接MySQL服务器后，都会产生与之对应的会话。会话期间，MySQL服务实例  会在MySQL服务器内存中生成与该会话对应的会话系统变量，这些会话系统变量的初始值是全局系统变  量值的复制。如下图：
-
-![img](E:/Typora/MySQL/14%20%E5%8F%98%E9%87%8F%E3%80%81%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E6%B8%B8%E6%A0%87/assets/wps10.jpg)
 
  
 
@@ -3235,7 +3233,7 @@ BEGIN
 			THEN LEAVE my_loop; 
 		END IF;
 
-		SELECT '顿开教育：让每个学员都学有所成'; 
+		SELECT '让每个学员都学有所成'; 
 	END LOOP my_loop;
 END //
 ```
@@ -3260,7 +3258,7 @@ MySQL中游标可以在存储过程和函数中使用。
 SELECT empno,ename,sal FROM emps WHERE sal > 1500;
 ```
 
-![image-20220428165219836](E:/Typora/MySQL/14%20%E5%8F%98%E9%87%8F%E3%80%81%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E4%B8%8E%E6%B8%B8%E6%A0%87/assets/image-20220428165219836.png)
+![image-20220428165219836](../../pic/image-20220428165219836.png)
 
 这里我们就可以通过游标来操作数据行，如图所示此时游标所在的行是“7698”的记录，我们也可以在结果集上滚动游标，指向结果集中的任意一行。
 
@@ -3585,13 +3583,13 @@ DROP TRIGGER IF EXISTS 触发器名称;
 
 假设我们用 进货单头表 （demo.importhead）来保存进货单的总体信息，包括进货单编号、供货商编号、仓库编号、总计进货数量、总计进货金额和验收日期。
 
- ![img](E:/Typora/MySQL/15%20%E8%A7%A6%E5%8F%91%E5%99%A8/assets/wps42.png)
+
 
 用 进货单明细表 （demo.importdetails）来保存进货商品的明细，包括进货单编号、商品编号、进货数量、进货价格和进货金额。
 
 
 
-  ![img](E:/Typora/MySQL/15%20%E8%A7%A6%E5%8F%91%E5%99%A8/assets/wps43.png)
+
 
 每当我们录入、删除和修改一条进货单明细数据的时候，进货单明细表里的数据就会发生变动。这个时候，在进货单头表中的总计数量和总计金额就必须重新计算，否则，进货单头表中的总计数量和总计金额就不等于进货单明细表中数量合计和金额合计了，这就是数据不一致。
 

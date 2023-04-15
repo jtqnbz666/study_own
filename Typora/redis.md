@@ -153,15 +153,15 @@ zpop可以用在延时队列中
 
 第一条连接中
 
-![	](C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\1669257137058.png)
+![	](..\pic\1669257137058.png)
 
 第二条连接中
 
-![1669257147472](C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\1669257147472.png)
+![1669257147472](../pic/1669257147472.png)
 
 **事务实现加倍操作**
 
-![1669258639371](C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\1669258639371.png)
+![1669258639371](../pic/1669258639371.png)
 
 ## Lua脚本
 
@@ -169,9 +169,9 @@ zpop可以用在延时队列中
 
 redis中lua脚本的执行是原子性的，当某个脚本正在执行的时候， 不会有其他命令或者脚本被执行。
 
-![1669259215346](C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\1669259215346.png)
+![1669259215346](../pic/1669259215346.png)
 
-![1669259507367](C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\1669259507367.png)
+![1669259507367](../pic/\1669259507367.png)
 
 eval 不需要生成散列值， 将script 先编译成sha1 再执行   ， 测试使用
 
@@ -250,7 +250,7 @@ send(fd, bin, sz1);
 
 ## redis协议
 
-![1669268725565](C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\1669268725565.png)
+![1669268725565](../pic/1669268725565.png)
 
 一般协议的制定规则，为了 **界定数据包** 
 
@@ -305,7 +305,7 @@ HLL 采用的是调和平均数（倒数的平均）。调和平均可以有效�
 在 Redis 的HLL中 共有2的14次方(16384)个桶，而每个桶是一个 6bit 的数组；
 hash 生成 64位整数，其中**后 14 位用来索引桶子**；后面 50位 共有2的50次方用来统计累计0的个数；保存对数的话最大值为 49(一共50位，第一位是1，其余全是0的数)；6位对应的是 对应整数值为 64 可以容纳存储 49；
 
-![1669309256483](C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\1669309256483.png)
+![1669309256483](../pic/1669309256483.png)
 
 如果你不懂为什么每个桶是6位， 因为它没有采用那种直接画64个桶的方式， 而是使用6位来表示可以有64个桶，也就是最大能表示2^64次方的数
 
@@ -447,7 +447,7 @@ aof 持久化策略会持久化所有修改命令；里面的很多命令其实�
 aof rewrite 在 aof 的基础上，满足一定策略则 fork 进程，根据当前内存状态，转换成一系列的 redis 命令，序列化成一个新的 aof 日志文件中，序列化完毕后再将操作期间发生的增量 aof 日志追加到新的 aof 日志文件中，追加完毕后替换旧的 aof 日志文件；以此达到对 aof 日志瘦身的目的；
 注意：aof rewrite 开启的前提是开启 aof；
 
-![1669349997075](C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\1669349997075.png)
+![1669349997075](../pic/1669349997075.png)
 
 配置
 
@@ -644,7 +644,7 @@ repl-backlog-ttl 3600
 disconnect_time ：从库断线后重连主库所需的平均时间（以秒为单位）；
 write_size_per_second ：主库平均每秒产生的写命令数据量；
 
-![1669377529034](C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\1669377529034.png)
+![1669377529034](../pic/1669377529034.png)
 
 像10000, 10001 这些就是复制偏移量, 是一个64位的数字,  永远用不完,能表示的范围太大了.
 
@@ -661,9 +661,9 @@ write_size_per_second ：主库平均每秒产生的写命令数据量；
 若主库发生变化(原主库宕机, **如何选择新的节点, 根据每个从库的复制偏移量来决定,看谁拥有最新的数据**),哨兵会自动更改配置文件更新为最新主库信息, 并且会通知其他从库来连接新的主节点.
 
 在哨兵节点的配置文件中,只需要配置主库的信息(ip, port),  可以通过主库来获取其他从库的信息,哨兵内部会通过命令互相建立连接,并且每一个哨兵会与所有redis节点(主库+从库)建立连接. 
-![1669379383086](C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\1669379383086.png)
+![1669379383086](../pic/1669379383086.png)
 
-![1669383274192](C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\1669383274192.png)
+![1669383274192](../pic/1669383274192.png)
 
 每一个客户端会配置所有哨兵节点的信息, 采用取余的方式连接任意**一个**哨兵节点即可(因为若这个哨兵节点宕机了,要尝试去连接另外的哨兵节点). 
 
@@ -713,7 +713,7 @@ min-slaves-max-lag 10
 
 ## redis cluster 集群
 
-![1669383040386](C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\1669383040386.png)
+![1669383040386](../pic/1669383040386.png)
 
 Redis集群是一个由多个主从节点群组组成的分布式服务集群，他具有**主从复制、高可用、分片特性**，Redis集群不需要sentinel哨兵(去中心化)，也能完成节点移除和故障转移的功能，需要将每个节点设置成集群模式，这种集群模式没有中心节点，可水平扩展；Redis集群的性能和高可用均优于之前版本的哨兵模式，且集群配置非常简单
 

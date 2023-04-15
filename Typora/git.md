@@ -44,7 +44,7 @@ git push original test 即可在远程建立test分支
 
 **实用命令：**
 
-![1676257212630](C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\1676257212630.png)
+![1676257212630](../pic/1676257212630.png)
 
 //以下内容是以这幅图进行介绍的， 如果把下边的 "文件" 换成 "." 则表示所有文件
 
