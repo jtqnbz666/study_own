@@ -104,10 +104,14 @@ g++ main -L. -ladd
 
 动态库编译
 
+可以扯一点gcc 和 g++的关系
+
 ```C
 g++ -fPIC -shared add.cpp -o libadd.so
 cp libadd.so /usr/lib
 g++ main -L. -ladd
+
+//把上边的g++换成gcc也可以
 ```
 
 

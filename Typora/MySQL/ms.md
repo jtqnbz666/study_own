@@ -30,11 +30,23 @@ ON e.empno=mgr.mgr;
 
 
 
+### count(*)不同引擎的区别
+
+对于MyISAM,它会在磁盘上记录一张表的总行数，所以可以直接获取到总行数，但是如果加上where限定就不是这样了，而对于InoDB它需要将数据一行一行的读，然后进行统计，那么它为什么不想MyISAM那样记录总行数就行呢？因为InoDB中有MVCC机制，不同事务看到的总行数记录是不一样的。
+
+count(字段)会忽略字段值为null的行，对非null行累计， 但这个列名最好是有索引的，否则就会全表扫描速度慢。count(1)和count(*)不会忽略null，会累加每一行
+
+count(`* `)和count(1)区别：不管这里是1，还是2，还是'x', 'y'，得到的结果都是一样的，可以吧count()里面的值理解为一个字段，从而进行累加，意思是累加每一行，不针对某一个字段。 而count(` * `) 会把这个* 翻译成某一个具体的字段， 多了一步操作。
+
+对于COUNT(1)和COUNT(` * `)执行优化器的优化是完全一样的，并没有COUNT(1)会比COUNT(*)快这个说法。
+
+总结：忽略null选择count(字段),反之选择count(1)或者count(` * `)都行
+
 ## 红黑树、B树、B+树、hash常问
 
 比如普通搜索树，如果是有序的一串数字(并且插入顺序是有序的)，那么就退化成了链表的形式，后来出现了平衡树，但平衡时调整代价太大，因为平衡要求太高。
 
-为什么数据库存储不用红黑树和数组而用B树，B+树：
+为什么数据库存储不用红黑树和数组而用B树，B+树（最底层是双向链表）：
 
 如果是b数或者b+树，如果路的广度无限制增加，就退化成了数组
 
@@ -43,6 +55,8 @@ ON e.empno=mgr.mgr;
 有同学可能有疑问，B+树可以一次放一个节点到内存去，那红黑树为什么不能每次放一部分数据到内存呢？
 且不说红黑树只放一部分数据的编程实现难度，并且根本不知道放哪部分(左或者右)节点到内存去，会有很多无效的内存操作。
 最重要的一点就是B树的树高比红黑树低，查找次数少，对磁盘的IO操作少
+
+b+树，n对应n； b树 n 对应 n + 1 
 
 ## 锁相关
 
@@ -98,7 +112,7 @@ innoDB提供了innodb_autoinc_lock_mode 系统变量，用它决定用AUTO-INC�
 |                                   | create table t2 like t                |
 | insert into t2 values(null, 5, 5) | insert into t2(c,d) select c,d from t |
 
-两个事务同时开启，可能出现insert into t2 values(null, 5, 5)在insert into t2(c,d) select c,d from t进行到id为2时执行，那么本应该主键id为5的数据申请了自增id3，就变到了主键为3， 本该是主键id 为 3 和 4 的数据推后去申请自增id，就变成了 4， 5，但binlog并不会知道这些，最终如下图
+在从库中两个事务同时开启，可能出现insert into t2 values(null, 5, 5)在insert into t2(c,d) select c,d from t进行到id为2时执行，那么本应该主键id为5的数据申请了自增id3，就变到了主键为3， 本该是主键id 为 3 和 4 的数据推后去申请自增id，就变成了 4， 5，但binlog并不会知道这些，最终如下图
 
 **在从库中：**
 
@@ -144,7 +158,7 @@ innoDB提供了innodb_autoinc_lock_mode 系统变量，用它决定用AUTO-INC�
 
 **对于redolog 和 binlog，设置相应参数实现不同的刷盘效果：**
 **redolog:** 
-innodb_flush_log_at_trx_commit = 0时，每次事务提交时，还是将redo log留在redo log buffer中，该模式下不会主动触发写磁盘的操作，但是mysql有一个后台进程(注意一下，这个后台线程，目前看来只是处理对于redo log的刷盘操作，对于binlog没有谈到它)，每秒会进行一次写磁盘操作。
+innodb_flush_log_at_trx_commit = 0时，每次事务提交时，还是将redo log留在redo log buffer(和buffer pool 不是一个位置)中，该模式下不会主动触发写磁盘的操作，但是mysql有一个后台进程(注意一下，这个后台线程，目前看来只是处理对于redo log的刷盘操作，对于binlog没有谈到它)，每秒会进行一次写磁盘操作。
 innodb_flush_log_at_trx_commit = 1时，每次事务提交时，都将redo log  buf里的redo log直接持久化到磁盘
 innodb_flush_log_at_trx_commit = 2时，每次事务提交时，将redo log buf里的redo log写到redo log文件(这种说法意思是写到内核中的cache page，并不是真正的刷盘操作)，操作系统来决定何时刷到磁盘中。(为2时比0时安全，因为是写到cache page中，即时mysql崩溃也不会丢失数据，除非操作系统出故障或者断电关机了
 
@@ -195,6 +209,12 @@ redolog和undolog的关系：
 其余所有类型的索引都是二级索引(辅助索引)也叫非聚簇索引
 有那么多索引的叫法，其实本质上就两种，聚集索引和二级索引(这是按物理存储方式分类)，比如按字段个数又分为单列索引和联合索引。
 
+在《数据库原理》一书中是这么解释聚簇索引和非聚簇索引的区别的：**聚簇索引的叶子节点就是数据节点，而非聚簇索引的叶子节点仍然是索引节点，只不过有指向对应数据块的指针**
+
+介绍聚簇和非聚簇时要分引擎讨论：
+对于数据库原理最后一句话“只不过有指向对应数据块的指针”， 这里特指myisam中的非聚簇索引实现，而对于innodb中的非聚簇索引(也就是平时说的二级索引，辅助索引)， 它们的记录中包含了主键key，通过这个key在去聚簇索引中找数据，这个过程被称为回表。
+而对于myisam引擎，只有非聚簇索引。它的索引文件和数据文件是单独分开的，table.myd记录数据，table.myi记录索引信息。
+
 **索引失效？**
 范围查询如%x, 或者 %x%即失效， 若是x%则可以
 对索引使用函数如:select * from table where LENGTH(主键id) = 1;
@@ -234,6 +254,8 @@ B树对于B+树的优点：
 但是 mysql也有用到hash的地方， 比如**自适应hash**，将经常访问到的页通过自适应hash(hash的key设为主键id，val为页地址)进行存储，能够提高快速定位这个页的位置提高效率(但只用于等值查询，不能范围查询)
 
 ## binlog redolog undolog关系
+
+![](../../pic/v2-544cd81d665e47ef99c2d0bea86045f3_1440w.webp)
 
 因为最开始 MySQL 里并没有 InnoDB 引擎。MySQL 自带的引擎是 MyISAM，但是 MyISAM 没有 crash-safe(崩溃恢复) 的能力，binlog 日志只能用于归档。
 而 InnoDB 是另一个公司以插件形式引入 MySQL 的，只依靠 binlog 是没有 crash-safe 能力的，所以 InnoDB 使用另外一套日志系统—— redo log 来实现 crash-safe 能力。
