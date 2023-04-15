@@ -1,0 +1,26 @@
+// https://github.com/Microsoft/vscode-cpptools/blob/master/launch.md
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "redis启动",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/src/redis-server",
+            "args": ["redis.conf"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启动整齐打印",
+                    "text": "-enable-pretty_printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "redis-build"
+        }
+    ]
+}

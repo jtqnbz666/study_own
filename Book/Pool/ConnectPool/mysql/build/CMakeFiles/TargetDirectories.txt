@@ -1,0 +1,4 @@
+/media/sf_demo/Pool/mysql_pool/build/CMakeFiles/rebuild_cache.dir
+/media/sf_demo/Pool/mysql_pool/build/CMakeFiles/edit_cache.dir
+/media/sf_demo/Pool/mysql_pool/build/CMakeFiles/test_ThreadPool.dir
+/media/sf_demo/Pool/mysql_pool/build/CMakeFiles/test_DBPool.dir
