@@ -182,6 +182,11 @@ int startRow = (row / 3) * 3;
 11.容器的使用
 
 ~~~c
+map，unordered_map ， vector可以用auto来遍历
+
+对于priority_queue<int, vector<int>, cmp> 
+push入， pop出， top()取顶
+
 对于map:
 用count 和 find(键) != end()查找是否存在
 
@@ -190,8 +195,15 @@ map.erase() //可以是iter迭代器，也可也是主键
 map.insert(make_pair(A,B));
 
 对于queue
-queue.front() , queue.pop(), queue.push();
-//
+front访问对头， back访问队尾， size 求大小，empty判空， push加入队尾，pop弹出队首
+
+queue是一个适配器， 底层是deque，deque的实现既不是单纯的数组，也不是链表。
+
+对于vector
+队尾back()， 队首front(), push_back, pop_back()
+
+对于reverse函数需要注意
+reverse(idx1, idx2) ,idx2是没有算的，左闭右开
 ~~~
 
 12.string 类型的初始化
@@ -302,5 +314,43 @@ int main() {
 	}*/
 	return  0;
 }
+~~~
+
+16.vector数组定义理解
+
+~~~c++
+若是一维数组 vector<int>tmp， 具体类型自己定
+若是二维数组 vector<vector<int>>tmp(n, vector<int>(n, 0));
+对于二维数组，我们在使用的时候都是tmp[i][j], 类型同样是自己定。
+vector<vector<int>>tt(3);
+    tt.push_back({1,2,3});
+    tt.push_back({1,2,3});
+    cout << tt[0].size() << endl;  //0
+    cout << tt[0].size(); // 3
+    for(auto v : tt) {
+        for(auto v1 : v) {
+            cout << v1 << " ";
+        }
+        cout << endl;
+    }
+//打印结果
+0
+3
+
+
+1 2 3 
+1 2 3 
+~~~
+
+17.max不能在里面放其他函数
+
+~~~c++
+正确：
+int k = ((Max - 1) * (n + 1) + m);
+int k2 = tasks.size();
+return max(k, k2);
+
+错误：
+return max((Max - 1) * (n + 1) + m, tasks.size());
 ~~~
 
