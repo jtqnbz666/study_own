@@ -2,12 +2,13 @@ package myrpc
 
 import (
 	"encoding/json"
-	"fmt"
+	"errors"
 	"io"
 	"log"
 	"myrpc/codec"
 	"net"
 	"reflect"
+	"strings"
 	"sync"
 )
 
@@ -23,7 +24,9 @@ var DefaultOption = &Option{
 	CodecType:   codec.GobType, // 默认使用gob的编码方式
 }
 
-type Server struct{}
+type Server struct {
+	serviceMap sync.Map //去重用的
+}
 
 func NewServer() *Server {
 	return &Server{}
@@ -76,6 +79,8 @@ func (server *Server) serveCodec(cc codec.Codec) {
 type request struct {
 	h            *codec.Header //请求头， 像调用的方法啊啥的
 	argv, replyv reflect.Value //请求或者回应的字段
+	mType        *methodType
+	svc          *service
 }
 
 func (server *Server) readRequestHeader(cc codec.Codec) (*codec.Header, error) {
@@ -95,6 +100,23 @@ func (server *Server) readRequest(cc codec.Codec) (*request, error) {
 		return nil, err
 	}
 	req := &request{h: h}
+	req.svc, req.mType, err = server.findService(h.ServiceMethod)
+	if err != nil {
+		return req, err
+	}
+	req.argv = req.mType.newArgv()
+	req.replyv = req.mType.newReplyv()
+
+	//确保argvi 是一个指针， readbody中解码需要一个指针作为参数
+	argvi := req.argv.Interface()
+	if req.argv.Type().Kind() != reflect.Ptr {
+		argvi = req.argv.Addr().Interface() //如果不是指针就转化为指针
+	}
+	if err = cc.ReadBody(argvi); err != nil {
+		log.Println("rpc server: 读body的时候失败:", err)
+		return req, err
+	}
+	return req, nil
 	// 并不知道请求的方法类型
 	req.argv = reflect.New(reflect.TypeOf(""))
 	if err = cc.ReadBody(req.argv.Interface()); err != nil {
@@ -113,8 +135,12 @@ func (server *Server) sendResponse(cc codec.Codec, h *codec.Header, body interfa
 
 func (server *Server) handleRequest(cc codec.Codec, req *request, sending *sync.Mutex, wg *sync.WaitGroup) {
 	defer wg.Done()
-	log.Println(req.h, req.argv.Elem())
-	req.replyv = reflect.ValueOf(fmt.Sprintf("myrpc resp %d", req.h.Seq))
+	err := req.svc.call(req.mType, req.argv, req.replyv)
+	if err != nil {
+		req.h.Error = err.Error()
+		server.sendResponse(cc, req.h, invalidRequest, sending)
+		return
+	}
 	server.sendResponse(cc, req.h, req.replyv.Interface(), sending)
 }
 
@@ -130,3 +156,37 @@ func (server *Server) Accept(lis net.Listener) {
 }
 
 func Accept(lis net.Listener) { DefaultServer.Accept(lis) }
+
+//注册服务
+func (server *Server) Register(recv interface{}) error {
+	s := newService(recv)
+	if _, dup := server.serviceMap.LoadOrStore(s.name, s); dup {
+		return errors.New("rpc: 服务已经定义过了-" + s.name)
+	}
+	return nil
+}
+
+func Register(recv interface{}) error { //提供给外界的接口
+	return DefaultServer.Register(recv)
+}
+
+//发现服务
+func (server *Server) findService(serviceMethod string) (svc *service, mtype *methodType, err error) {
+	dot := strings.LastIndex(serviceMethod, ".") //Foo.Sum  相当于拆解它
+	if dot < 0 {
+		err = errors.New("rpc server: 请求的rpc方法错误")
+		return
+	}
+	serviceName, methodName := serviceMethod[:dot], serviceMethod[dot+1:]
+	svci, ok := server.serviceMap.Load(serviceName) //去map表中查找是否注册了这个服务
+	if !ok {
+		err = errors.New("rcp server: 没有找到这个服务")
+		return
+	}
+	svc = svci.(*service) //接口类型的转换
+	mtype = svc.method[methodName]
+	if mtype == nil {
+		err = errors.New("rpc server: 没有发现这个方法")
+	}
+	return
+}

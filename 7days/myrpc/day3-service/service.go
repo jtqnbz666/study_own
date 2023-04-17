@@ -1,3 +1,5 @@
+package myrpc
+
 import (
 	"go/ast"
 	"log"
@@ -54,7 +56,7 @@ type service struct {
 // 这个函数的入参是需要映射为服务的实例对象
 func newService(recv interface{}) *service {
 	s := new(service)
-	s.recv = reflect.Value(recv)
+	s.recv = reflect.ValueOf(recv)
 	s.name = reflect.Indirect(s.recv).Type().Name()
 	s.typ = reflect.TypeOf(recv)
 	//个人感觉s.name可以换为s.name = s.typ.Name()
