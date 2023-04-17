@@ -174,7 +174,7 @@ int startRow = (row / 3) * 3;
 ~~~c
 求有几种方法： dp[j] += dp[j - coins[i]]; //需要初始化dp[0] = 1;
 求最大能装的物品个数: dp[j] = max(dp[j], dp[j - coins[i]] + 1);	
-// 上下两种方法都需要初始化dp[0] = 0,其他位置初始化为很大的数；
+// 上下两种方法都需要初始化dp[0] = 0,其他位置初始化为很小/大的数；
 求最小能装的物品个数: dp[j] = min(dp[j], dp[j - coins[i]] + 1);
 求能装的最大价值: dp[j] = max(dp[j], dp[j - w[i]] + value[i]);
 ~~~
@@ -182,28 +182,48 @@ int startRow = (row / 3) * 3;
 11.容器的使用
 
 ~~~c
-map，unordered_map ， vector可以用auto来遍历
+1.可以用auto来遍历
+map，unordered_map ， vector
 
-对于priority_queue<int, vector<int>, cmp> 
+2.定义n个小顶堆
+priority_queue<char, vector<int>,  greater<int>) ph[n]
+
+3.对于priority_queue<int, vector<int>, cmp> 
 push入， pop出， top()取顶
 
-对于map:
+4.对于map:
 用count 和 find(键) != end()查找是否存在
 
 map.erase() //可以是iter迭代器，也可也是主键
 
 map.insert(make_pair(A,B));
 
-对于queue
+5.对于queue
 front访问对头， back访问队尾， size 求大小，empty判空， push加入队尾，pop弹出队首
 
 queue是一个适配器， 底层是deque，deque的实现既不是单纯的数组，也不是链表。
 
-对于vector
+6.对于deque
+pop_back(), push_back(), push_front(), pop_front(), front(), back();
+
+7.对于vector
 队尾back()， 队首front(), push_back, pop_back()
 
-对于reverse函数需要注意
+8.对于reverse函数需要注意
 reverse(idx1, idx2) ,idx2是没有算的，左闭右开
+
+9.对于unordered_map
+.clear清空， 
+.count()  返回是否包含
+.find() != .end() 判断是否包含
+struct CMP {
+    int operator()(const pair<int, int>&a) {
+        return a.first ^ a.second;
+    }
+}
+typedef pair<int, int> PII;
+unordered_map<PII, int, CMP> mp;//注意这个cmp是hash方法的仿函数, 介个map,set的greater<>,less<>比较函数来理解。
+
 ~~~
 
 12.string 类型的初始化
@@ -352,5 +372,16 @@ return max(k, k2);
 
 错误：
 return max((Max - 1) * (n + 1) + m, tasks.size());
+~~~
+
+18.将数字转化为和，比如17转为 1 + 7 = 8
+
+~~~c++
+vector<int>dsum(100);
+for(int i = 0; i < 10; i ++) {
+	for(int j = 0; j < 10; j ++) {
+		dsum[i * 10 + j] = i + j;
+	}
+}
 ~~~
 
