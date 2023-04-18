@@ -1,9 +1,12 @@
 sort
 
 ~~~
+字段号从1开始, ::1:2 这里面的1就是第三个字段
 sort -k 4 表示指定以第四个字段来排序，默认第一个字段
 
-sort -t ":" 表示以'-t'分割字段，默认以tab分割
+sort -t ":" 表示以'-t'分割字段，默认以tab分割，不是空格
+
+sort -n 以数字大小排序，而不是字典序，默认是字典序
 
 sort - r 表示逆序排序， 
 
@@ -26,14 +29,15 @@ qwqee
 uniq 
 
 ~~~
-因为uniq会考虑一个连续与不连续的问题，所以一般与sort一起使用
+因为uniq会考虑连续与不连续的问题，所以一般与sort一起使用
+一般是 sort | uniq -c
 
 -c	统计 连续 重复的行出现的次数，并且删除重复的行
 123
 12341
 123
 123
-sort -u 结果为
+sort -c 结果为
 1 123
 1 12341
 2 123
@@ -74,9 +78,70 @@ sort -d 结果为
 
 ~~~
 
+tr命令
+
+~~~
+tr 一般后边跟两个字符集 ，用单引号双引号都可以
+默认是-t参数，也就是将字符集1转化为字符集2
+
+1.小写转大写
+echo abc | tr 'a-z' 'A-Z' //ABC
+echo "thirrrr is firhhhht" | tr  'rh' 'sa' //taissss is fisaaaat
+可以看出转换关系是一一对应的
+2.将a 转化为 A
+echo abc | tr 'a' 'A'  //Abc
+
+-s 将重复出现的字符串压缩为一个字符
+1.去除空白行
+cat file | tr -s '\n'
+也可以用grep -v  "^$"
+2.将重复出现的字符压缩并且替换为指定字符
+echo "thirrrr is firhhhht" | tr -s "rh" "s"  //this is fist
+//这个需要注意它把rhhhh当成一个整体转化为一个s
+
+echo "thirrrr is firhhhht" | tr -s "rh" // thir is firht
+~~~
+
+cut
+
+~~~
+cut -b 以字节为单位进行分割，仅显示行中指定直接范围的内容
+cut -d 自定义分隔符，默认以tab分隔,不是空格，必须配合-f或其他,不能单独存在
+cut -fn 表示或者分割后的第n部分内容。 下标从1开始
+cut --output-delimiter=' ' 更改输出内容的分隔符
+cut --complement
+
+要注意-d并不是把原字符串拆分了， 只是提供给用户一个访问某个字段的方法，原字符串本身没有变化(指的分隔符: 并没有被删除)
+比如 "a:b:c:d:e:g:h:i"
+cut -d ":" -f1  //a 
+cut -d ":" -f 1-4,6,7 //a:b:c:d:g:h 逗号中间不要留空格
+
+把这个分隔符: 变换为自定义的输出，比如 空格
+cut -d ":" -f 1-4,6,7 cut --output-delimiter=' '
+
+排除指定字段
+cut -d ":" --complement -f 1-4,6,7  //e:i
+
+截取字符串
+i = 13145
+echo $i | cut -b 3-6 //145 下标从1开始
+expr substr $i 3 3	//145 下标从1开始
+~~~
+
+split
+
+~~~
+文件拆分
+-l 以行数拆分
+-b 以大小拆分
+
+split -l 10 原始文件 拆分后文件的前缀
+拆分后原文件会保留。
+~~~
 
 
-小技巧
+
+### 小技巧
 
 ~~~
 全选vim， v + gg + G
@@ -86,12 +151,22 @@ sort -d 结果为
 移动行首 home , 行尾 end
 
 查看ubuntu版本  cat /etc/issue
+制表符\t 会自动帮你控制距离
+
+echo -e "test\ntest" // 表示将\n转义字符输出，默认不输出
+echo -ne "test" //-n表示输出之后不换行，默认是换行的
 
  netstat  通过端口号查一些信息，或者服务名查端口号
 
 lsof -i:4369  通过端口查看这个进程的相关信息 
+nc -l 4369 开启一个端口号
 
 ps -aux | wc -l  统计进程数量
+
+默认的>是只管stdout
+2> 表示只管stderr , 2>> 表示只管stderr同时追加写。
+命令 > 文件 2>&1  //将stdout和stderr覆盖的方式定向到文件， 把第一个>改为>>则表示追加(不要改第二个>)， 可重定向到/dev/null丢弃打印内容
+
 ~~~
 
 

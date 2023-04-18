@@ -147,7 +147,7 @@ func work(ctx context.Context, str string) {
     for {
         select {
         case <- ctx.Done(): 
-        // 触发它的时间有两种，要么手动cancel取消，要么超时
+        // 触发它的方式有两种，要么手动cancel取消，要么超时
             fmt.Println("退出", str)
             return 
         default://默认走这里，否则就会阻塞在上边ctx.Done()
@@ -302,10 +302,10 @@ ch 	:= make(chan int, 4)
 
 ~~~go
 1.不能向一个已关闭的管道写数据
-2.可以向一个已关闭的管道读数据
-3.从空管道读数据不会阻塞而是返回0。
-4.若管道的大小为1， 那么如果没有把里面的这个元素读取出来，但仍然往里面写就会阻塞。
+2.从已经关闭的空管道读数据不会阻塞会返回管道数据，没有则返回0
+3.从未关闭的空管道读数据会阻塞。 特例：如果是select有default分支则不阻塞
 
+4.若管道的大小为1， 那么如果没有把里面的这个元素读取出来，但仍然往里面写就会阻塞。
 
 5.不能直接往一个大小为0的管道写入数据， 但如果这个大小为0的管道存在一个读它的协程， 那么这种情况是可以向大小为0的管道写数据的。
 func receive(ch chan int) {
@@ -320,7 +320,12 @@ func main() {
     
     
 6.确保管道写安全的最好方式就是由负责写管道的协程自己来关闭管道
-7.
+7.多协程采用wg *sync.waitgroup，每个发送者都wg.Add(1); send完毕后wg.Done(); 调用wg.Wait()阻塞，当所有的send都结束了再关闭管道。
+    
+8.遍历管道 , 不会主动退出循环，除非管道ch被关闭。
+    for v := range ch {
+        
+    }
 ~~~
 
 
@@ -432,7 +437,7 @@ test(&a)
 go中一个结构体中如果包含另一个结构体的匿名对象， 那么相当于继承了它的所有属性和方法。
 
 举例一：
-type Persons struct {
+type Person struct {
     Name string
     Age  int 
 }
@@ -442,13 +447,19 @@ type Student struct {
     Person	//匿名对象
 }
 //如果要初始化这个匿名对象， 可以理解为Student结构体中有一个匿名对象的名字和结构体名字一样
+
+//如果匿名对象中有和当前类相同的成员，如果是匿名的方式优先调用自己的同名成员
+
 stu := &Student {
-    //如果是*Person 这里就换成Person: &Person{}
+    //如果是*Person 这里就换成Person: &Person{}而不是*Person: &Person{}
+    //但是要注意比如sync.Mutex不管是否指针，都不能像下边这样初始化
+    //而是按照顺序直接初始化，但按顺序就必须初始化每个对象，或者用有名对象
     Person: Person { 
         Name: "jt",
         Age : 18,
     }, // 这里必须加逗号
 }
+
 
 若采用一行的方式
 stu3 := Student{score: "100", Age: 20} //20紧接着可以不加逗号， 如果是分行的，必须所有元素都要加上逗号

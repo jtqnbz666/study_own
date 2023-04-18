@@ -54,7 +54,7 @@ set role:10001 '{["name"]:"mark",["sex"]:"male",["age"]:19}'
 
 ## 数据结构
 
-string类型是二进制安全字符串， 如 char[20] = "hello\0", 它是以\0结束1的，而string类型是判断的长度，而不是以\0结束。类似std::string ，虽然redis是c语言写的，但是string却不是跟char一样。
+string类型是二进制安全字符串， 如 char[20] = "hello\0", 它是以\0结束1的，而string类型是判断的长度，而不是以\0结束。类似std::string ，虽然redis是c语言写的，但是string却不是跟char一样。redis协议本身和protobuf中对字符串的编码都是通过在前边加上了长度。
 
 ~~~
 存储结构：

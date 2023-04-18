@@ -117,3 +117,17 @@ json_txt(date_json)
 print("dic ---: "+str(dic))
 ~~~
 
+7.从标准输入接收输入
+
+~~~python
+for line in sys.stdin:
+    if not line:
+       break
+    line = line.strip()
+    try:
+        ...
+    except:
+        pass
+
+~~~
+
