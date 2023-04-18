@@ -1,0 +1,21 @@
+<config>
+   <smtpServer>smtp.0voice.com</smtpServer>
+   <smtpPort>25</smtpPort>
+   <sender>youzi@0voice.com</sender>
+  <senderPasswd>123456</senderPasswd>
+   <receivers flag="true">
+     <user>king@0voice.gom</user>
+     <user>darren@0voice.gom</user>
+     <script>
+     <![CDATA[
+        function &%< matchwo(a,b) {
+            if (a < b && a < 0) then {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+        ]]>
+     </script>
+  </receivers>
+ </config>
