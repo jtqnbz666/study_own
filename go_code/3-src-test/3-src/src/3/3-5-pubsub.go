@@ -71,7 +71,7 @@ func (p *Publisher) sendTopic(
 	if topic != nil && !topic(v) { // 过滤信息
 		return
 	}
-	select {
+	select { //谁先触发就去执行谁
 	case sub <- v:
 	case <-time.After(p.timeout): // 超时
 	}

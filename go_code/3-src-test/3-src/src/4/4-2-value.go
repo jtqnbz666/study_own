@@ -19,7 +19,7 @@ func main() {
 
 	time.Sleep(5 * time.Second)
 	fmt.Println("可以了， 通知监控停止")
-	cancel()
+	cancel() //把ctx 取消了之后， valueCtx 和 valueCtx2也会跟着结束
 	//为了检测监控是否停止， 如果没有监控输出， 就表示停止了
 	time.Sleep(5 * time.Second)
 }

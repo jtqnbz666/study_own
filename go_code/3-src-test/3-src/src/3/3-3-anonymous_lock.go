@@ -20,19 +20,21 @@ type SafeDict struct {
 
 func NewSafeDict(data map[string]int) *SafeDict {
 	return &SafeDict{
-		data,
-		&sync.Mutex{},
-		&test{"jt", 19}, //若是这种按照顺序初始化，必须初始化每个对象
+		// data,
+		// &sync.Mutex{},
+		// &test{"jt", 19},
+		//若是这种按照顺序初始化，必须初始化每个对象
 		//这里采用了顺序初始化， 所以可以不用写自己的成员对象
 
 		//若采用有名对象
 		// data : data,
 		// tt: &sync.Mutex{},
 
-		//这样是错误的， 普通结构体test适用，但sync.Mutex的匿名对象不管是否指针，目前只发现顺序初始化一种方式
-		// data:       data,
-		// test:       &test{},
-		// sync.Mutex: sync.Mutex{},
+		//如果引用的别的包的结构体，把前缀去掉就可以了，
+		//如果同时引用了两个别的包的结构体，并且是同名的，需要对其中一个明确的命名，不然编译会报错
+		data:  data,
+		test:  &test{},
+		Mutex: &sync.Mutex{},
 	}
 }
 
