@@ -54,6 +54,18 @@ do
 done
 ~~~
 
+goNb的点
+
+~~~go
+1.select中ctx.Done() 机制
+2.defer 机制
+3.wg sync.Waitgroup ; wg.Add(1), wg.Done(), wg.Wait()机制
+~~~
+
+
+
+
+
 ### c++和go定义对象的区别 
 
 ~~~go
@@ -105,9 +117,27 @@ func main() {
 
 
 
-### sync.Once 
+### sync系列
+
+**sync.WaitGroup**
 
 ~~~go
+配合上下文一起使用， 上下文主要是针对特定条件来进行下一步操作，而sync.WaitGroup是为了保证每一个任务都结束了再进行下一步操作。二者并不冲突，并且能一起配合带来更好的操作。
+var wg sync.WaitGroup
+//主要有两个操作 wg.Add()  和 wg.Done()
+
+//上下文
+ctx, cancel := context.WithTimeout(context.Background(), 10 * time.Second)
+//返回的ctx是上下文，cancel是用于中断上下文的函数， 也可以等超时后自动调用cancel， 效果就是会触发 ctx.Done(), 那么就可以用select来监听这个事件，当出现这个事件的时候，表示时间到期或者手动cancel取消了上下文。
+
+每次开一个任务的时候都会执行wg.Add() , 任务执行完后 都执行wg.Done， 当wg.Wait()等于0时，结束阻塞
+
+//上下文还可以嵌套，比如ctx1 依赖 ctx， ctx2 依赖 ctx1， ctx3 依赖 ctx2， 那么当ctx1这个上下文中断后，ctx2 和 ctx3 都会跟着中断， 但是ctx 不会受到影响
+~~~
+
+### sync.Once 
+
+```go
 var once sync.Once
 
 func once1() {
@@ -120,24 +150,13 @@ for i := 0; i < 5; i ++ {
     once.Do(once1) //只有它会执行
     once.Do(once1) 
     once.Do(once2)
+    fmt.Printf("i = %d", i) //每一次都会执行
 }
-~~~
+```
 
-### sync.WaitGroup
+### 
 
-~~~go
-配合上下文一起使用
-var wg sync.WaitGroup
-//主要有两个操作 wg.Add()  和 wg.Done()
 
-//上下文
-ctx, cancel := context.WithTimeout(context.Background(), 10 * time.Second)
-//返回的ctx是上下文，cancel是用于中断上下文的函数， 也可以等超时后自动调用cancel， 效果就是会触发 ctx.Done(), 那么就可以用select来监听这个事件，当出现这个时间的时候，表示时间到期或者手动cancel取消了上下文。
-
-每次开一个任务的时候都会执行wg.Add() , 任务执行完后 都执行wg.Done， 当wg.Wait()等于0时，结束阻塞
-
-//上下文还可以嵌套，比如ctx1 依赖 ctx， ctx2 依赖 ctx1， ctx3 依赖 ctx2， 那么当ctx1这个上下文中断后，ctx2 和 ctx3 都会跟着中断， 但是ctx 不会受到影响
-~~~
 
 ### select多路复用
 
@@ -146,7 +165,9 @@ ctx, cancel := context.WithTimeout(context.Background(), 10 * time.Second)
 func work(ctx context.Context, str string) {
     for {
         select {
-        case <- ctx.Done(): 
+        case <- ctx.Done():  
+       //本质上是一个管道，如果关闭管道就会触发，因为可以读取关闭的管道
+      //若管道没有关闭就会一直阻塞在这里
         // 触发它的方式有两种，要么手动cancel取消，要么超时
             fmt.Println("退出", str)
             return 
@@ -301,9 +322,10 @@ ch 	:= make(chan int, 4)
 ### chanel管道使用
 
 ~~~go
+<-chan int 表示输出类型，  chan<- int 表示输入类型
 1.不能向一个已关闭的管道写数据
-2.从已经关闭的空管道读数据不会阻塞会返回管道数据，没有则返回0
-3.从未关闭的空管道读数据会阻塞。 特例：如果是select有default分支则不阻塞
+2.从已经关闭的空管道读数据不会阻塞会返回管道数据，没有则返回0，select中的ctx.Done()也是通过这个机制实现的。
+3.从未关闭的空管道读数据会阻塞。 特例：如果是select有default分支则不会阻塞select。
 
 4.若管道的大小为1， 那么如果没有把里面的这个元素读取出来，但仍然往里面写就会阻塞。
 
@@ -452,8 +474,10 @@ type Student struct {
 
 stu := &Student {
     //如果是*Person 这里就换成Person: &Person{}而不是*Person: &Person{}
-    //但是要注意比如sync.Mutex不管是否指针，都不能像下边这样初始化
-    //而是按照顺序直接初始化，但按顺序就必须初始化每个对象，或者用有名对象
+    //如果引用的别的包的结构体，把前缀去掉就可以了，
+    //如果同时引用了两个别的包的结构体，并且是同名的，需要对其中一个明确的命名，不然编译会报错
+	
+    //也可以按照顺序直接初始化，但按顺序就必须初始化每个对象，或者用有名对象
     Person: Person { 
         Name: "jt",
         Age : 18,
@@ -470,19 +494,23 @@ stu3 := Student{score: "100", Age: 20, {"jt", 19}}
 
 举例二：
 
-type son struct {
-    a int
-}
 type father struct {
-   	 *son
+    a int
+    b int
+}
+type son struct {
+   	 *father
      b int 
 }
 
 
-tt := &father{b: 10}
-tt.son = &son{a: 6} // 注意这里的使用
+tt := &son{b: 10}
+tt.father = &father{a: 6, b: 12} // 注意这里的使用
 fmt.Println(tt.a)
-可以直接调用son中的a，如 tt.a
+可以直接调用father中的a，如 tt.a
+fmt.Println(tt.b) //默认是son的b
+fmt.Println(tt.son.b) //显式调用father的b
+//由此可见，在son中可以实现方法来覆盖father的方法达到重写的效果
 ~~~
 
 
@@ -844,7 +872,7 @@ fmt.Println(t.Kind()) //int
 fmt.Println(t.Name()) // int
 
 
-type MyInt int
+type MyInt int	
 var x MyInt = 5
 v := reflect.TypeOf(x)
 fmt.Println(v.Kind())	// int
@@ -853,6 +881,13 @@ fmt.Println(v.Name())   // MyInt
 v := reflect.ValueOf(x)
 fmt.Println(v.Kind())	// int
 fmt.Println(v.Name())   // 错误，没有这种写法
+
+拓展：
+type MyInt int	
+//NB的地方在于go可以通过这种方式给MyInt设置函数方法
+func ( *MyInt) test() {
+    fmt.Println("test")
+}
 ~~~
 
 

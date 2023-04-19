@@ -144,6 +144,8 @@ split -l 10 原始文件 拆分后文件的前缀
 ### 小技巧
 
 ~~~
+ldd (list, dynamic, dependencies)可以查看可执行文件依赖的动态库，也可以查看动态库依赖的其他动态库，如果 ldd 静态库 会告诉你 not a dynamic executable
+
 全选vim， v + gg + G
 复制全部  ggyG
 删除全部  ggdG
@@ -278,7 +280,8 @@ scp * -r ubuntu@49.234.61.220:/home/ubuntu
 
 ```c
 g++ -c add.cpp
-ar rc libadd.a add.o
+ar rcs libadd.a add.o 
+//不能把add.o 和 libadd.a交换位置, 不能ar rcs add.o -o libadd.a
 g++ main -L. -ladd
 ```
 
