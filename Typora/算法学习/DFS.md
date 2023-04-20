@@ -2,25 +2,25 @@
 
 494.目标和 ： 可以用dp的方式，也可以爆搜，dfs就是通过递归来实现的，所以递归跟dfs的思想是很近似的。
 
-体验一下记忆化搜索
+**体验一下记忆化搜索**
 
 ~~~c++
-class solution{
+class Solution{
 public:
     struct CMP{
-      int operator()(const pair<int, int>&a) {
+        //这个const一定不能少
+      int operator()(const pair<int, int>&a) const{
           return a.first ^ a.second;
       }  
     };
     typedef pair<int, int> PII;
 	unordered_map<PII, int, CMP>mp; //重载一个hash函数因为默认没有
 	int dfs(int k, int target, vector<int>&arr) {//k记录位置
-       if(mp.count(PII(k, target))) {
-           return mp[PII(k, target)];
-       }
        if(k == arr.size()) {
-           if(target == 0) ans += 1;
-           return ans;
+           return target == 0;
+       }
+       if(mp.find(PII(k, target)) != mp.end()) {
+           return mp[PII(k, target)];
        }
        int ans = 0;
        ans += dfs(k + 1, target + arr[k], arr);
@@ -28,7 +28,7 @@ public:
        mp[PII(k, target)] = ans; // 这里就是记忆化搜索
        return ans;
    } 
-   int test(vector<int>& arr, int target) {
+   int findTargetSumWays(vector<int>& arr, int target) {
        return dfs(0, target, arr);
    }
 };
@@ -52,27 +52,48 @@ vector<int>r = dfs(i + 1, 3);//第一次循环会返回2种情况,一种2为根,
 //这三个节点遍历完就可以得到5种情况
 ```
 
-完整代码
+完整代码 **，含有记忆化搜索优化**
 
 ```c++
 class Solution {
 public:
-    vector<TreeNode*> dfs(int l, int r){
+    struct CMP {
+        //这个const一定不能少
+        int operator()(const pair<int, int>& a) const{
+            return a.first ^ a.second;
+        }
+    };
+    typedef pair<int, int> PII;
+    unordered_map<PII, vector<TreeNode*>, CMP>mp;
+    vector<TreeNode*> dfs(int l, int r) {
         vector<TreeNode*>ans;
         if(l > r) {
             ans.push_back(nullptr);
             return ans;
         }
         for(int i = l; i <= r; i ++) {
-            vector<TreeNode*>left = dfs(l, i - 1);
-            vector<TreeNode*>right = dfs(i + 1, r);
+            vector<TreeNode*> left;
+            vector<TreeNode*> right;
+            if(mp.count(PII(l, i - 1))) {
+                
+               left = mp[PII(l, i - 1)];
+            } else {
+               left = dfs(l, i - 1);
+            }
+            if(mp.count(PII(i + 1, r))) {
+                right = mp[PII(i + 1, r)];
+            } else {
+                right = dfs(i + 1, r);
+            }
+        
             for(auto v1 : left) {
                 for(auto v2 : right) {
-                    TreeNode* node = new TreeNode(i, v1, v2);
+                    TreeNode *node = new TreeNode(i, v1, v2);
                     ans.push_back(node);
                 }
             }
         }
+        mp[PII(l, r)] = ans;
         return ans;
     }
     vector<TreeNode*> generateTrees(int n) {
