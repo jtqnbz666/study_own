@@ -6,6 +6,15 @@ cd github.git
 git init --bare
 ~~~
 
+机器首次提交的时候要自报家名
+
+~~~
+git config --global user.name "jt"
+git config --global user.email "454193896@qq.com"
+
+使用 git confil -l 查看是否设置成功
+~~~
+
 
 
 

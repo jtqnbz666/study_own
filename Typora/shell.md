@@ -446,6 +446,18 @@ else
 	echo "不相等"
 fi
 
+# if , elif 判断
+if condition1
+then
+    command1
+elif condition2 
+then 
+    command2
+else
+    commandN
+fi
+
+
 #for循环
 for var in item1 item2 ... itemn
 do

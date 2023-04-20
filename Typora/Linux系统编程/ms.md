@@ -144,6 +144,8 @@ split -l 10 原始文件 拆分后文件的前缀
 ### 小技巧
 
 ~~~
+ps -p 11361 -o comm= 通过进程号查看进程名
+
 ldd (list, dynamic, dependencies)可以查看可执行文件依赖的动态库，也可以查看动态库依赖的其他动态库，如果 ldd 静态库 会告诉你 not a dynamic executable
 
 全选vim， v + gg + G
