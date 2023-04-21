@@ -131,3 +131,45 @@ for line in sys.stdin:
 
 ~~~
 
+8.遍历json串的所有key
+
+~~~python
+js_new = json.loads(line_str)
+     js_new["all_contexts"] = line_strpr
+     dic={}		#用dic来形成新的json串
+     for key in js_new:
+         strtmp=js_new[key]
+         dic[key]=str(strtmp)
+      outStr=json.dumps(dic, ensure_ascii=False)
+      print(outStr)
+
+~~~
+
+9.find查看是否包含
+
+~~~python
+s = "This be a string"
+if s.find("is") == -1: # 没找到
+    print "No 'is' here!"
+else:
+    print "Found 'is' in the string."
+~~~
+
+10.unicode与utf-8编码问题
+
+~~~python
+在python脚本第一行加上   # -*- coding: utf-8 -*-
+i#号键也要加上
+
+直接js = json.loads(line)  #此时这个line已经被转为utf-8了，
+str = json.dumps(js, ensure_ascii=False)	#这样就是utf-8字符串了
+
+~~~
+
+11.json与字符串细节
+
+~~~python
+如果
+field1 = js['name']  #如果你的name对应的value是一个json对象，那么可以直接把field1当成json对象使用， 否则必须把field1转化为json对象才可以进一步解析field1中的子字段
+~~~
+

@@ -144,7 +144,12 @@ split -l 10 原始文件 拆分后文件的前缀
 ### 小技巧
 
 ~~~
+进程三件套：
+ps -aux | grep _ser  通过部分名字查看进程信息，-aux 比 -ef 信息详细
 ps -p 11361 -o comm= 通过进程号查看进程名
+lsof -i:3306		通过端口号查看进程信息。
+
+
 
 ldd (list, dynamic, dependencies)可以查看可执行文件依赖的动态库，也可以查看动态库依赖的其他动态库，如果 ldd 静态库 会告诉你 not a dynamic executable
 

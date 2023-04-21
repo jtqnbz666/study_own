@@ -720,6 +720,8 @@ vscode上
 更改代理设置
 go env -w GOPROXY="https://proxy.golang.org,direct"
 
+go env -w GOPROXY=https://goproxy.cn,direct
+
 ctrl + shift + p 输入setting， 找到Docs Tool 改成guru
 
 ### 包管理方式
