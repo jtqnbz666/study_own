@@ -19,7 +19,7 @@ func queryRowDemo(db *sql.DB) {
 	sqlStr := "select id, name, age from user where id=?"
 	var u user
 	//非常重要：确保QueryRow之后调用Scan方法，否则持有的数据库连接不会被释放
-	err := db.QueryRow(sqlStr, 2).Scan(&u.id, &u.name, &u.age)
+	err := db.QueryRow(sqlStr, 1).Scan(&u.id, &u.name, &u.age)
 	if err != nil {
 		fmt.Printf("scan failed, err:%v\n", err)
 		return

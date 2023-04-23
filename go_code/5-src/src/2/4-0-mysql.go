@@ -9,7 +9,8 @@ import (
 
 // https://github.com/go-sql-driver/mysql#usage
 func main() {
-	db, err := sql.Open("mysql", "root:123456@tcp(127.0.0.1:3306)/go_test?charset=utf8mb4")
+	//db, err := sql.Open("mysql", "root:123456@tcp(127.0.0.1:3306)/go_test?charset=utf8mb4")
+	db, err := sql.Open("mysql", "root:123456@/go_test")
 	fmt.Println("err:", err) // err: <nil>
 	if db == nil {
 		fmt.Println("db open failed:", err)

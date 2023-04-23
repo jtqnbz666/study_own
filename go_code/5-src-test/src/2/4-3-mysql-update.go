@@ -16,7 +16,7 @@ type user struct {
 // 更新数据
 func updateRowDemo(db *sql.DB) {
 	sqlStr := "update user set age=? where id = ?"
-	ret, err := db.Exec(sqlStr, 20, 2)
+	ret, err := db.Exec(sqlStr, 20, 1)
 	if err != nil {
 		fmt.Printf("update failed, err:%v\n", err)
 		return
@@ -29,7 +29,7 @@ func updateRowDemo(db *sql.DB) {
 	fmt.Printf("update success, affected rows:%d\n", n)
 }
 func main() {
-	db, err := sql.Open("mysql", "root:123456@tcp(127.0.0.1:3306)/go_test?charset=utf8mb4")
+	db, err := sql.Open("mysql", "root:nswdsm58@tcp(127.0.0.1:3306)/go_test?charset=utf8mb4")
 	// fmt.Println("err:", err)
 	err = db.Ping()
 	if err != nil {

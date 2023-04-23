@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	_ "github.com/go-sql-driver/mysql" //这个不能注释，里面对db做了init操作
+	_ "github.com/go-sql-driver/mysql" //这个_不能注释，里面对db做了init操作
 )
 
 func main() {

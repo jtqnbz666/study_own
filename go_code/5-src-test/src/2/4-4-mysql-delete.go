@@ -16,7 +16,7 @@ type user struct {
 // 删除数据
 func deleteRowDemo(db *sql.DB) {
 	sqlStr := "delete from user where id = ?"
-	ret, err := db.Exec(sqlStr, 2)
+	ret, err := db.Exec(sqlStr, 1)
 	if err != nil {
 		fmt.Printf("delete failed, err:%v\n", err)
 		return

@@ -61,15 +61,11 @@ func main() {
 }
 
 /* 异步
-start rpc server on [::]:34885
-&{Foo.Sum 5 } myrpc 请求3
-&{Foo.Sum 2 } myrpc 请求4
-&{Foo.Sum 1 } myrpc 请求0
-&{Foo.Sum 3 } myrpc 请求2
-&{Foo.Sum 4 } myrpc 请求1
-reply: myrpc resp 3
-reply: myrpc resp 4
-reply: myrpc resp 2
-reply: myrpc resp 1
-reply: myrpc resp 5
+rpc server: 注册了Foo . Sum
+start rpc server on [::]:38007
+4 + 16 = 20:
+3 + 9 = 12:
+0 + 0 = 0:
+1 + 1 = 2:
+2 + 4 = 6:
 */
