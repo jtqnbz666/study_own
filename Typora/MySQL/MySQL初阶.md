@@ -77,7 +77,7 @@ alter table new_table rename to old_table;
 #修改字段名
 alter table oldtable  change id stu_id int;
 #修改字段类型
-alter table oldtable  modify stu_id tinyint;
+alter table oldtable  modify stu_id tinyint auto_increment;
 #添加字段
 alter table old_table add age tinyint;
 alter table old_table add(aa int,bb int,cc int);#添加多个

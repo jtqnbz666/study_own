@@ -570,5 +570,7 @@ source不会新开一个shell程序，
 sh -x 和 . 基本没有区别
 
 子shell可以继承父shell的环境变量，但子shell不会返回环境变量给父shell， 除非使用export
+
+先执行的脚本执行完后才会接着执行后边的脚本
 ```
 

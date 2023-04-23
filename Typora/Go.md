@@ -214,7 +214,38 @@ go run test.go -help // 或者其他不认识的 -..  就输出下边的提示
   -b string
         backup path (default "/home/default_dir") //第三个参数提示
   -d    debug mode							   //第三个参数提示
+                     
+          
+
 ~~~
+
+而在c++中是这样的
+
+~~~c++
+#include <iostream>
+#include <gflags/gflags.h>
+
+DEFINE_bool(isvip, false, "If Is VIP");
+DEFINE_string(ip, "127.0.0.1", "connect ip");
+DECLARE_int32(port);
+DEFINE_int32(port, 80, "listen port");
+
+int main(int argc, char** argv)
+{
+  google::ParseCommandLineFlags(&argc, &argv, true);
+  std::cout<<"ip:"<<FLAGS_ip<<std::endl;
+  std::cout<<"port:"<<FLAGS_port<<std::endl;
+  if (FLAGS_isvip)
+  {
+      std::cout<<"isvip:"<<FLAGS_isvip<<std::endl;
+  }
+  google::ShutDownCommandLineFlags();
+  return 0;
+                  
+}     
+~~~
+
+
 
 
 

@@ -155,7 +155,7 @@ else:
     print "Found 'is' in the string."
 ~~~
 
-10.unicode与utf-8编码问题
+10.ascii与utf-8编码问题
 
 ~~~python
 在python脚本第一行加上   # -*- coding: utf-8 -*-
