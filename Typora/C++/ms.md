@@ -488,6 +488,8 @@ shared_ptr 存在循环引用问题
 构造对象:
 shared_ptr<int>INum(new int(10));
 shared_ptr<int>INum2 = make_shared<B>();
+
+比如程序结束后，两个shared_ptr对象发生循环引用，因为shared_ptr是在栈上，会主动释放shared_ptr这个指针变量，那么这个shared_ptr所指向的对象的引用计数就会减一（这里特别注意，shared_ptr的情况下才会有这种减一的说法，如果是int* 指向的对象，你不主动delete，根本不会释放int*指向的内存）， 但因为引用计数还不为0，所以堆上这个被shared_ptr指向的对象不会释放，如果是一个类，意思就是还不会调用析构函数。
 ~~~
 
 weak_ptr
