@@ -149,9 +149,19 @@ ps -aux | grep _ser  通过部分名字查看进程信息，-aux 比 -ef 信息�
 ps -p 11361 -o comm= 通过进程号查看进程名
 lsof -i:3306		通过端口号查看进程信息。
 
+程序编译三件套 -I, -L, -l 分别表示头文件路径，链接库的路径， -l 指定链接的库，如果是动态库的话要放到/lib;/usr/lib/; usr/local/lib，如果没放有三种方式
+1：加上-Wl,-rpath=指定动态库链接路径 
+ g++ test.cpp -L. -ladd -Wl,-rpath=.
+ 
+当动态库为libxx-x.x.x.so之类的，给他弄个软连接
+ln  -s  libxx-x.x.x.so  libxx.so 
 
+2:去/etc/ld.so.conf文件中加上你想要的路径，保存后执行ldconfig命令即可
+
+3.export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH 那个点就是你想要指定的路径， 但linux子系统好像并不支持这样操作。
 
 ldd (list, dynamic, dependencies)可以查看可执行文件依赖的动态库，也可以查看动态库依赖的其他动态库，如果 ldd 静态库 会告诉你 not a dynamic executable
+
 
 全选vim， v + gg + G
 复制全部  ggyG

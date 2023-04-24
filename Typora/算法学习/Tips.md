@@ -385,3 +385,61 @@ for(int i = 0; i < 10; i ++) {
 }
 ~~~
 
+19.switch问题
+
+~~~c++
+switch() 不能判断字符串(但可以判断单个字符)，1.可以使用枚举的方式，2.使用strcmp函数对比
+~~~
+
+20.若要持续输入东西，当输入-1为结束标志的方法(EOF)
+
+```c++
+int a;
+while(cin>>a&&a!=EOF)
+{
+    cout<<a;
+}
+//当输入为-1时，循环结束。
+//网上说还有两种方式，但我试了一下不行，应该是编译器的问题
+while(scanf(%d,&a)!=EOF)
+while(~scanf(%d,&a))  //~是按位取反的意思，只有输入为-1，~后才全部都是0。
+    
+    
+```
+
+21.getline，cin.getline, out.write(), strlen, get, put, 
+
+~~~c++
+getline(cin, buf);//这里getline必须要用到string类型的变量，所以这个buf是string类型的
+
+cin.getline(arr, 20, ",") //以, 为结束标志，会把","从缓冲区删除，arr必须是个char[]数组，不能是string
+
+getline以换行为分隔符(普通的cin >> str是以空格或者回车)，而cin.getline可以用指定分隔符
+getline可以读取任意输入流(cin，文件), 而cin.getline只能读取标准输入流。
+getline()是string类的成员函数，而cin.getline是输入流对象的成员函数
+ 
+
+fgets(buf, sizeof(a), stdin);//从标准输入中读入一整行，可以包括空格，，fgets还有一种用法就是用于文件； buf是一个char[]数组， fgets和上边那两种不同的是stdin再最后一个参数
+fputs(buf, stdout);//fgets和fputs的使用有点像c语言风格。因为stdin和stdout在后边
+
+fgets和fscanf区别在于前者遇到回车才结束，后者遇到空格或者回车都会结束，
+
+get 和 put 配合使用
+char temp;
+read.get(temp);
+//temp=read.get();一样的效果！
+if (read.eof()) {
+    break;
+}
+write.put(temp);
+// 这里的read表示的是一个文件描述符，换成cin则表示从标准输入中读取
+cin.get(无参数)主要是用于舍弃输入流中的不需要的字符,或者舍弃回车, 可以用cin.get去清除缓冲区中剩下的第一个字符，如果缓冲区中没有字符那就阻塞，直到用户输入一个字符。比如下边的情况
+cin.getline(str, 20,','); //这样会更安全
+    //假如输入hello world,
+    cin.get(b);
+因为上边是以',' 结尾的，最后还剩下一个'\n'没有读，此时可以用cin.get去清除它。
+
+
+strlen()求得的是实际大小，没有包含最后的"\n".
+~~~
+
