@@ -222,15 +222,22 @@ do {cout << "test" << endl;}while(0)
 ## decltype 和 auto
 
 ~~~c
-	//1.auto 推断必须存在赋值操作,意思也就是必须给a 赋值
-	auto a = 1;
-	auto p = new MM("name", 18);
-	p->print();
-	auto func = bind(print, placeholders::_3, placeholders::_1, placeholders::_2);
-	//2.decltype(表达式)
-	decltype(a) c;  //decltype(a) 返回一个int
-	decltype(p) pp;
-	decltype(1.0*2) f; // 可以看出来里面其实可以是一个表达式
+auto是在编译器确定的，所以不影响运行时的效率，而decltype是运行时时的
+
+//1.auto 推断必须存在赋值操作,意思也就是必须给a 赋值
+auto a = 1;
+auto p = new MM("name", 18);
+p->print();
+auto func = bind(print, placeholders::_3, placeholders::_1, placeholders::_2);
+
+//2.decltype(表达式,或者函数)
+decltype(a) c;  //decltype(a) 返回一个int
+decltype(p) pp;
+decltype(1.0*2) f; // 可以看出来里面其实可以是一个表达式
+
+void hha() {return 1;}
+decltype(hha()) a = 1;
+cout << a << endl; //1
 ~~~
 
 ### 
@@ -394,7 +401,7 @@ int main() {
 using namespace std;
 class Fa {
 public:
-    //如果去掉这个virtual， 下方dynamic进行下行转换报错
+    //注意dynamic进行下行必须要求基类有虚函数。
 	virtual void hha() {
 		cout << "fa_hha" << endl;
 	}
@@ -412,22 +419,24 @@ public:
     int ss = 10; //如果子指父， 那么会出问题，因为父类没有这个对象空间
 };
 int main() {
-    
 //1.子指父
 Fa *fa = new Fa();
-Son* s = (Son*)fa;	//子转父，必须显式转换，不然报错
+Son* s = (Son*)fa;	//子转父，必须显式转换，不然报错, 如果上边换成虚继承这里会报错
 //Son *s = (Son*)new Fa();
 Son* s1 = static_cast<Son*>(fa);
     
 //如果Fa中没有虚函数，下边这行会报错，而static_cast不会
-//因为dynamic_cast为动态类型检查，需要检查运行时需要的信息，也就是虚表
+//因为dynamic_cast为动态类型检查，需要检查运行时需要的信息(RTTI，运行时类型识别)，而它存在于虚表中
 Son* s2 = dynamic_cast<Son*>(fa);
 s->hha();	//fa_hha，说明子转父这种情况用的是父类的虚表
 s->test();	//son_test
 cout << s->ss << endl; // 0  这里可以看出来出问题了，因为父类没有ss空间
+cout << s1->ss << endl; //0
+cout << (long)s1 << endl; //一个地址
+cout << (long)s2 << endl; //0
+//cout << s2->ss << endl; //编译不会出错，运行时段错误，因为s2本来就是空指针了
 static_cast<Fa*>(s)->hha();//fa_hha
 //static_cast<Fa*>(s)->test(); //报错，因为Fa类中没有test
-//所以子类指向父类是不安全的。
 
 Son* s3 = new Son();
 cout << s3->ss << endl; // 10；
@@ -441,7 +450,6 @@ Fa* f1 = static_cast<Fa*>((Son*)fa);
 Fa* f2 = dynamic_cast<Fa*>((Son*)fa);
 return 0;
 }
-
 ~~~
 
 ### 枚举和联合体
@@ -522,6 +530,150 @@ unique_ptr 删除了拷贝构造和拷贝赋值函数
 make_unique<int>里面用了完美转发，相当于给了一个右值出来，也就是跟下边的move一个效果，其实这里用RVO机制也可以。
 
 只能通过 1.move 2.release + reset 来交换对象的所有权。
+
+~~~
+### c++类型转换(涉及了explicit和volatile关键字的使用)
+c语言类型转换可视性不好，什么都是直接在变量名前加上（类型），比如float b; int a = (int)b; 再比如 int *a = &x; long c = (long)a; 将指针类型转为long类型的整型。
+并且c语言在转换这一块上有缺陷，因为所有情况的转换方式都一样(也有隐式转换，比如float和int之间)，1.也没有什么动态检查的说法，如果将父类对象转为子类指针是不安全的，2.将常量指针类型转化为非常量指针类型。这两种情况都是我们不希望看到的。
+
+抓住核心就是，c语言的转换语法c++都有，但c++检查严格，有些c语言留下的转换方式c++不认可(比如上边说的const int * 转为 int *)，并且还考虑到一些安全转换的问题，以及可读性的问题， 所以c++自己又制定了几个类型转换来解决一些特定的情况
+
+单参数类的隐式类型转换
+
+~~~c++
+如果有2个或者以上参数, explicit就没用了
+但也有例外， 比如你的构造函数的其他参数都有默认值，那么explicit还是有用的。
+
+class A {
+    public :
+    explicit A(int a) : a(a) {}
+    explicit A(const char* s) : s(s) {}
+    int a;
+    const char* s;
+};
+int main() {
+	//如果上边都不加explicit，以下两句都是正确的，就会很奇怪，所以可以给其中一个构造函数加上，避免这种情况
+	A a = 1;  //错误，因为有explicit，如果不加上explicit, 这个1会被隐式转换, 即会被解析为， A t(1); 
+	A s = "hhha";
+
+    A t(1); //正确, 这是隐式构造，真正的显示构造应该是A t = A(1); 但explicit接受这种构造方式，只是拒绝了隐式转换操作
+    
+    //这种代码本来可读性也就不好
+    A t = 1; 
+}
+~~~
+
+
+
+static_cast:
+
+~~~c++
+int a = 10;  void* b = static_cast<void*>(&a); //可行
+int a = 10;  float* b = static_cast<float*>(&a); //不可以
+
+使用场景：基本数据类型之间比如float转int，int转char，不支持有类型指针到有类型指针的转换，但有例外，比如有类型指针和void*之间转换，父类指针指向子类对象，子类指针指向父类对象。
+int a = 10;
+float b = static_cast<float>(a); // 成功，如果把static_cast换成reinterpret_cast就不行。大家各司其职
+float *b = static_cast<float*>(&a); // 失败，不支持有类型指针到有类型指针的转换，有继承关系的类(父子类)之间可以用static_cast,  把static_cast换成reinterpret_cast也行。   
+cout << b;
+~~~
+
+
+
+dynamic_cast:
+
+~~~c++
+float b = dynamic_cast<float>(a);  //错误的写法，只有static_cast可以
+
+应用场景就是用子类指针去指向一个父类对象，如果采用c语言的方式进行强转或者使用static_cast转换(不会进行运行时检查)是不安全的， 而dynamic_cast会进行运行时检查，这也要求了父类必须有虚函数，因为运行时检查所需的信息RTTI存储在虚函数表中，其实在dynamic_cast转换后，会返回一个空指针，因为它觉得这是不允许发生的转换，避免了不安全的事件的发生，而强转和static_cast则会返回转换后的地址，如果去操作了不存在的对象，是一种不安全的行为。
+Fa *fa = new Fa();
+Son* s = (Son*)fa;	//子转父，必须显式转换，不然报错, 如果上边换成 虚继承(不是说虚基类) 这里会报错
+Son* s1 = static_cast<Son*>(fa);
+    
+//如果Fa中没有虚函数，下边这行会报错，而static_cast不会
+//因为dynamic_cast为动态类型检查，需要检查运行时需要的信息(RTTI)，而它存在于虚表中
+Son* s2 = dynamic_cast<Son*>(fa);//返回的s2是一个空指针
+cout << s->ss << endl; // 0  这里可以看出来出问题了，因为父类没有ss空间
+cout << s1->ss << endl; //0
+cout << (long)s1 << endl; //一个地址
+cout << (long)s2 << endl; //0
+
+
+TRRI(Run-Time Type Identification)运行时类型识别
+c++通过以下几种方式来支持RTTI
+1.typeid 运行时识别出一个对象的类型
+2.dynamic_cast 运行时识别出一个父类指针指向的是父类对象还是子类对象
+3.decltype 在运行是推演出一个表达式或函数返回值的类型。
+~~~
+
+
+
+const_cast:
+
+~~~c++
+如果是在c语言中可能出现，将一个常量指针(指针可变，值不可以变)转为非const类型的指针，那么就可能出现如下情况，本来不该被改变的，却能够被我们改变，非常的不安全。
+而在c++中类型检查非常严格，下边的代码会报错，如果想实现这种效果，必须用const_cast进行转换
+const int a = 10;
+int *b = (int*)&a;
+*b = 111;
+printf("%d,%d", a, *b); //111,111
+
+
+在c++应该这样写。
+volatile const int a = 10; //如果不要volatile就会直接从寄存器拿值，因为程序认为a为const类型，值是不会发生改变的，就相当于直接给a的值做了一个缓存，可能放在寄存器中，避免了去内存增加时耗。
+int* b = const_cast<int*>(&a);
+*b = 11;
+cout << *b << a; //加上volatile就是1111,不然就是1110
+
+
+~~~
+
+reinterpret_cast
+
+指针与非指针之间的转换
+
+允许**所有的指针**之间转换，既不检查指针所指向的内容，也不检查指针类型本身
+而对于不同类型的指针之间(static_cast和dynamic_cast都是不支持了，有继承关系的类除外)
+
+不支持例如int与float这样的普通对象的转换
+
+~~~c++
+float b = reinterpret_cast<float>(a);  //错误的写法，只有static_cast可以
+
+
+非指针转指针
+int a = 10;
+float *b = reinterpret_cast<float*>(&a);
+cout << *b;//打印出来是  0xa
+
+指针转非指针
+int tmp = 10;
+int* a = &tmp;
+long b = reinterpret_cast<long>(a); 不能把long换成int，因为int是4字节无法表示完整一个64位的地址，可以用size_t,它其实就是long unsigned int 
+
+
+不同指针间的转换；
+int data = 10;
+int *pi = &data;
+float *jt = reinterpret_cast<float*>(pi);
+cout << *jt;
+~~~
+
+总结归纳
+
+~~~c++
+static_cast: 
+1.能处理普通类型的转换比如float<==>int, 并且只有static_cast可以，其他都不行
+2.不能处理不同指针类型之间的转换，有例外如 1.有继承关系的类指针对象的上下行转换，2.void* 与 其他指针类型的转换
+
+dynamic_cast:
+1.只能处理有继承关系的类指针对象之间的转换
+
+const_cast: 
+1.就是为了去除常属性的存在 ，不能处理其他情况
+
+reinterpret_cast:
+1.支持非指针和指针对象之间的相互转换，但要注意指针转非指针的时候记得用size_t或者long不要用int, 2.支持不同类型的指针对象之间的相互转换，并且也只有它能做到。
 
 ~~~
 
