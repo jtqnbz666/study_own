@@ -1,4 +1,4 @@
-1.string 中的find函数
+1.string 中的find， substr函数
 
 ~~~c++
 #include <iostream>
@@ -15,6 +15,11 @@ int main()
   //static const size_t npos = -1;           
  //string::npos的值是-1并不准确，string::npos的值是无符号型类型的，其值是(unsigned int)(-1)，也就是4294967295，但是和int 类型的-1比较结果是true,所以使用的时候，认为其值是int类型的-1不会影响结果.
 }
+str.find()返回值是找到的字符串的第一个字符的下标
+
+substr:
+str.substr(idx); 表示从idx开始截取后边的所有
+str.substr(idx, cnt);表示从idx开始，截取后边的cnt个
 ~~~
 
 2.c++中排序＋去重
@@ -385,7 +390,7 @@ for(int i = 0; i < 10; i ++) {
 }
 ~~~
 
-19.switch问题
+19.switch-case问题
 
 ~~~c++
 switch() 不能判断字符串(但可以判断单个字符)，1.可以使用枚举的方式，2.使用strcmp函数对比
