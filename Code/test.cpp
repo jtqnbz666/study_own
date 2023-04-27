@@ -1,21 +1,24 @@
-#include <iostream>
+#include   <bits/stdc++.h>
 using namespace std;
-class A {
-	public:
-	virtual void test() {}
-	A(){}
-	int a;
-};
-class B : public  A{
-	public:
-	B() {}
-};
+void quick_sort(int *arr, int left, int right) {
+    if(left >= right) return;
+	int l = left, r = right;
+    int mid = arr[(l + r) / 2];
+    while(l <= r) {
+        while(arr[l] < mid) l++;
+        while(arr[r] > mid) r--;
+        if(l <= r) {
+            swap(arr[l], arr[r]);
+            l ++, r --;
+        }
+    }
+    quick_sort(arr, left, r);
+    quick_sort(arr, l , right);
+}
 int main() {
-	// B b;
-	// A* a = dynamic_cast<A*>(&b);
-
-	A a;
-	B* b = dynamic_cast<B*>(&a);
-	cout << b;
-	return 0;
+	int arr[10] = {3, 2, 1, 7, 9, 5, 4, 6, 0, 8};
+	quick_sort(arr, 0, 9); 
+	for(auto v : arr) {
+	 	cout << v << " ";
+	}  
 }

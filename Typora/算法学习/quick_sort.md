@@ -7,7 +7,8 @@
 ~~~c++
 #include   <bits/stdc++.h>
 using namespace std;
-quick_sort(int *arr, int left, int right) {
+void quick_sort(int *arr, int left, int right) {
+    if(l >= right) reutrn 0;
     int l = left, r = right;
     int mid = arr[(l + r) / 2];
     while(l <= r) {
@@ -22,7 +23,11 @@ quick_sort(int *arr, int left, int right) {
     quick_sort(arr, l , right);
 }
 int main() {
-    
+     int arr[10] = {3, 2, 1, 7, 9, 5, 4, 6, 0, 8};
+        quick_sort(arr, 0, 9);
+        for(auto v : arr) {
+                cout << v << " ";
+        }
 }
 ~~~
 
