@@ -33,7 +33,7 @@ type Client struct {
 	opt      *Option
 	sending  sync.Mutex       //为了保证请求的有序发送
 	header   codec.Header     //每个请求的消息头，header只有在请求发送时才需要，而请求是互斥发送的，因此每个客户端只需要一个，声明在client结构体中可以复用
-	mu       sync.Mutex       //
+	mu       sync.Mutex       //每次请求都会将当前请求加入pending映射表，加入的过程就需要加锁
 	seq      uint64           //发送的请求编号，每个请求拥有唯一编号
 	pending  map[uint64]*Call //存储未处理完的请求， 键为编号，值为call实例
 	closing  bool             //用户主动关闭，
@@ -79,7 +79,7 @@ func dialTimeout(f newClientFunc, network, address string, opts ...*Option) (cli
 	}
 }
 
-var _ io.Closer = (*Client)(nil)
+var _ io.Closer = (*Client)(nil) //优化， 判断Client结构体是否是否实现了接口所需要的方法
 
 var ErrShutdown = errors.New("connection is shut down")
 
@@ -216,7 +216,7 @@ func (client *Client) registerCall(call *Call) (uint64, error) {
 	}
 	call.Seq = client.seq
 	client.pending[call.Seq] = call
-	client.seq++
+	client.seq++ //每次递增
 	return call.Seq, nil
 }
 

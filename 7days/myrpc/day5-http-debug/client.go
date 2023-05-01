@@ -1,6 +1,8 @@
 package myrpc
 
 import (
+	"bufio"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -8,7 +10,10 @@ import (
 	"log"
 	"myrpc/codec"
 	"net"
+	"net/http"
+	"strings"
 	"sync"
+	"time"
 )
 
 // 一次rpc所需要的信息。
@@ -31,11 +36,80 @@ type Client struct {
 	opt      *Option
 	sending  sync.Mutex       //为了保证请求的有序发送
 	header   codec.Header     //每个请求的消息头，header只有在请求发送时才需要，而请求是互斥发送的，因此每个客户端只需要一个，声明在client结构体中可以复用
-	mu       sync.Mutex       //
+	mu       sync.Mutex       //每次请求都会将当前请求加入pending映射表，加入的过程就需要加锁
 	seq      uint64           //发送的请求编号，每个请求拥有唯一编号
 	pending  map[uint64]*Call //存储未处理完的请求， 键为编号，值为call实例
 	closing  bool             //用户主动关闭，
 	shutdown bool             //出现不可预知的错误导致的关闭
+}
+
+type clientResult struct {
+	client *Client
+	err    error
+}
+
+type newClientFunc func(conn net.Conn, opt *Option) (client *Client, err error)
+
+func XDial(rpcAddr string, opts ...*Option) (*Client, error) {
+	parts := strings.Split(rpcAddr, "@")
+	if len(parts) != 2 {
+		return nil, fmt.Errorf("rpc client err: wrong format '%s', expect protocal@addr", rpcAddr)
+	}
+	protocol, addr := parts[0], parts[1]
+	switch protocol {
+	case "http":
+		return DialHTTP("tcp", addr, opts...)
+	default:
+		return Dial(protocol, addr, opts...)
+	}
+}
+
+func NewHTTPClient(conn net.Conn, opt *Option) (*Client, error) {
+	_, _ = io.WriteString(conn, fmt.Sprintf("CONNECT %s HTTP/1.0\n\n", defaultRPCPath))
+	resp, err := http.ReadResponse(bufio.NewReader(conn), &http.Request{Method: "CONNECT"})
+	if err == nil && resp.Status == connected {
+		return NewClient(conn, opt)
+	}
+	if err == nil {
+		err = errors.New("unexpected HTTP response: " + resp.Status)
+	}
+	return nil, err
+}
+
+func DialHTTP(network, address string, opts ...*Option) (*Client, error) {
+	return dialTimeout(NewHTTPClient, network, address, opts...) //封装了一层http
+}
+
+func dialTimeout(f newClientFunc, network, address string, opts ...*Option) (client *Client, err error) {
+	opt, err := parseOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	conn, err := net.DialTimeout(network, address, opt.ConnectTimeOut)
+	if err != nil {
+		return nil, err
+	}
+	// 如果这次连接没有成功的话，就关闭它
+	defer func() {
+		if err != nil {
+			_ = conn.Close()
+		}
+	}()
+	ch := make(chan clientResult)
+	go func() {
+		client, err := f(conn, opt)
+		ch <- clientResult{client: client, err: err}
+	}()
+	if opt.ConnectTimeOut == 0 {
+		result := <-ch
+		return result.client, result.err
+	}
+	select {
+	case <-time.After(opt.ConnectTimeOut):
+		return nil, fmt.Errorf("rpc client: 连接超时： 规定时间%s", opt.ConnectTimeOut)
+	case result := <-ch:
+		return result.client, result.err
+	}
 }
 
 var _ io.Closer = (*Client)(nil) //优化， 判断Client结构体是否是否实现了接口所需要的方法
@@ -143,23 +217,27 @@ func parseOptions(opts ...*Option) (*Option, error) {
 	return opt, nil
 }
 
+//连接到指定rpc的服务器上
 func Dial(network, address string, opts ...*Option) (client *Client, err error) {
-	opt, err := parseOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	conn, err := net.Dial(network, address) //真正的请求过程
-	if err != nil {
-		return nil, err
-	}
+	return dialTimeout(NewClient, network, address, opts...)
 
-	//如果conn 是nil 则关闭连接
-	defer func() {
-		if client == nil {
-			_ = conn.Close()
-		}
-	}()
-	return NewClient(conn, opt)
+	//下边这些是不带超时控制的
+	// opt, err := parseOptions(opts...)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// conn, err := net.Dial(network, address) //真正的请求过程
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	// //如果conn 是nil 则关闭连接
+	// defer func() {
+	// 	if client == nil {
+	// 		_ = conn.Close()
+	// 	}
+	// }()
+	// return NewClient(conn, opt)
 }
 
 // 将参数call添加到 client.pending中， 并更新client.seq
@@ -171,7 +249,7 @@ func (client *Client) registerCall(call *Call) (uint64, error) {
 	}
 	call.Seq = client.seq
 	client.pending[call.Seq] = call
-	client.seq++
+	client.seq++ //每次递增
 	return call.Seq, nil
 }
 
@@ -246,9 +324,15 @@ func (client *Client) Go(ServiceMethod string, args, reply interface{}, done cha
 	return call
 }
 
-func (client *Client) Call(serviceMethod string, args, reply interface{}) error {
+func (client *Client) Call(ctx context.Context, serviceMethod string, args, reply interface{}) error {
 	//serviceMethod 为  "Foo.Sum"
 	//args 为   " myrpc 请求i "
-	call := <-client.Go(serviceMethod, args, reply, make(chan *Call, 1)).Done
-	return call.Error
+	call := client.Go(serviceMethod, args, reply, make(chan *Call, 1))
+	select {
+	case <-ctx.Done():
+		client.removeCall(call.Seq)
+		return errors.New("rpc client: call 失败:" + ctx.Err().Error())
+	case call := <-call.Done:
+		return call.Error
+	}
 }

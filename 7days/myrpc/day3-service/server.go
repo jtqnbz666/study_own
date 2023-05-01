@@ -45,6 +45,7 @@ func (server *Server) ServeConn(conn io.ReadWriteCloser) {
 		log.Printf("rpc 解析 magic number 失败 %x", opt.MagicNumber)
 		return
 	}
+	// 根据客户端的编码方式，服务端生成一个相同的方法
 	f := codec.NewCodecFuncMap[opt.CodecType] //返回的f是一个函数指针
 	if f == nil {
 		log.Printf("rpc 生成编码器失败%s", opt.CodecType)
@@ -59,7 +60,7 @@ func (server *Server) serveCodec(cc codec.Codec) {
 	sending := new(sync.Mutex)
 	wg := new(sync.WaitGroup)
 	for {
-		req, err := server.readRequest(cc)
+		req, err := server.readRequest(cc) //先接收请求，下边再去处理请求
 		if err != nil {
 			if req == nil {
 				break //没有东西, 出错了就退出

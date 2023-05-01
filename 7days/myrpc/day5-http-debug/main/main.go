@@ -5,6 +5,7 @@ import (
 	"log"
 	"myrpc"
 	"net"
+	"net/http"
 	"sync"
 	"time"
 )
@@ -23,22 +24,19 @@ func startServer(addr chan string) {
 		log.Fatal("注册服务失败", err)
 	}
 	//挑选一个空闲的端口
-	l, err := net.Listen("tcp", ":0")
+	l, err := net.Listen("tcp", ":9999")
 	if err != nil {
 		log.Fatal("network error:", err)
 	}
 	log.Println("start rpc server on", l.Addr())
+	myrpc.HandleHTTP()
 	addr <- l.Addr().String()
-	myrpc.Accept(l)
+	_ = http.Serve(l, nil)
+	// myrpc.Accept(l)
 }
 
-func main() {
-	//异步
-	log.SetFlags(0)
-	addr := make(chan string)
-	go startServer(addr)
-
-	client, _ := myrpc.Dial("tcp", <-addr)
+func call(addr chan string) {
+	client, _ := myrpc.DialHTTP("tcp", <-addr)
 	defer func() { _ = client.Close() }()
 
 	time.Sleep(time.Second)
@@ -59,6 +57,15 @@ func main() {
 		}(i)
 	}
 	wg.Wait()
+}
+
+func main() {
+	//异步
+	log.SetFlags(0)
+	addr := make(chan string)
+	go call(addr)
+	startServer(addr)
+
 }
 
 /* 异步

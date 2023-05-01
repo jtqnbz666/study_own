@@ -17,7 +17,7 @@ type GobCodec struct {
 var _ Codec = (*GobCodec)(nil)
 
 func NewGobCodec(conn io.ReadWriteCloser) Codec {
-	buf := bufio.NewWriter(conn) //相当于为conn建立了一个写缓冲区，每次写完需要刷新一下才能发出去。
+	buf := bufio.NewWriter(conn)
 	return &GobCodec{
 		conn: conn,
 		buf:  buf,
