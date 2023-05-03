@@ -94,6 +94,18 @@ a := student {
 为什么go需要在 {} 前边加上 结构体名字， 因为它前边没有加类型
 ~~~
 
+c++和go的函数指针的区别
+
+~~~
+go中
+type Func func(string,  int)
+
+c++中
+typedef void(*Func)(string, int) 	//c
+typedef std::function<void(string, int)> Func;
+using Func = function<void(string, int)>;
+~~~
+
 
 
 ### 日志打印
