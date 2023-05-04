@@ -96,7 +96,7 @@ a := student {
 
 c++和go的函数指针的区别
 
-~~~
+~~~go
 go中
 type Func func(string,  int)
 
@@ -104,6 +104,34 @@ c++中
 typedef void(*Func)(string, int) 	//c
 typedef std::function<void(string, int)> Func;
 using Func = function<void(string, int)>;
+~~~
+
+c++和go的类型转换的区别
+
+~~~go
+go中
+type String string 
+str := String("test") 或者 str := string("test")
+
+接口型函数
+type Getter interface{
+    Get(key string)([]byte, error)
+}
+
+type GetterFunc func(key string) ([]byte, error) 
+
+func (f GetterFunc) Get(key string) ([]byte, error) {
+    return f(key)
+}
+
+var f Getter = GetterFunc(func(key string) ([]byte, error) {
+    return []byte(key), nil
+})
+
+
+c++中
+string tmp = "test"
+string str = (string)tmp;
 ~~~
 
 
@@ -727,6 +755,22 @@ fmt.Println("r:", r) //{100 100}
 fmt.Println("rx": rx)//{100 100}
 fmt.Printf("rx:%p, r:%p\n", rx, &r)
 //rx:0xc0000180a0, r:0xc0000180a0
+
+接口型函数
+定义一个函数类型 F，并且实现接口 A 的方法，然后在这个方法中调用自己。这是 Go 语言中将其他函数（参数返回值定义与 F 一致）转换为接口 A 的常用技巧。
+type Getter interface{
+    Get(key string)([]byte, error)
+}
+
+type GetterFunc func(key string) ([]byte, error) 
+
+func (f GetterFunc) Get(key string) ([]byte, error) {
+    return f(key)
+}
+
+var f Getter = GetterFunc(func(key string) ([]byte, error) {
+    return []byte(key), nil
+})
 
 ~~~
 
