@@ -60,6 +60,8 @@ goNb的点
 1.select中ctx.Done() 机制
 2.defer 机制
 3.wg sync.Waitgroup ; wg.Add(1), wg.Done(), wg.Wait()机制
+4.反射
+5.做一个web后端特别容易
 ~~~
 
 

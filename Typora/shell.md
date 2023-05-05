@@ -43,6 +43,10 @@ if echo "test"
 then
 	echo "yes"
 # 这里会输出yes， 但其实echo "test" 执行成功返回的结果是0
+
+3.从文件中随机读取n行数据
+awk 'BEGIN{srand()} {print rand()"\t"$0}'  输入文件 | sort -nk 1 | head -5 | awk -F "\t" '{print $2}' //数字5表示5行
+
 ```
 
 
