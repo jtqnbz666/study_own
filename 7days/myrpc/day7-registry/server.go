@@ -96,7 +96,7 @@ var invalidRequest = struct{}{}
 func (server *Server) serveCodec(cc codec.Codec, opt *Option) {
 	sending := new(sync.Mutex)
 	wg := new(sync.WaitGroup)
-	for {
+	for { //循环处理
 		req, err := server.readRequest(cc)
 		if err != nil {
 			if req == nil {
@@ -138,6 +138,7 @@ func (server *Server) readRequest(cc codec.Codec) (*request, error) {
 		return nil, err
 	}
 	req := &request{h: h}
+	// 找到这次请求对应的服务
 	req.svc, req.mType, err = server.findService(h.ServiceMethod)
 	if err != nil {
 		return req, err
@@ -176,6 +177,7 @@ func (server *Server) handleRequest(cc codec.Codec, req *request, sending *sync.
 	called := make(chan struct{})
 	sent := make(chan struct{})
 	go func() {
+		//methodtype
 		err := req.svc.call(req.mType, req.argv, req.replyv)
 		called <- struct{}{}
 		if err != nil {
