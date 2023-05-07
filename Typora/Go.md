@@ -64,6 +64,15 @@ goNb的点
 5.做一个web后端特别容易
 ~~~
 
+go处理http消息的三种方式
+
+~~~
+本质上都是去ServeHTTP()，
+1.http.ListenAndServe("localhost:9999", s), 对s这个对象实现ServeHTTP()方法
+2.http.HandleFunc("路径"， 处理函数)
+3.http.Handle(registryPath, s) 对这个s对象实现ServeHTTP方法
+~~~
+
 
 
 
@@ -130,6 +139,9 @@ var f Getter = GetterFunc(func(key string) ([]byte, error) {
     return []byte(key), nil
 })
 
+但go中也可以向c++一样
+检测某个结构体是否满足接口的功能需求
+var _ PeerGetter = (*httpGetter)(nil)
 
 c++中
 string tmp = "test"

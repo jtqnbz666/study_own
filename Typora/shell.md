@@ -47,6 +47,14 @@ then
 3.从文件中随机读取n行数据
 awk 'BEGIN{srand()} {print rand()"\t"$0}'  输入文件 | sort -nk 1 | head -5 | awk -F "\t" '{print $2}' //数字5表示5行
 
+
+4.将执行语句的结果赋值给变量
+while read str	//循环读入文件的每一行
+do
+        tmp=`echo -n $str | md5sum | awk '{print $1}'`
+        tmp="https://wenku.so.com/d/"$tmp
+    echo $tmp >> need
+done
 ```
 
 
