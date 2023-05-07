@@ -96,3 +96,163 @@
 2023-02-27 22:10:23,414 [INFO  IM] - <file_client_conn.cpp>|<44>|<Close>,close client, handle 9
 2023-02-27 22:10:24,316 [INFO  IM] - <file_client_conn.cpp>|<86>|<OnTimer>,Close another online conn, user_id=2
 2023-02-27 22:10:24,316 [INFO  IM] - <file_client_conn.cpp>|<44>|<Close>,close client, handle 10
+2023-04-16 20:29:53,492 [INFO  IM] - <file_msg_server_conn.cpp>|<153>|<_HandleGetServerAddressReq>,Upload file_client_conn addr info, ip=127.0.0.1, port=8600
+2023-04-16 20:31:12,771 [INFO  IM] - <file_msg_server_conn.cpp>|<120>|<_HandleMsgFileTransferReq>,trams_mode=1, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, from_id=1, to_id=2, file_name=C:/Users/ASUS/Pictures/94/IMG_20200919_220847.jpg, file_size=2325269
+2023-04-16 20:31:12,772 [INFO  IM] - <file_msg_server_conn.cpp>|<137>|<_HandleMsgFileTransferReq>,Create task succeed, task id a2b20e5c-0855-4512-9185-aa9bf3f8d826, task type 1, from user 1, to user 2
+2023-04-16 20:31:13,777 [INFO  IM] - <file_client_conn.cpp>|<137>|<_HandleClientFileLoginReq>,client login, user_id=1, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1
+2023-04-16 20:31:13,777 [INFO  IM] - <file_client_conn.cpp>|<137>|<_HandleClientFileLoginReq>,client login, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=2
+2023-04-16 20:31:13,803 [INFO  IM] - <file_client_conn.cpp>|<402>|<_StatesNotify>,notify to user 1 state 0 task a2b20e5c-0855-4512-9185-aa9bf3f8d826
+2023-04-16 20:31:15,675 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=0, datasize=34816
+2023-04-16 20:31:15,722 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=0, data_size=34816
+2023-04-16 20:31:15,726 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=34816, datasize=34816
+2023-04-16 20:31:15,771 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=34816, data_size=34816
+2023-04-16 20:31:15,773 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=69632, datasize=34816
+2023-04-16 20:31:15,821 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=69632, data_size=34816
+2023-04-16 20:31:15,823 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=104448, datasize=34816
+2023-04-16 20:31:15,871 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=104448, data_size=34816
+2023-04-16 20:31:15,873 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=139264, datasize=34816
+2023-04-16 20:31:15,921 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=139264, data_size=34816
+2023-04-16 20:31:15,923 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=174080, datasize=34816
+2023-04-16 20:31:15,971 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=174080, data_size=34816
+2023-04-16 20:31:15,974 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=208896, datasize=34816
+2023-04-16 20:31:16,031 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=208896, data_size=34816
+2023-04-16 20:31:16,034 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=243712, datasize=34816
+2023-04-16 20:31:16,091 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=243712, data_size=34816
+2023-04-16 20:31:16,093 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=278528, datasize=34816
+2023-04-16 20:31:16,141 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=278528, data_size=34816
+2023-04-16 20:31:16,142 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=313344, datasize=34816
+2023-04-16 20:31:16,191 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=313344, data_size=34816
+2023-04-16 20:31:16,195 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=348160, datasize=34816
+2023-04-16 20:31:16,251 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=348160, data_size=34816
+2023-04-16 20:31:16,253 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=382976, datasize=34816
+2023-04-16 20:31:16,301 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=382976, data_size=34816
+2023-04-16 20:31:16,304 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=417792, datasize=34816
+2023-04-16 20:31:16,351 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=417792, data_size=34816
+2023-04-16 20:31:16,359 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=452608, datasize=34816
+2023-04-16 20:31:16,411 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=452608, data_size=34816
+2023-04-16 20:31:16,413 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=487424, datasize=34816
+2023-04-16 20:31:16,461 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=487424, data_size=34816
+2023-04-16 20:31:16,463 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=522240, datasize=34816
+2023-04-16 20:31:16,511 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=522240, data_size=34816
+2023-04-16 20:31:16,513 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=557056, datasize=34816
+2023-04-16 20:31:16,561 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=557056, data_size=34816
+2023-04-16 20:31:16,565 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=591872, datasize=34816
+2023-04-16 20:31:16,611 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=591872, data_size=34816
+2023-04-16 20:31:16,613 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=626688, datasize=34816
+2023-04-16 20:31:16,661 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=626688, data_size=34816
+2023-04-16 20:31:16,665 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=661504, datasize=34816
+2023-04-16 20:31:16,711 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=661504, data_size=34816
+2023-04-16 20:31:16,715 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=696320, datasize=34816
+2023-04-16 20:31:16,761 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=696320, data_size=34816
+2023-04-16 20:31:16,766 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=731136, datasize=34816
+2023-04-16 20:31:16,811 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=731136, data_size=34816
+2023-04-16 20:31:16,815 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=765952, datasize=34816
+2023-04-16 20:31:16,861 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=765952, data_size=34816
+2023-04-16 20:31:16,863 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=800768, datasize=34816
+2023-04-16 20:31:16,911 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=800768, data_size=34816
+2023-04-16 20:31:16,913 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=835584, datasize=34816
+2023-04-16 20:31:16,961 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=835584, data_size=34816
+2023-04-16 20:31:16,963 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=870400, datasize=34816
+2023-04-16 20:31:17,011 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=870400, data_size=34816
+2023-04-16 20:31:17,013 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=905216, datasize=34816
+2023-04-16 20:31:17,061 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=905216, data_size=34816
+2023-04-16 20:31:17,063 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=940032, datasize=34816
+2023-04-16 20:31:17,111 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=940032, data_size=34816
+2023-04-16 20:31:17,113 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=974848, datasize=34816
+2023-04-16 20:31:17,161 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=974848, data_size=34816
+2023-04-16 20:31:17,164 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1009664, datasize=34816
+2023-04-16 20:31:17,211 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1009664, data_size=34816
+2023-04-16 20:31:17,213 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1044480, datasize=34816
+2023-04-16 20:31:17,261 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1044480, data_size=34816
+2023-04-16 20:31:17,263 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1079296, datasize=34816
+2023-04-16 20:31:17,311 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1079296, data_size=34816
+2023-04-16 20:31:17,313 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1114112, datasize=34816
+2023-04-16 20:31:17,361 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1114112, data_size=34816
+2023-04-16 20:31:17,364 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1148928, datasize=34816
+2023-04-16 20:31:17,411 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1148928, data_size=34816
+2023-04-16 20:31:17,413 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1183744, datasize=34816
+2023-04-16 20:31:17,461 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1183744, data_size=34816
+2023-04-16 20:31:17,464 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1218560, datasize=34816
+2023-04-16 20:31:17,511 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1218560, data_size=34816
+2023-04-16 20:31:17,513 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1253376, datasize=34816
+2023-04-16 20:31:17,561 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1253376, data_size=34816
+2023-04-16 20:31:17,565 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1288192, datasize=34816
+2023-04-16 20:31:17,611 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1288192, data_size=34816
+2023-04-16 20:31:17,613 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1323008, datasize=34816
+2023-04-16 20:31:17,661 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1323008, data_size=34816
+2023-04-16 20:31:17,664 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1357824, datasize=34816
+2023-04-16 20:31:17,711 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1357824, data_size=34816
+2023-04-16 20:31:17,720 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1392640, datasize=34816
+2023-04-16 20:31:17,771 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1392640, data_size=34816
+2023-04-16 20:31:17,774 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1427456, datasize=34816
+2023-04-16 20:31:17,821 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1427456, data_size=34816
+2023-04-16 20:31:17,823 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1462272, datasize=34816
+2023-04-16 20:31:17,871 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1462272, data_size=34816
+2023-04-16 20:31:17,873 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1497088, datasize=34816
+2023-04-16 20:31:17,921 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1497088, data_size=34816
+2023-04-16 20:31:17,923 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1531904, datasize=34816
+2023-04-16 20:31:17,971 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1531904, data_size=34816
+2023-04-16 20:31:17,973 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1566720, datasize=34816
+2023-04-16 20:31:18,021 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1566720, data_size=34816
+2023-04-16 20:31:18,023 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1601536, datasize=34816
+2023-04-16 20:31:18,071 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1601536, data_size=34816
+2023-04-16 20:31:18,073 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1636352, datasize=34816
+2023-04-16 20:31:18,131 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1636352, data_size=34816
+2023-04-16 20:31:18,133 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1671168, datasize=34816
+2023-04-16 20:31:18,181 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1671168, data_size=34816
+2023-04-16 20:31:18,183 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1705984, datasize=34816
+2023-04-16 20:31:18,231 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1705984, data_size=34816
+2023-04-16 20:31:18,233 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1740800, datasize=34816
+2023-04-16 20:31:18,281 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1740800, data_size=34816
+2023-04-16 20:31:18,283 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1775616, datasize=34816
+2023-04-16 20:31:18,331 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1775616, data_size=34816
+2023-04-16 20:31:18,333 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1810432, datasize=34816
+2023-04-16 20:31:18,381 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1810432, data_size=34816
+2023-04-16 20:31:18,383 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1845248, datasize=34816
+2023-04-16 20:31:18,431 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1845248, data_size=34816
+2023-04-16 20:31:18,433 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1880064, datasize=34816
+2023-04-16 20:31:18,481 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1880064, data_size=34816
+2023-04-16 20:31:18,483 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1914880, datasize=34816
+2023-04-16 20:31:18,531 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1914880, data_size=34816
+2023-04-16 20:31:18,533 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1949696, datasize=34816
+2023-04-16 20:31:18,581 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1949696, data_size=34816
+2023-04-16 20:31:18,585 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=1984512, datasize=34816
+2023-04-16 20:31:18,631 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=1984512, data_size=34816
+2023-04-16 20:31:18,633 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=2019328, datasize=34816
+2023-04-16 20:31:18,681 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=2019328, data_size=34816
+2023-04-16 20:31:18,685 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=2054144, datasize=34816
+2023-04-16 20:31:18,731 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=2054144, data_size=34816
+2023-04-16 20:31:18,734 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=2088960, datasize=34816
+2023-04-16 20:31:18,781 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=2088960, data_size=34816
+2023-04-16 20:31:18,785 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=2123776, datasize=34816
+2023-04-16 20:31:18,831 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=2123776, data_size=34816
+2023-04-16 20:31:18,833 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=2158592, datasize=34816
+2023-04-16 20:31:18,881 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=2158592, data_size=34816
+2023-04-16 20:31:18,883 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=2193408, datasize=34816
+2023-04-16 20:31:18,931 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=2193408, data_size=34816
+2023-04-16 20:31:18,933 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=2228224, datasize=34816
+2023-04-16 20:31:18,981 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=2228224, data_size=34816
+2023-04-16 20:31:18,983 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=2263040, datasize=34816
+2023-04-16 20:31:19,031 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=2263040, data_size=34816
+2023-04-16 20:31:19,033 [INFO  IM] - <file_client_conn.cpp>|<277>|<_HandleClientFilePullFileReq>,Recv FilePullFileReq, user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_role=1, offset=2297856, datasize=27413
+2023-04-16 20:31:19,081 [INFO  IM] - <file_client_conn.cpp>|<345>|<_HandleClientFilePullFileRsp>,Recv FilePullFileRsp, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, user_id=1, offset=2297856, data_size=27413
+2023-04-16 20:31:19,089 [INFO  IM] - <file_client_conn.cpp>|<229>|<_HandleClientFileStates>,recv filestate,user_id=2, task_id=a2b20e5c-0855-4512-9185-aa9bf3f8d826, file_stat=3
+2023-04-16 20:31:19,090 [INFO  IM] - <file_client_conn.cpp>|<252>|<_HandleClientFileStates>,Task a2b20e5c-0855-4512-9185-aa9bf3f8d826 3 by user_id:2 notify 1, erased
+2023-04-16 20:31:19,091 [INFO  IM] - <file_client_conn.cpp>|<44>|<Close>,close client, handle 9
+2023-04-16 20:31:20,093 [INFO  IM] - <file_client_conn.cpp>|<86>|<OnTimer>,Close another online conn, user_id=1
+2023-04-16 20:31:20,094 [INFO  IM] - <file_client_conn.cpp>|<44>|<Close>,close client, handle 10
+2023-04-16 21:35:27,321 [INFO  IM] - <file_msg_server_conn.cpp>|<61>|<OnClose>,Client onclose: handle=8
+2023-04-16 21:35:27,327 [INFO  IM] - <file_msg_server_conn.cpp>|<44>|<Close>,Close client, handle 8
+2023-04-16 21:35:27,753 [INFO  IM] - <file_msg_server_conn.cpp>|<153>|<_HandleGetServerAddressReq>,Upload file_client_conn addr info, ip=127.0.0.1, port=8600
+2023-04-16 22:08:16,284 [INFO  IM] - <file_msg_server_conn.cpp>|<61>|<OnClose>,Client onclose: handle=8
+2023-04-16 22:08:16,289 [INFO  IM] - <file_msg_server_conn.cpp>|<44>|<Close>,Close client, handle 8
+2023-04-16 22:08:16,545 [INFO  IM] - <file_msg_server_conn.cpp>|<153>|<_HandleGetServerAddressReq>,Upload file_client_conn addr info, ip=127.0.0.1, port=8600
+2023-04-17 19:58:28,901 [INFO  IM] - <file_msg_server_conn.cpp>|<67>|<OnTimer>,msg server timeout
+2023-04-17 19:58:28,987 [INFO  IM] - <file_msg_server_conn.cpp>|<44>|<Close>,Close client, handle 8
+2023-04-17 19:58:29,648 [INFO  IM] - <file_msg_server_conn.cpp>|<153>|<_HandleGetServerAddressReq>,Upload file_client_conn addr info, ip=127.0.0.1, port=8600
+2023-04-17 20:55:44,361 [INFO  IM] - <file_msg_server_conn.cpp>|<67>|<OnTimer>,msg server timeout
+2023-04-17 20:55:44,369 [INFO  IM] - <file_msg_server_conn.cpp>|<44>|<Close>,Close client, handle 8
+2023-04-17 20:55:44,795 [INFO  IM] - <file_msg_server_conn.cpp>|<153>|<_HandleGetServerAddressReq>,Upload file_client_conn addr info, ip=127.0.0.1, port=8600
+2023-04-18 19:14:01,261 [INFO  IM] - <file_msg_server_conn.cpp>|<67>|<OnTimer>,msg server timeout
+2023-04-18 19:14:01,334 [INFO  IM] - <file_msg_server_conn.cpp>|<44>|<Close>,Close client, handle 8
+2023-04-18 19:14:01,634 [INFO  IM] - <file_msg_server_conn.cpp>|<153>|<_HandleGetServerAddressReq>,Upload file_client_conn addr info, ip=127.0.0.1, port=8600
