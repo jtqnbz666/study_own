@@ -3,6 +3,11 @@ docker教程： https://pengfeixc.com/tutorial/docker/docker-guide
 
 docker官网镜像：https://hub.docker.com/
 
+下载好docker后去设置中配置引擎加上一行
+ "registry-mirrors":["https://mirror.ccs.tencentyun.com"],
+
+
+
 docker pull mongo //拉取mongo的最新版本
 
 docker run -p 27017:27017 --name mongodb -d mongo    //启动容器， 第一个端口号是host的，第二个是container中的
