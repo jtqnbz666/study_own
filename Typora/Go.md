@@ -54,6 +54,14 @@ do
 done
 ~~~
 
+go小技巧
+
+~~~go
+strconv.FormatInt(time.Now().Unix(), 10) 日期
+~~~
+
+
+
 goNb的点
 
 ~~~go
