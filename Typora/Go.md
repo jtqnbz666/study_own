@@ -58,6 +58,10 @@ go小技巧
 
 ~~~go
 strconv.FormatInt(time.Now().Unix(), 10) 日期
+
+//获取当前时间20230510112501
+date := time.Now().Format("20060102150405")
+fmt.Println(date)
 ~~~
 
 
