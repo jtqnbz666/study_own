@@ -1,0 +1,92 @@
+package main
+
+import (
+	"bufio"
+	"flag"
+	"fmt"
+	"math/rand"
+	"strconv"
+	"time"
+	"gitee.com/fengling/gotools/simplejson"
+	"io"
+	"os"
+	"strings"
+)
+
+var redo = flag.Int("redo", 0, "0 不重新转换，1 重新转换")
+var pageNumber = flag.Int("pageNumber", 0, "页码数")
+var docloadUrl = flag.String("docloadUrl", "", "docloadUrl")
+var loc = flag.String("loc", "", "loc")
+var docId = flag.String("docId", "", "docId")
+var docDownloadUrl = flag.String("docDownloadUrl", "https://www.qiqiwenku.com/api/source-file/download?op=download&url={}&id={}&time=112312&sign=95380101be90af46adde2f71875488f30d493cf5", "docDownloadUrl")
+var imgDownloadUrl = flag.String("imgDownloadUrl", "https://www.qiqiwenku.com/img/{}/{}", "imgDownloadUrl")
+var docFormat = flag.String("docFormat", "", "docFormat")
+
+func main() {
+	flag.Parse()
+
+	if (*pageNumber) > 0 && len(*docDownloadUrl) > 0 && len(*imgDownloadUrl) > 0 && len(*docId) > 0  && len(*loc) > 0 && len(*docFormat) > 0 {
+		fmt.Println("111111111111")
+		running(1, *pageNumber, *docDownloadUrl, *imgDownloadUrl, *docId, *loc, *docFormat)
+	} else {
+
+		var inputReader *bufio.Reader
+		var input string
+		var err error
+		//mapred_tip_id := os.Getenv("mapred_tip_id")
+		//mapred_tip_ids := strings.Split(mapred_tip_id, "_r_")
+		//curr_mapred_tip_id, err := strconv.Atoi(mapred_tip_ids[1])
+		if err != nil {
+			return
+		}
+		rand.Seed(time.Now().UnixNano())
+		inputReader = bufio.NewReader(os.Stdin)
+		for {
+			//fmt.Println("mapred_tip_id:" + fmt.Sprintf("%v\n", curr_mapred_tip_id))
+
+			input, err = inputReader.ReadString('\n')
+
+			if err == io.EOF {
+				break
+			}
+
+			if len(input) < 30 {
+				continue
+			}
+
+			in := strings.Split(input, "\t")
+			js, _ := simplejson.NewJson([]byte(in[1]))
+			js_loc := ""
+
+			*docId, _ = js.Get("data").Get("url").Get("data").Get("display").Get("id").String()
+			if len(*docId) <= 0 {
+				break
+			}
+
+			*docFormat, _ = js.Get("data").Get("url").Get("data").Get("display").Get("format").String()
+			if len(*docFormat) <= 0 {
+				break
+			}
+
+			js_loc, _ = js.Get("loc").String()
+
+			pageNumberStr, _ := js.Get("data").Get("url").Get("data").Get("display").Get("pageNumber").String()
+			if(len(pageNumberStr) <= 0) {
+				break
+			}
+			*pageNumber, _ = strconv.Atoi(pageNumberStr)
+			retry := 0
+			fmt.Println("22222222222")
+			for {
+				issuccess := running(*redo, *pageNumber, *docDownloadUrl, *imgDownloadUrl, *docId, js_loc, *docFormat)
+				if issuccess {
+					break
+				}
+				retry++
+				if (retry >= 3) {
+					break
+				}
+			}
+		}
+	}
+}
