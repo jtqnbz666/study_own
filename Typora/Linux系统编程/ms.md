@@ -144,6 +144,9 @@ split -l 10 原始文件 拆分后文件的前缀
 ### 小技巧
 
 ~~~
+vim中set list 显示不可见字符， set nu 显示行号
+
+
 在etc/profile 修改配置，就是永久有效的
 
 gunzip 文件  解压.gz文件
