@@ -800,7 +800,13 @@ var f Getter = GetterFunc(func(key string) ([]byte, error) {
 
 ~~~
 
+go中import前边加符号区别
 
+~~~
+1.加 . 表示省去前缀，比如fmt.Println()写成Println()
+2.加 _ 表示只调用里面的init函数
+3.加 任意字符串 表示取别名 (针对包名和路径名不相同也可以用这种方式来调用) 
+~~~
 
 
 
