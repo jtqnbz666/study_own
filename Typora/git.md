@@ -15,6 +15,12 @@ git config --global user.email "454193896@qq.com"
 使用 git confil -l 查看是否设置成功
 ~~~
 
+如果仓库含有子模块，需要把子模块一起拉下来的话
+
+~~~
+git clone --recurse-submodules
+~~~
+
 
 
 

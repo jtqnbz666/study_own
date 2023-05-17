@@ -57,6 +57,7 @@ done
 go小技巧
 
 ~~~go
+go的main()执行前，会先执行init函数(这个init函数是别的包中的也是一样)， init函数执行前会先初始化全局变量
 strconv.FormatInt(time.Now().Unix(), 10) 日期
 
 //获取当前时间20230510112501
@@ -179,6 +180,33 @@ func main() {
 打印结果：
 [logusage]2020/07/02 F:/go/src/algorithm/logusage/main.go:9: i am log
 [logusage]2020/07/02 F:/go/src/algorithm/logusage/main.go:10: i am fatal
+~~~
+
+**模板templete的使用**
+
+~~~go
+package main
+
+import "fmt"
+import "html/template"
+import "os"
+
+func main() {
+
+        type person struct {
+                Id      int
+                Name    string
+                Country string
+        }
+
+        liumiaocn := person{Id: 1001, Name: "liumiaocn", Country: "China"}
+
+        fmt.Println("liumiaocn = ", liumiaocn)
+
+        tmpl := template.New("tmpl1")
+        tmpl.Parse("Hello {{.Name}} Welcome to go programming...\n")
+        tmpl.Execute(os.Stdout, liumiaocn)
+}
 ~~~
 
 

@@ -144,6 +144,9 @@ split -l 10 原始文件 拆分后文件的前缀
 ### 小技巧
 
 ~~~
+如果遇到无法修改/bin下的文件，就修改环境变量，比如mac中就是在～/.zshrc文件中修改一下环境变量，这样就不用强制一定去/bin下找了，比如
+export PATH=$HOME/bin:/usr/local/bin:$PATH:/opt/homebrew/bin
+
 vim中set list 显示不可见字符， set nu 显示行号
 
 

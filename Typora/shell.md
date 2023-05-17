@@ -586,3 +586,14 @@ sh -x 和 . 基本没有区别
 先执行的脚本执行完后才会接着执行后边的脚本
 ```
 
+${!变量}作用
+
+~~~shell
+Test_VERSION=devlop
+prefix="Test"
+version_var="${prefix}_VERSION"
+echo $version_var		#Test_VERSION
+version="${!version_var}" #相当于是把内容再一次作为变量
+echo $version				#devlop
+~~~
+

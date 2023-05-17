@@ -23,4 +23,21 @@ docker exec mongodb bash  	//表示执行一次mongodb容器中的bash命令， 
 docker start mongodb	启动mongo容器
 
 持久化数据
-docker run -it -v mongo_volume:/data/db/mongo -p 27017:27017 --name mongodb -d mongo   mongo_volume是挂载的名字， /data/db/mongo是具体路径
+docker run -it -v mongo_volume:/data/db/mongo -p 27017:27017 --name mongodb -d mongo   mongo_volume是挂载在本机的位置， /data/db/mongo是容器内部存储信息的位置。
+
+
+
+查看日志
+
+docker logs 容器名
+
+
+
+docker tag : 标记本地镜像，将其归入某一仓库。
+举例：将镜像ubuntu:15.10标记为 runoob/ubuntu:v3 镜像。
+
+![](../pic/20230516-222221.jpeg)
+
+
+
+docker上的容器如果不指定网络，默认和本机上一个网络中。如果给docker容器指定了network，那么本地就跟docker容器不在同一个网段内了，docker和本机就不能进行通讯了，但是docker中放到同一个network的容器可以相互通信。
