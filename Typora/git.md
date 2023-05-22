@@ -165,3 +165,22 @@ git reset --hard HEAD^
 再git pull
 ~~~
 
+
+
+**合并分支**
+
+~~~
+比如此时只有main分支，main分支有一个test文件
+git branch test
+git checkout test
+git add .
+git commit -m ""
+git push origin test
+此时test和main分支下都有一个test文件
+
+情况一：此时test和main分支的文件内容是一样的，如果在test分支下对test文件进行修改(不提交)，那么切换到main分支的时候是可以看到这个修改的，如果单独在test分支提交了test文件的修改，那么再次切换到main分支是看不到修改后的test文件的
+情况二：情况一结束后test分支已经领先了main分支的内容，此时如果修改了test分支内容，如果未提交或者stash，是无法切换到main分支的， 此时可以在test分支先提交修改，然后切换到main分支(只能看到未修改的内容)，然后执行git merge test，将test分支的内容合并到main分支
+情况三：继情况二结束后，main和test分支内容是一致的，如果此时在main分支新增一个文件xx并且push上去，再去test分支修改一下原来已经有的某个文件并push上去，切换到main分支执行 git merge test命令，此时是可以把test分支做的修改合并到main分支的，并且不会把刚才在main分支新增的文件xx同步到test分支去
+情况四：继情况三结束后，main分支比test分支多了一个文件xx，此时如果在test分支对某个文件进行修改但是未提交或者暂存，则无法切换到main分支去。 所以必须要在test分支下git push， 如果是多个协作者在test分支下进行操作， 那么自然需要先处理好test分支下的冲突，并且在test分支下完成提交(我平时在公司和家就可以理解为多协作者解决test分支的冲突)，再切换到main分支下进行合并。
+~~~
+
