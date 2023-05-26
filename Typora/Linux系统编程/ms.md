@@ -144,6 +144,11 @@ split -l 10 原始文件 拆分后文件的前缀
 ### 小技巧
 
 ~~~
+echo test | base64 编码
+echo dGVzdAo= | base64 -D 解码
+echo -n "xx" | md5sum
+echo -n "xx" | sha1sum
+
 如果遇到无法修改/bin下的文件，就修改环境变量，比如mac中就是在～/.zshrc文件中修改一下环境变量，这样就不用强制一定去/bin下找了，比如
 export PATH=$HOME/bin:/usr/local/bin:$PATH:/opt/homebrew/bin
 

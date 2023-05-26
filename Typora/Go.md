@@ -54,15 +54,50 @@ do
 done
 ~~~
 
-go小技巧
+go时间
 
 ~~~go
 go的main()执行前，会先执行init函数(这个init函数是别的包中的也是一样)， init函数执行前会先初始化全局变量
-strconv.FormatInt(time.Now().Unix(), 10) 日期
+strconv.FormatInt(time.Now().Unix(), 10) //1685094260
 
-//获取当前时间20230510112501
+uint64(time.Now().UTC().UnixNano()) / uint64(time.Millisecond)//时间戳1685094260742
+
 date := time.Now().Format("20060102150405")
-fmt.Println(date)
+fmt.Println(date)//获取当前时间20230510112501
+
+
+year, month, day := time.Now().UTC().Date()
+unix := time.Date(year, month, day, 0, 0, 0, 0, time.UTC)
+//2023-05-26 00:00:00 +0000 UTC,这几个0代表时分秒毫秒
+
+
+
+~~~
+
+把字符串时间转为时间戳
+
+~~~go
+func main() {
+	// 定义需转换的时间格式
+	layout := "2006/01/02 15:04:05" //"2006-01-02 15:04:05"
+
+	// 定义需转换的时间字符串
+	str := "2021/10/28 13:16:12"  //2021-10-28 13:16:12.123
+  //不管是用/ 还是 - 只要大家都一样就行
+
+	// 使用 Parse 将时间字符串转换为 Time 类型
+	t, err := time.Parse(layout, str) //这里的t是Time类型，不是string类型
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// 使用 Unix 函数将 Time 类型转换为时间戳
+  //timestamp := t.Unix() 精确到秒
+	timestamp := uint64(t.UnixNano()) / uint64(time.Millisecond)
+	fmt.Println(timestamp)
+}
+
 ~~~
 
 
@@ -1327,6 +1362,43 @@ fmt.Println(gret) // "hh like me"
 v1 := reflect.ValueOf(gret)
 fmt.Println(v1.Interface())// "I like hh" 
 ~~~
+
+### gorm
+
+~~~go
+如果中途给结构体加字段， 那么之前的默认为NULL， 如果你设置了默认值， 其他记录的对应字段会变成这个默认值
+
+
+package main
+
+import (
+	"time"
+
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+)
+
+type People struct {
+	Age      int
+	Name     string
+	Birthday time.Time
+}
+
+func main() {
+	// 参考 https://github.com/go-sql-driver/mysql#dsn-data-source-name 获取详情
+	dsn := "root:123456@tcp(127.0.0.1:3307)/test?charset=utf8mb4&parseTime=True&loc=Local"
+	db, _ := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db.AutoMigrate(&People{})
+	user := People{Name: "Jinzhu", Age: 18, Birthday: time.Now()}
+	db.Create(&user)
+
+}
+
+~~~
+
+
+
+
 
 
 
