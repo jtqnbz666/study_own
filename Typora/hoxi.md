@@ -1,8 +1,14 @@
-问题： 看一下如何把奖励写到mails表的，考虑是否可以在新接口返回一个邮件信息(以前有一个通用信息，但没有包含mail， 可以新增一个)。
+问题： 我把邮件写入mysql，你去请求
 
 2.在哪里关注同事是否提交了新东西，
 
 判断赛季更新那里， 返回一个通用的消息就行（GetRewardBackMsg）
+
+
+
+
+
+ci的作用是否是： 我修改excel，假设我不执行脚本， 点击ci后会去拿到我提交的版本执行脚本再提交上去， 然后我拉下来的就是执行过脚本的config-tool
 
 ~~~go
 天梯之路
@@ -30,6 +36,7 @@
 		Where("id = ?", msg.UserID).Select("got_exploration_reward_id").Updates(&model.User{
 		GotExplorationRewardID: rewardID,
 	})
+//下边不用
 	res = global.MysqlIns.Model(&model.User{}).
 		Where("id = ?", msg.UserID).Select("exploration_score").Updates(&model.User{
 		ExplorationScore: uint64(explorationMaxRewardID),
@@ -118,7 +125,7 @@ func GetNewRewardLevel(score int32) int32 {
 
 
 判断赛季是否更新
-isupdateseason = 0;
+isupdateseason := 0;
 
 	if err != nil {
 		logrus.Errorf("UserLadderRewardRec create failed %v %v", msg.UserID, msg.RewardId)
@@ -177,12 +184,11 @@ func main {
     
 //根据当前赛季得到具体的奖励id
 	getrewardID(users3.Season)  得到具体的奖励id
- //接着把这些奖励写入mail数据库表中， 直接返回前端
+ //去simplereward表得到具体是什么东西，生成邮件信息放到mysql中，前端自己去请求
   
-// 如果有， 判断一下是否跨赛季，跨了则执行领奖逻辑，没跨就直接返回。
+// 如果有， 判断一下是否跨赛季，跨了则执行则写邮件
 //如果没有就把当前赛季记录一下， 不考虑领奖问题，直接返回user信息。
 
-//有，如果跨赛季了
 }
 
 ~~~

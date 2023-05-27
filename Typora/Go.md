@@ -87,9 +87,8 @@ func main() {
 
 	// 使用 Parse 将时间字符串转换为 Time 类型
 	t, err := time.Parse(layout, str) //这里的t是Time类型，不是string类型
-	if err != nil {
-		fmt.Println(err)
-		return
+	if err == nil {
+    t = t.UTC()
 	}
 
 	// 使用 Unix 函数将 Time 类型转换为时间戳
@@ -1366,32 +1365,61 @@ fmt.Println(v1.Interface())// "I like hh"
 ### gorm
 
 ~~~go
-如果中途给结构体加字段， 那么之前的默认为NULL， 如果你设置了默认值， 其他记录的对应字段会变成这个默认值
-
-
 package main
 
 import (
-	"time"
+	"fmt"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 type People struct {
-	Age      int
-	Name     string
-	Birthday time.Time
+	Age  int
+	Name string `gorm:"default:'jt'"`
+	// Birthday time.Time
+	Ge     string `gorm:"default:'wh'"`
+	Season string
+	New    int
+}
+
+type user struct {
+	Age  int
+	Name string
 }
 
 func main() {
 	// 参考 https://github.com/go-sql-driver/mysql#dsn-data-source-name 获取详情
 	dsn := "root:123456@tcp(127.0.0.1:3307)/test?charset=utf8mb4&parseTime=True&loc=Local"
 	db, _ := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-	db.AutoMigrate(&People{})
-	user := People{Name: "Jinzhu", Age: 18, Birthday: time.Now()}
-	db.Create(&user)
+	db.AutoMigrate(&People{}) //自动生成表
+	// Birthday: time.Now(),
+	//user := People{Name: "Jinzhu", Age: 18, New: 123}
+	//db.Create(&user1)	//添加一条记录
 
+	user3 := &People{}
+	db.Model(&People{}).Select("season", "name").Where("age = ?", 18).First(&user3)
+	fmt.Println(user3.Season)
+	if user3.Season == "" {
+		fmt.Println("yes")
+		db.Model(&People{}).Select("season", "name").Where("age = ?", 18).First(&user3).Updates(&People{
+			Season: "S1",
+		}).First(&user3)
+
+	}
+	fmt.Println(user3.Season)
+
+	var str string		//读单个字段season
+	db.Model(&People{}).Select("season").Where("age = ?", 18).First(&user3).Updates(&People{
+		Season: "S1",
+	}).First(&str)
+	fmt.Println(str)
+
+  var u1 user		//只要字段一致(People和user都有name和age字段)，就可以读到它里面
+	db.Model(&People{}).Select("name", "age").Where("age = ?", 18).First(&user3).Updates(&People{
+		Season: "S1",
+	}).First(&u1)
+	fmt.Println(u1)
 }
 
 ~~~
