@@ -1,6 +1,45 @@
 1.天梯之路
 
-2.赛季需求
+### 10. 跑马灯
+
+目前想法， 只放一个消息进kafka， 然后大厅服消费的时候根据类型决定是广播给所有在线玩家还是自己。
+
+~~~
+ message Marquee {
+  uint64 uid = 1; //玩家id
+  int32  type = 2; //触发消息类型
+  MarqueeInfo Info = 3; //具体数据，按需采用
+}
+ //跑马灯具体信息
+ message MarqueeInfo {
+   int32  num = 1; //涉及数量都用它， x级，x个, x连胜等
+   TeamType gameType = 2; //游戏模式
+   int32   resonanceConfId = 3; //共鸣类型对应的confid
+   int32 levelConfId = 4; //段位对应的confid
+   int32 minionId = 5; //对应cardhero的id，从而获得品质
+   float percent = 6; //超过百分比
+ }
+~~~
+
+
+
+疑问：1.现在的广播逻辑， 是同一份消息，换了不同的to_user_id，一起放到kafka里面。
+2.在哪里管理所有在线用户的
+
+写到kafka的消息包含，1.uid，2，事件类型 3.广播范围（前三个类型固定），4.str串(包含所有其他信息)
+
+主要看两个模块，consumer和broadcaster
+
+生产消息：
+在open-match-director/service/kafka里面可以看到初始化kafka的过程， 以及topic的选择，还有生产消息的过程（目前所有的消息类型都是BroadcastMessage(消息类型(message-type.go里面的)，对方id，和Message，还有所在大厅以及唯一消息id的标识，但此时还没设置，在消费的时候设置的，  真正的数据是Message成员)，然后进一步封装为(topic，key，data(也就是BroadcastMessage))放到kafka中）
+
+消费者处理消息(从consumer->broadcaster->大厅服)：
+在consumer库中消费消息的时候会先通过玩家id得到玩家所在的大厅服ip信息，然后通过post方法（最多尝试5次）把消息(同样是BroadcastMessage，同时里面添加了玩家所在大厅服的信息)转发给broadcaster库的Send函数，进一步调用broadcaster库的forwarder模块进行广播(去看broadcaster库main函数，消息会通过Send函数放入chanel中最后会由forwarder模块的manager进行转发)，通过MsgBroadcast消息发送到大厅服进行处理，所有的广播消息都通过大厅服的connMgr.Run()去处理
+在这个过程中，**如果都成功了的话， 大厅服会回复MessageAck给broadcaster告诉它成功了，然后broadcaster会回复返回码200告诉consumer成功了。** 如果broadcaster那里一直不成功最多重传10次，不管是否成功都会返回200告诉consumer成功了
+
+
+
+### 2.赛季需求
 
 
 
@@ -243,5 +282,9 @@ while (_FakePlayers.Count < guideState.GameList.Count)
 7AI点击匹配的时候，出来的头像数说根据主场景的GuideForceMatchCanva下的PlayerContainer的个数决定的。
 ~~~
 
-战斗服：
+战斗服没什么好改的，改下读配置方式
+
+
+
+
 

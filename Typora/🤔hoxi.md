@@ -1,6 +1,6 @@
 
 
-数据看板：账号 jiangtao	密码 nsswdsm58
+数据看板：账号 jiangtao	密码 nswdsm58
 
 ssh [deploy@47.95.6.108](mailto:deploy@47.95.6.108)
 
@@ -10,9 +10,13 @@ Kindly_Owl_6770
 
 debug代码：/Users/jiangtao/data/project328-client/Assets/Scripts/DebugCmd/CustomCmdRegister.cs
 
+app：https://launch.hoxigames.com/index.html
 
+gitlab：https://gitlab.hoxigames.com/users/sign_in
 
+ci：https://hoxigames.feishu.cn/wiki/wikcnPfIzdcQk1qL7Z69hSgZaKb
 
+成大邮箱：http://mail.stu.cdu.edu.cn/cgi-bin/loginpage?s=session_timeout&from=&r=1e92dfa32ab874b79be5624f7c54e1ab
 
 ```
 9003 ：

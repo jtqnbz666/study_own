@@ -6,3 +6,17 @@
 
 打开一个panel的时候，会默认去执行一次它的OnClose，关闭的时候会默认去执行一次它的OnClose，如果在OnClose里面又写了CloseCurrentUI()，则会把主界面一起关掉，目前来看，setactive(false)不会去执行OnClose
 
+1.将物体串成一个链表
+
+~~~c#
+  while (_fakePlayers.Count < guideState.GameList.Count)
+  {
+      var player = Instantiate(_fakePlayersTemplate, _fakePlayersGoParent);
+      _fakePlayers.Add(player);
+  }
+//_fakePlayersTemplate是某一个panel中的节点模版
+//节点模版就是被_fakePlayersGoParent包含的
+//这样一来，_fakePlayers链表与panel就关联上了，对_fakePlayers设置就能对panel产生影响。
+
+~~~
+
