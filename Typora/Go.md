@@ -1,3 +1,14 @@
+**小知识**
+
+~~~
+go的main()执行前，会先执行init函数(这个init函数是别的包中的也是一样)， init函数执行前会先初始化全局变量
+2.时间处理上，用2006那个时间，只要写上固定的时间，format得到的时间戳就是utc时间
+3.把字符串以某个符号分割. strings.Split(str, ",")
+4.fmt.Sprintf("%v", levelConf.Id)给字符串格式化
+~~~
+
+
+
 ### c++,go,lua,shell 遍历方式区别
 
 ~~~go
@@ -57,7 +68,6 @@ done
 go时间
 
 ~~~go
-go的main()执行前，会先执行init函数(这个init函数是别的包中的也是一样)， init函数执行前会先初始化全局变量
 strconv.FormatInt(time.Now().Unix(), 10) //1685094260
 
 uint64(time.Now().UTC().UnixNano()) / uint64(time.Millisecond)//时间戳1685094260742
@@ -66,9 +76,16 @@ date := time.Now().Format("20060102150405")
 fmt.Println(date)//获取当前时间20230510112501
 
 
-year, month, day := time.Now().UTC().Date()
-unix := time.Date(year, month, day, 0, 0, 0, 0, time.UTC)
-//2023-05-26 00:00:00 +0000 UTC,这几个0代表时分秒毫秒
+
+//获取到时分秒 local表示把UTC转为当地时间
+  year, month, day := time.Now().UTC().Date()
+	hour, minute, second := time.Now().UTC().Local().Clock()
+	unix := time.Date(year, month, day, hour, minute, second, 0, time.UTC)
+
+	fmt.Println(unix)	//二者一样
+	ret, _ := time.Parse("2006/1/2 15:04:05", "2023/5/29 17:29:00")
+	fmt.Print(ret)		//二者一样
+
 
 
 
@@ -88,15 +105,30 @@ func main() {
 	// 使用 Parse 将时间字符串转换为 Time 类型
 	t, err := time.Parse(layout, str) //这里的t是Time类型，不是string类型
 	if err == nil {
-    t = t.UTC()
+    t = t.UTC()	//重点：这种写死的时间，执行.UTC()还是一样的结果
 	}
-
+  
 	// 使用 Unix 函数将 Time 类型转换为时间戳
   //timestamp := t.Unix() 精确到秒
 	timestamp := uint64(t.UnixNano()) / uint64(time.Millisecond)
 	fmt.Println(timestamp)
 }
 
+~~~
+
+把时间戳转为utc
+
+~~~go
+	time.Date(1970, time.January, 1, 0, 0, 0, 0, time.UTC).Add(time.Duration(时间戳) * time.Second).UTC()
+//把time.Second换成millisecond就是毫秒
+~~~
+
+求时间差(天数) 
+
+~~~go
+毫秒为单位
+dayTime := timeUtil.MakeTimeStamp(time.Now()) - useInfo.LastPlayTime
+if math.Floor(float64(dayTime/(24*60*60*1000))) > 30 
 ~~~
 
 
@@ -1362,9 +1394,17 @@ v1 := reflect.ValueOf(gret)
 fmt.Println(v1.Interface())// "I like hh" 
 ~~~
 
+
+
+
+
 ### gorm
 
 ~~~go
+1.只要第一次把执行了AutoMigrate创建了表结构，后边就可以不执行这个函数，直接修改表结构(增加或者删除某个字段)也会同步产生效果
+2.通过First(&user)找到一条或者Find(&[]uesr)找到所有符合条件的，就可以通过这个user结构得到查询的结果，使用select对指定字段查询时，user只要与对应字段能够匹配上即可，不是必须要求查询出来的结构体和表的结构体完全一致。
+3.如果使用了select，那么update只能更新select中有的字段， 不会改变其他字段，特别注意，select的多个字段是分开的，不能放在一起，比如"age", "name", 而不是"age, name", 而where是放在一个引号中的，这一点需要特别注意。
+4.表第一次创建好之后，后边修改以前某些字段的属性，有可能不会生效。
 package main
 
 import (
@@ -1416,10 +1456,23 @@ func main() {
 	fmt.Println(str)
 
   var u1 user		//只要字段一致(People和user都有name和age字段)，就可以读到它里面
-	db.Model(&People{}).Select("name", "age").Where("age = ?", 18).First(&user3).Updates(&People{
+	db.Model(&People{}).Select("name", "age").Where("age = ?  and status = 1", 18).First(&user3).Updates(&People{
 		Season: "S1",
 	}).First(&u1)
 	fmt.Println(u1)
+}
+
+
+4.计算一列值的和
+var price int64
+db.Table("orders").Select("sum(order_amount)").Scan(&price)  //但如果有空值就会出错，可以改用一下方式
+//创建一个存储查询结果的切片
+var result []int64
+var sum int64
+db.Table("orders").Pluck("order_amount",&result )
+
+for _,v := range result{
+			sum += v
 }
 
 ~~~

@@ -1,225 +1,25 @@
-问题： 我把邮件写入mysql，你去请求
 
-2.在哪里关注同事是否提交了新东西，
-
-判断赛季更新那里， 返回一个通用的消息就行（GetRewardBackMsg）
-
-
-
-
-
-ci的作用是否是： 我修改excel，假设我不执行脚本， 点击ci后会去拿到我提交的版本执行脚本再提交上去， 然后我拉下来的就是执行过脚本的config-tool
-
-~~~go
-天梯之路
-
-// 合法检测
-	Ladderinfo := GetLadderInfo(msg.UserID)
-	Explorationinfo := GetExplorationInfo(msg.UserID)
-	gradeMaxRewardID := getCurMaxLevel(Explorationinfo.GotRewardID + 1)
-	explorationMaxRewardID := getCurRewardIDByExp(uint64(Ladderinfo.Score))
-	rewardID := MinOfTwo(gradeMaxRewardID, explorationMaxRewardID)
-	if Explorationinfo.GotRewardID >= rewardID {
-		logrus.WithField("role", "get-exploration-reward").Warnf("玩家已经领到此ID奖励 %v %v %v", msg.UserID, msg.RewardID, Explorationinfo.GotRewardID)
-		backMsg.ResultCode = pb.RESULT_CODE_ERROR
-		return backMsg
-	}
-	//判断奖励id是否对应
-	if msg.RewardID != rewardID {
-		logrus.WithField("role", "get-exploration-reward").Warnf("奖励ID与探索值不匹配 %v %v %v", msg.UserID, msg.RewardID, rewardID)
-		backMsg.ResultCode = pb.RESULT_CODE_ERROR
-		return backMsg
-	}
-
-	// 更新记录
-	res := global.MysqlIns.Model(&model.User{}).
-		Where("id = ?", msg.UserID).Select("got_exploration_reward_id").Updates(&model.User{
-		GotExplorationRewardID: rewardID,
-	})
-//下边不用
-	res = global.MysqlIns.Model(&model.User{}).
-		Where("id = ?", msg.UserID).Select("exploration_score").Updates(&model.User{
-		ExplorationScore: uint64(explorationMaxRewardID),
-	})
-~~~
-
-赛季更新
-
-~~~go
-还需要做的：去user结构加一个season和一个isupdate字段
-
-一些功能性函数
-func splitRewardStrRaw(str string, level int) int {//考虑写到工具中
-	allRewardStr := strings.Split(str, ",")
-	for _, rewardStr := range allRewardStr {
-		var splitData = strings.Split(rewardStr, "|")
-		var intList [2]int
-		for i := 0; i < 2; i++ {
-			temp, _ := strconv.Atoi(splitData[i])
-			intList[i] = temp
-		}
-		if int(intList[0]) == level {
-			return intList[1]
-		}
-	}
-	return 0
-}
-
-//根据当前赛季得到具体的奖励id
-func getrewardID(season string)  int{//得到具体的奖励id
-  // 先得到当前段位，
-  level := getLevel(ladder.highscore) 
-  var rewardlist string 
-  idx := 0
-  for {
-    tmpconf := getLadderSeason(idx)
-    if season == tmpconf.name {
-        rewardlist = tmpconf.reward
-        break
-    }
-  }
-  return splitRewardStrRaw(rewardlist,level)
-}
-
-如果是，执行更新
-func GetNewScore(score int32) int32 {
-	var newscore int32 = 0
-	var curIdx int32 = 1
-	for {
-		levelConf, has := conf.GetLadderGrade(curIdx + 1)
-		if !has {
-			break
-		}
-
-		need := levelConf.ScoreList[0]
-
-		if score < need {
-			break
-		}
-		own_levelConf, has := conf.GetLadderGrade(curIdx)
-		newscore = (own_levelConf.resetScore)
-		curIdx++
-	}
-
-	return newscore
-}
-func GetNewRewardLevel(score int32) int32 {
-	var curIdx int32 = 1
-	for {
-		levelConf, has := conf.GetExploreLevel(curIdx)
-		if !has {
-			break
-		}
-
-		need := levelConf.score
-
-		if score == need {
-			return curIdx
-		}
-
-		curIdx++
-	}
-
-	return curIdx
-}
-
-
-判断赛季是否更新
-isupdateseason := 0;
-
-	if err != nil {
-		logrus.Errorf("UserLadderRewardRec create failed %v %v", msg.UserID, msg.RewardId)
-		return
-	}
-
-
-//得到当前赛季
-func getnowseason() string{  
-  nowtime := uint64(time.Now().Format("20060102150405"))
-  idx := 0
-  for {
-    conftmp := conf.GetLadderSeason(idx)
-    t := ParseTimeToUtc(conftmp.start)
-    timestamp := t.Unix
-    if nowtime < timestamp {
-      break
-    }
-    	
-    idx ++ 
-  }
-  return conftmp.name
-}
-
-//先得到这个赛季的段位，好像不用这一步了，不过也可以判断一下数据库中存储的与理应的是否一致
-func getLevel(highscore string) int{
-  idx := 1
-  for {
-     tmpconf := getLadderGrade(idx)
-    if highscore < tmpconf.ScoreList[0] {
-      break
-    }
-       
-     idx ++
-  }
-  return idx - 1
- 
-}
-
-func main {
-  //得到当前赛季
-  nowseason := getnowseason() 
-  //查看数据库中是否有赛季信息
-	user3 := &People{}
-	db.Model(&People{}).Select("season", "name").Where("age = ?", 18).First(&user3)
-	fmt.Println(user3.Season)
-	if user3.Season == "" { //如果信息为空，说明用户第一次登陆，给它配置一下赛季信息
-		db.Model(&People{}).Select("season", "name").Where("id = ?", msg.userid).First(&user3).Updates(&People{
-      Season: getnowseason(),
-		}).First(&user3)
-    //更新完赛季直接返回就是， 通过那个通用返回消息(注意去看一下得到更新后的userdata的处理函数是否有设置我新增的两个字段(season和是否改变))。
-  } else if users3.Season == getnowseason() { //赛季信息等于当前赛季
-    //这种情况也直接返回就行
-    
-  } else { // 说明赛季发生了变化。
-    
-//根据当前赛季得到具体的奖励id
-	getrewardID(users3.Season)  得到具体的奖励id
- //去simplereward表得到具体是什么东西，生成邮件信息放到mysql中，前端自己去请求
-  
-// 如果有， 判断一下是否跨赛季，跨了则执行则写邮件
-//如果没有就把当前赛季记录一下， 不考虑领奖问题，直接返回user信息。
-
-}
-
-~~~
-
-
-
-
-
-1.ladderreward
-
-2.explorreward
-
-3.新接口判断是否更新赛季
-
-4.用户登陆的时候把赛季信息返回给他，如果没有历史就根据当前时间赋值一个版本信息给它， 每次打开排位赛界面的时候再去判断是否跨越季度了
-
-需要在mysql中加3个字段： own赛季，now赛季,赛季是否改变
-
-
-
-
-
-我会记录我当前领到那个探索等级了， 如果是通过段位分， 需要先通过已经领到的等级在explorelevel中得到所需天梯分，然后拿这个天梯分去laddergrade判断上限分数， 然后用上限分数去explorelevel中得到当前段位的上限领取等级(一共需要三次)， 因为服务器是记录的当前领到哪个探索等级的奖励。 如果说服务器通过记录分来判断领到哪个位置的奖励是不行的(因为配置文件的主键是探索等级。)
-
-
-
-我认为需要改的， 把score改成可领id， 把数据库中的探索值改为可领id， 以前的score就通过数据库中的这个值来赋值 
 
 数据看板：账号 jiangtao	密码 nsswdsm58
 
+ssh [deploy@47.95.6.108](mailto:deploy@47.95.6.108)
+
+Reddit: AcademicLandscape180   nswdsm58
+
+Kindly_Owl_6770
+
 debug代码：/Users/jiangtao/data/project328-client/Assets/Scripts/DebugCmd/CustomCmdRegister.cs
+
+
+
+
+
+```
+9003 ：
+ssh deploy@47.95.6.108
+docker exec -it dev3-mysql /bin/bash
+docker exec -it dev3-data-redis redis-cli
+```
 
 装备码
 
@@ -276,6 +76,12 @@ debug代码：/Users/jiangtao/data/project328-client/Assets/Scripts/DebugCmd/Cus
 18.玩家获得奖励的时候，对应了三个字段，类型｜ID｜数量， 如果是简单的比如货币，根据ID来决定是金币还是钻石，不用单独配置excel表， 而对于礼包和宝箱则需要配置excel(GiftBag,LotteryMain)
 19.天梯之路和战令路线的奖励不属于任务奖励， 领取了之后如果把分数扣下去不会显示已经领取，但当你把等级升回去的时候也不可以重复领取,任务对应的playertask表， 天梯之路对应的是explorelevel表
 20.比如玩家点一个领取时， 服务器这边会处理做真正的领取操作，如果领取成功，会返回一个通用消息，主要是两部分， 一部分就是结果码(成功与否)，第二部分是ShowRewardData消息，它里面又包含了本次领取的所有东西，以及用户领取完后的一个新的状态(以一个userdata结构新状态信息)， 所以这个通用消息能解决大部分问题。
+21.ci其实就是去执行config-tool/build.sh， 它做了这么几件事， 先给一个缓存目录， 去这个缓存目录下把你需要ci的所有git仓库代码都拉取(现在公司是develop分支)到那个缓存目录下， 然后本身把excel表格序列化后， 把这些序列化后的文件同步给所有的git仓库(大厅服务，uds，client等)， 这样就叫集成。
+那么在config-tool/env.sh中配置路径是为了方便自己本地调试，执行gen.sh会重新把excel生成序列化文件根据env.sh的配置同步到本地(自己选择同步uds还是大厅服还是client，但这都还只是本地，同步完后并没有push， 而ci是做了push操作的)
+22.每次调用请求返回的userdata不一定是完整的，所以客户端采用的是merge方式， 如果返回的userdata包含的有的字段就覆盖之前的，如果没有就继续用之前的。
+23.GameConfConstant表中记录了一些固定的游戏相关常量配置， 比如战令进阶豪华版的信息等等。
+24.注册一个玩家时需要设置最基本的信息， 比如新手礼包等等，在uds/utils/data.go的findOrCreateUserByAccountID中
+25.登陆注册过程在MainScreenSceneManager.cs中
 ~~~
 
 
@@ -287,10 +93,6 @@ debug代码：/Users/jiangtao/data/project328-client/Assets/Scripts/DebugCmd/Cus
 各种proto配置文件(xx_conf.proto)的信息在hoxi-server/conf包下
 一些实用工具在hoxi-server/util包下
 ~~~
-
-
-
-
 
 
 

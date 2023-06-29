@@ -11,6 +11,8 @@ where age != 10
 是否在指定区间
 where age in(1, 2, 3)
 
+show create table 表名 // 可以看到如何创建这个表的
+
 SELECT d.deptno FROM  dept d 
 WHERE NOT EXISTS (SELECT deptno FROM emp WHERE deptno=d.deptno); // 如果成立exists返回1，反之0
 
@@ -274,7 +276,7 @@ redo log 是循环写的，空间固定会用完；binlog 是可以追加写。�
 **binlog作用**：
 
    	**①**	**主从复制：**1：在主库中开启Binlog功能，这样主库就可以把数据更改记录到binlog，2：从库把主服务器的二进制日志(binlog)复制到自己的中级日志(relay log)中，3：从服务器重做中继日志中的日志，就可以实现数据恢复，从而达到主从数据的一致性。
-        **②   数据恢复：**通过mysqlbinlog工具来恢复数据。
+   	    **②   数据恢复：**通过mysqlbinlog工具来恢复数据。
 
 **redolog作用**：每次进行DML操作(增删改)，并不会直接修改B+树的内容，而是先刷到redolog中，因为这样更快一点，如数据库宕机，可以通过redolog**重写**。
 **undolog作用**：里面包含了事物id和回滚指针，每一次新的DML操作都会指向上一次DML操作的数据，通过这种机制来**实现事务回滚**，同时也因为这种机制来**实现了MVCC**(多版本并发控制)

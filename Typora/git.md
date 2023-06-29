@@ -1,3 +1,37 @@
+1.如果某一个commit没有在任何分支上，就从它身上创建一个临时分支， 然后去你想合并过去的分支，再把这个临时分支的内容merge过来。 (第二种方式：直接去你的目标分支，然后reset到这个commit上，就会发现此时本地的目标分支就在这个commit节点上，然后pull最新的内容再push上去)
+
+1.子模块如果更新了，但此时主模块指向的子模块还是旧的子模块，这个时候需要先切到主模块，这个时候点回子模块会发现自己主模块指向的是老的子模块，此时需要把子模块切到最新的子模块的位置，再切回主模块，双击出现变化的子模块(作用是加入暂存区)，再提交一次主模块即可。
+
+1.下边说到，revert之后那么之前的修改就不见了，所以revert后push完成后新增一个分支，对这个新增的分支进行revert(相当于两次revert)， 那么就可以在新分支上用自己修改的协议
+
+1.fork， 如果不小心把协议提上去了， 就去revert提交错的那一次(merge的那个不影响) ，主要就是push的那一次，revert后重新pull拉取最新的协议，再次提交上去即可
+
+1.如果是在一个分支上协作， 每次git add . , git commit -m "", 再git pull --rebase 看是否有冲突需要解决，再git push
+
+2.终端配置git，先设置一下git pull的模式， 一般git config pull.rebase false(表示用merge的方式), 不然它默认既不是merge也不是rebase
+
+3.强推(git push origin develop --force)和强拉(git reset --hard origin/develop)
+
+4.有时候发现git reset --hard 无法删除本地工作区新增的文件， 两种方法，采用git clean --df 或者 先git add . 添加到暂存区，再 git reset --hard 一次，因为git reset 删除的是已跟踪的文件，将已commit的回退。 git clean 删除的是未跟踪的文件
+
+5.rebase和merge的区别是前者会先隐藏本地最新的commit内容，暂时只能看到对方最新push的commit内容，然后去解决冲突，逐渐就能看到自己本地的commit内容，然后git add . 再 git rebase --continue(可以用git rebase --skip跳过冲突的解决)， 而merge是将对方最新push的commit内容和自己本地的最新commit内容合并在一起， 解决完冲突后先执行git add . 再 git merge --continue，其实我感觉merge更好用，因为rebase用时候需要解决多个阶段有点复杂。 它们都可以用git xx --abort中断。
+
+![](/Users/jiangtao/study_own-main/study_own/pic/20171215110156640.png)
+
+![](/Users/jiangtao/study_own-main/study_own/pic/20171215111256619.png)
+
+6.两个分支A和B， 如果现在A和B都有一个1.txt 和 2.txt文件，此时在A上增加3.txt，修改1.txt， 而在B上删除2.txt，修改1.txt， 此时在A分支执行git merge B 就会出现A上的3.txt不变，2.txt会被删除，1.txt出现冲突需要解决。（如果A上的2.txt发生改变，合并B过来的时候A就不会删除，而需要手动去处理冲突）
+
+
+
+感觉
+
+~~~
+简单服务开发过程，如果协作方修改的代码跟我的逻辑不冲突， git pull --rebase后并不需要去解决冲突后执git rebase --continue, 直接git add. 然后再push上去就可以了。 如果是两个不同的分支，也是通用的道理， 比如新建test分支先把develop的代码merge过来(此时test和develop内容一样)， 后面如果develop变了， 只要跟test新开发的的逻辑不冲突，就不影响后续把test分支新增的功能merge回develop上。  就比如说在节点1， test和develop同步，后续develop提交了很多东西已经变成了节点3， test分支也提交了很多节点变成节点3(两个节点3不是一条路上的), 但它们都有公共的节点1， 所以在test分支上开发完新内容后，在develop分支上执行git merge test， 这就像我平时遇到git push推不上去，需要先git pull --rebase一下， 但不会引起冲突的这种情况。
+~~~
+
+
+
 在服务器上创建一个git仓库
 
 ~~~
@@ -20,6 +54,8 @@ git config --global user.email "454193896@qq.com"
 ~~~
 git clone --recurse-submodules
 git pull --recurse-submodules //把子模块一起拉下来
+
+如果子模块中有改动，拉的时候失败了，先去子模块git stash 再 git stash drop 再重新拉
 ~~~
 
 
@@ -67,6 +103,8 @@ git push original test 即可在远程建立test分支
 git checkout 文件， 会用暂存器的文件来替换工作区的这个文件的内容，比如工作区这个文件的内容是6666， 而暂存区是666，则会将工作区内容更改为666
 
 git checkout HEAD 文件名， 会用本地仓库的这个文件来替换**工作区和暂存区**的这个文件的内容， 把文件名换为 点 表示所有文件
+
+有时候上边两部执行了也没有用， 无法切换分支，那么执行一下git fetch即可
 
 git reset HEAD 文件， 表示把本地仓库的文件同步到暂存区，但**不影响工作区内容**。
 **不存在 git reset --hard HEAD 文件** ，这种方式是错误的。
@@ -116,14 +154,13 @@ git rebase --continue	//因为刚才是在一个临时分支解决冲突，现�
 // 已经解决冲突了，此时git push 推送最新内容即可
 git push orign/master
 
-
 上述的两种方式，git pull 和 git pull --rebase的区别在于
-git pull 会将远程分支的最新commit 与自己刚才的commit记录合并，即只能看到自己刚才的最新commit记录
+git pull 会将远程分支的最新commit 与自己刚才的commit记录合并，即只能看到自己刚才的最新commit记录(我估计只是本地只能看到一条，但其实远端有两条)
 而git pull --rebase 会将远程分支的最新commit 与自己刚才的commit记录 都保留，即能看到两条commit记录
 
 
 
-git pull = git fetch + git merge
+git pull = git fetch + git merge.  
 git pull -rebase = git fetch + git rebase
 
 git pull 有这么几种配置
@@ -186,4 +223,6 @@ git push origin test
 情况三：继情况二结束后，main和test分支内容是一致的，如果此时在main分支新增一个文件xx并且push上去，再去test分支修改一下原来已经有的某个文件并push上去，切换到main分支执行 git merge test命令，此时是可以把test分支做的修改合并到main分支的，并且不会把刚才在main分支新增的文件xx同步到test分支去
 情况四：继情况三结束后，main分支比test分支多了一个文件xx，此时如果在test分支对某个文件进行修改但是未提交或者暂存，则无法切换到main分支去。 所以必须要在test分支下git push， 如果是多个协作者在test分支下进行操作， 那么自然需要先处理好test分支下的冲突，并且在test分支下完成提交(我平时在公司和家就可以理解为多协作者解决test分支的冲突)，再切换到main分支下进行合并。
 ~~~
+
+删除commit记录
 
