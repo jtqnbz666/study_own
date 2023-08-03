@@ -55,6 +55,8 @@ do
         tmp="https://wenku.so.com/d/"$tmp
     echo $tmp >> need
 done
+
+5.set -x 会在控制台打印执行的命令
 ```
 
 

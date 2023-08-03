@@ -1,4 +1,92 @@
-1.天梯之路
+### 工具
+
+CustomCmdRegister.cs的Start()可以看到大部分客户端作弊码的命令显示行(搜索DebugLogConsole.AddCommand添加debug命令)
+
+### 14.pve对局
+
+pvetaskmanager.cs的UpdateWatch可能有坑
+
+SetGuideTaskRecord可能有坑
+
+~~~
+对局流程：EnterRoomHandler.cs的Process接收进入房间的信息，接着GetOrCreateBattle创建战斗，接着调用CreateBattle，接着创建BattleRoyale，BattleRoyale的构造函数如果是guide模式会先把玩家自己的信息加载好(join一下)，并且把GuidePlayerSelf设置为自己, 同时把guideoperation的状态机初始化
+设置好之后调用battle.Start()，如果是guide进一步调用StartGuideBattleRoyale，接着调用base.Start切换状态再gameThread.ChangeState(initStateID)，这步实质上是在gameThread里加了一条消息，然后调用gameThread.Start去处理消息，实际处理消息的时候在去调用具体状态里面的OnEnter函数
+~~~
+
+
+
+1.在AIReactionService.cs可以看到AI的一些数据更新操作
+
+2.前端接收战斗服的数据
+
+3.AI数据来自RequestAi(因为使用AIOperationEndSnapShot保存返回结果，最后进战斗的时候会加载这个快照)， 在WaitAI()中做最后的处理(修改AIOperationEndSnapShot)，这里面还可以**更改玩家最后进入战斗时的数据**
+
+4.进入房间的消息是在EnterRoomHandler.cs，之后也去这里拓展冒险模式
+
+5.消息接收以及处理说在GameThread.cs里面做的： 增加消息Add, 处理消息HandleMessage
+
+6.游戏状态机GameStateMachine(里面有一个)，所有的状态类都是继承自AbstractGameState，状态类型搜索StateConstant，子类只要继承这些状态类，并且加入状态机，切换状态的时候就去的是这些子类，因为类型id是继承下来的，不需要在状态类型StateConstan中额外增加子类的类型id
+
+7.RestorePlayerAfterBattle做**数据转存**(如果是修改了snapshot里面的数据，需要在这里restore一下，不然数据会丢失)。
+
+8.运营模式发送BR_OperationStart消息有两个情况
+1.SendOperationStageStartMsg*//* 玩家运营阶段开始
+2.BuildEndMessage
+
+9.对于引导模式，客户端的EnterFromOperation表示根据战斗服传过来的运营消息进入房间，播放完动画后会给战斗服发送Guide_ClientReport，战斗服再进一步推进guide
+
+10.客户端创建引导模式房间CreateBRGuideRoom->GoToBRGuideScene->EnterFromOperation(根据服务器传过来的运营结束开始消息BR_OperationStart触发的)
+
+11.所有的action比如cheataction都继承于playeroperationaction，所有的action都在player.cs中，去里面搜索CheatCmd可以看到作弊码相关的，**具体处理是ExecutePlayerAction函数**(先执行Perform，就去到了playeroperationaction，根据不同的action去执行不同的execute函数)
+
+11.1 各种effet和action的关系， action中可能会初始化一个effet对象的实例，进一步执行里面的perform函数，还有另外一种方式可以在effet.xlsl中直接配置，但effet的类必须要写明标签，将effet表内容通过标签转为具体的effet实例可以看gametask.cs中的BuildLogic函数,  会把这些转换出来的实例都执行一下(effect.Run)
+
+12.去HandDeck.cs和BoardDeck.cs可以看到对手牌和战场牌的操作
+
+13.每次战斗结束的时候，需要还原玩家战斗前运营结束的时候的快照数据，在RestorePlayerAfterBattle还原玩家之前的数据(比如战场石灵)
+
+14.在BattleRoyalePlayer.cs中的ProcessOperation可以看到**处理一条actionx消息的流程**
+
+15.如果想在局内操作别的玩家的数据，可以看看OperationState.cs的OnRequest函数
+
+16.客户端一个执行命令完整流程， 比如现在在运营状态，客户端SendOperation，这个消息会去到OperationState.cs的OnRequest函数(在这里可以改变userid让不同的玩家执行)， 接着通过消息里面的userid把这条消息放到这个带处理消息的字典中(MessageDict)，接着遍历字典，调用ProcessOperation处理具体的消息(比如作弊就回在这里创一个CheatAction对象，后边会调用里面的Execute),  最后所有消息都会去统一的接口ExecutePlayerAction，这个接口会返回OperationResult，里面就包含了本次客户端执行操作的返回(**动画和操作结果**)
+
+17.所有客户端的action行为，服务器通过MESSAGE_TYPE_OPERATION_RESULT返回结果，客户端根据返回结果播放此次操作动画。
+
+18.客户端创建房间CreateBRGuideRoomAsync, 客户端是在收到运营开始消息的时候去播放的上一回合计算出来的**战斗结果动画**的，ReceiveBRNewRoundMsg可以看到播放动画逻辑如果startMsg.LastBattleData(服务器有两种情况会返回这个消息，如果还有下一回合，那么就在下一个运营开始时才发，如果是最后一个回合，比如引导模式，直接在Guide_BREndMsg发) 不为空，则播放上一场战斗动画,
+
+19.player.cs的RecordedMinionData保存着战斗开始前board上的石灵信息
+
+20.MinionUtils.cs  7AI的任务所需数据就来自这里的CreateGetValueFuncFromStr, 在PVEJudgeState.xlsx里面
+
+
+
+### 13.resultcode整理与显示
+
+~~~c#
+case Pb.ResultCode.RESULT_CODE_SHOP_VERIFICATION_PAYMENT_FAILURE:
+                    resultStr = LocaleManager.GetText("报错信息_商品验证支付失败");
+                    break;
+                case Pb.ResultCode.RESULT_CODE_SHOP_CONFIG_ERROR:
+                    resultStr = LocaleManager.GetText("报错信息_商品配置错误");
+                    break;
+~~~
+
+
+
+本地化配置中英文都在 LocaleConfig.xlsx里面
+
+客户端：BuildUnknownError  <====>. 服务器: result-code.go
+
+客户端的LocaleManager.cs有一些默认的显示
+
+比如“报错信息_UnknownError”，既在LocalLanguage.txt配置了中文 ，也在dicDefaultEN和dicDefaultCN单独配置了中英文
+
+### 12.android包共存 
+
+一开始就修改AndriodManifest.xml，把android:authorities改成对应的包名， 再去调用之前unity打包的命令
+
+### 11.英雄皮肤
 
 ### 10. 跑马灯
 
@@ -284,7 +372,7 @@ while (_FakePlayers.Count < guideState.GameList.Count)
 
 战斗服没什么好改的，改下读配置方式
 
-
+1.天梯之路
 
 
 

@@ -68,3 +68,151 @@ var allheroinfo = list.Select(val => new HeroInfo() { HeroID = val.Id }).ToList(
 
 
 
+10.对象设置属性
+
+~~~c#
+
+//保存石灵等级
+               public MinionCollectionInfo _minionLevelInfo;
+
+               public MinionCollectionInfo minionLevelInfo
+               {
+                   get => _minionLevelInfo;
+                   set
+                   {
+                       if (value != null)
+                       {
+                           _minionLevelInfo = value;
+                       }
+                   }
+               }
+~~~
+
+11.遍历map
+
+~~~c#
+foreach (var entry in snapShot.MinionLevel)
+            {
+                player.MinionLevelInfo.Collections.Add(new SingleMinionCollectionInfo()
+                    { MinionID = entry.Key,Level = entry.Value});
+            }
+~~~
+
+12.c#的函数注册与lambda表达式
+
+~~~c#
+p.OnBeforeEndGame += (rank, userData, battleRewardInfo, isSpecial) =>{balaba}
+
++=表示给OnBeforeEndGame函数注册时间， 后边则是lambda表达式
+~~~
+
+13.c#的Task类型
+
+~~~c#
+//1.开始一个异步操作 
+var task = Task.Run(() =>
+{
+    // 这里是异步操作
+    System.Threading.Thread.Sleep(1000);
+});
+//2.等待异步操作结束
+
+task.Wait()
+
+~~~
+
+14= 和 =>的区别
+
+~~~C#
+"="：这是一个赋值运算符
+ int a = 5
+"=>": 这被称为“箭头操作符”
+// 定义函数 或者 上边的lambda表达式
+public int Add(int x, int y) => x + y;
+// 定义只读属性
+public string Name => "Foo";
+// 定义只读属性的另外一种方式
+public override bool IsFull => HandElems.Count == Capacity;
+实质上就是
+public override bool IsFull
+{
+    get { return HandElems.Count == Capacity; }
+}
+  //用于筛选，其实也就是lambda
+  set = set.FindAll(heroinfo =>     !tmp.ChampionShipsInfo.Contains(heroinfo.HeroID));
+
+
+
+~~~
+
+15.Action的使用
+
+~~~c#
+Action<int, int> myAction = (x, y) => Console.WriteLine("Values: " + x + " and " + y);
+myAction(5, 10);  // Outputs: Values: 5 and 10
+
+lambda和action的关系
+// 定义一个 Action
+Action<int> myAction = (x) => { Console.WriteLine(x); };
+
+// 定义一个 lambda expression
+Func<int, int> myFunc = x => x * x;
+这两者之间并没有本质上的冲突或者对立，相反，它们经常一起被使用。
+~~~
+
+16.值传递和引用传递(ref和out)
+
+17.把string按照',' 分割为int类型数组
+
+~~~c#
+string[] minionIdsStr = minionIds.Split(',');
+int[] minionIdsInt = Array.ConvertAll(minionIdsStr, int.Parse);
+~~~
+
+
+
+18.获取随机种子
+
+~~~c#
+ Random random = new Random(DateTime.Now.Millisecond);
+ var seed = (uint)random.Next();;
+~~~
+
+19. 把string类型转为int
+
+~~~C#
+var num = int.parse(str)
+~~~
+
+20. ? 和 ？？的区别
+
+~~~c#
+? 以防空值
+?? 左边如果为null，则取右边的值
+string name = person?.Name ?? "Unknown";
+~~~
+
+
+
+21. delegate 委托是使用
+
+~~~c#
+例如：
+public delegate void MyDelegate(string message);
+
+一旦定义了委托类型，你就可以实例化这个委托，把它和一个方法绑定：
+// 假设有一个名为Print的方法，它的签名与委托相匹配
+public void Print(string message)  {  Console.Writeline(message);  }
+
+// 创建一个这个委托类型的实例
+MyDelegate del = new MyDelegate(Print);
+
+然后就可以调用这个委托：
+del("Hello, world!");
+
+//匿名委托
+MyDelegate del3 = delegate(string message) { Console.WriteLine(message); };
+MyDelegate del4 = message => Console.WriteLine(message); //注意一下，匿名函数返回什么，那么这个函数就是什么类型
+  
+~~~
+

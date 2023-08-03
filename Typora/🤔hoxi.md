@@ -1,4 +1,30 @@
+pve还需要留意一个地方，AddGuideTaskEffect.cs这是新手引导的
 
+疑问， 
+
+effectBuilder的BuildEffect发现问题了
+
+想问的问题， 多服是怎么实现的。
+
+test.hall.project328.hoxigames.com 8999 联赛服        
+
+approve.project328.hoxigames.com:8999 提审服    
+
+```
+查看联赛服pod有哪些
+kubectl get pods -n test
+
+查看某个pod的日志
+kubectl  logs -f test-user-data-service-6fcd5754c6-6frr5 -n test test-user-data-service --tail 100
+
+查看9005的uds
+docker ps
+docker logs 8fd5abf06c6d -f --tail 10
+```
+
+
+
+%system.teamcity.build.checkoutDir%/Assets/ 路径
 
 数据看板：账号 jiangtao	密码 nswdsm58
 
@@ -9,6 +35,14 @@ Reddit: AcademicLandscape180   nswdsm58
 Kindly_Owl_6770
 
 debug代码：/Users/jiangtao/data/project328-client/Assets/Scripts/DebugCmd/CustomCmdRegister.cs
+
+测试包：
+
+~~~
+/Applications/Unity/Hub/Editor/2020.3.47f1c1/Unity.app/Contents/MacOS/Unity -batchmode -projectPath ./ -executeMethod Build.Builder.BuildAndroid -logfile - -outputPath ~/tmp/android -cachePath ~/tmp/cache -channel Inner -packageName com.hoxigames.test.project328 -appName Project328Test -appVersion 0.99.155 -forceLog on -hallServer 47.95.6.108 -hallPort 9001 -developmentBuild false -enableProfiler false -androidVersionCode 216 -disableDebugTool off -buildAab off -deepProfiling off -quit -logFile
+~~~
+
+
 
 app：https://launch.hoxigames.com/index.html
 
@@ -86,6 +120,7 @@ docker exec -it dev3-data-redis redis-cli
 23.GameConfConstant表中记录了一些固定的游戏相关常量配置， 比如战令进阶豪华版的信息等等。
 24.注册一个玩家时需要设置最基本的信息， 比如新手礼包等等，在uds/utils/data.go的findOrCreateUserByAccountID中
 25.登陆注册过程在MainScreenSceneManager.cs中
+26.战斗服接口在TcpServer.cs
 ~~~
 
 

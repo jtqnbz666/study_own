@@ -5,6 +5,19 @@ go的main()执行前，会先执行init函数(这个init函数是别的包中的
 2.时间处理上，用2006那个时间，只要写上固定的时间，format得到的时间戳就是utc时间
 3.把字符串以某个符号分割. strings.Split(str, ",")
 4.fmt.Sprintf("%v", levelConf.Id)给字符串格式化
+5.如果改了某个框架的东西，go mod tidy
+go get gitlab.hoxigames.com/hoxi-games/hoxi-server@develop  最后的develop表示develop分支
+~~~
+
+实用技能
+
+~~~go
+将字符串分割
+"github.com/elliotchance/pie/v2"
+pie.Map(strings.Split(skinconf.Price, "|"), func(s string) int32 {
+		res, _ := strconv.Atoi(s)
+		return int32(res)
+})
 ~~~
 
 
@@ -18,7 +31,7 @@ for(int i = 0; i < 10; i ++)
 
 go  中
 //简单遍历
-for int i = 0; i < 10; i ++ {
+for  i := 0; i < 10; i ++ {
     
 }
 
