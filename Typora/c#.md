@@ -216,3 +216,25 @@ MyDelegate del4 = message => Console.WriteLine(message); //注意一下，匿名
   
 ~~~
 
+22.值类型和引用类型的区别
+
+~~~c#
+在C#中，可以使用以下方法来区分值类型和引用类型：
+内置类型和自定义类型：
+内置类型（如int、double、char等）是值类型。
+自定义类型（如class、struct、enum等）可以是值类型或引用类型，具体取决于定义时用的是class还是struct关键字。
+使用typeof运算符：
+使用typeof运算符可以获取类型，然后使用IsValueType属性来判断是否为值类型。
+使用typeof运算符获取的类型对象，调用IsClass方法来判断是否为引用类型。
+
+int是值类型，string和Person是引用类型。
+要注意的是，C#中struct类型也被认为是值类型，而class类型是引用类型。
+~~~
+
+23.as的用法
+
+~~~c#
+使用 as 关键字可以将一个对象转换为指定类型，如果不能转换，则返回 null。
+as 关键字只能用于引用类型之间的转换，对于值类型，可以使用强制类型转换（如 int x = (int)someObject;）。另外，如果进行类型转换的两个类型之间不存在继承关系，则无法使用 as 进行转换，需要使用其他方式（如显式类型转换）。
+~~~
+

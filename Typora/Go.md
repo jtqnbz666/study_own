@@ -25,11 +25,11 @@ pie.Map(strings.Split(skinconf.Price, "|"), func(s string) int32 {
 ### c++,go,lua,shell 遍历方式区别
 
 ~~~go
-c++ 中
+//c++ 中
 for(int i = 0; i < 10; i ++) 
 
 
-go  中
+//go  中
 //简单遍历
 for  i := 0; i < 10; i ++ {
     
@@ -44,7 +44,7 @@ for k, v := range array {
     //k表示索引下表，v是对应的值
 }
 
-lua 中
+//lua 中
 //简单遍历
 for i = 1,  10, 2 do //10表示最大值，2表示每次步数
 	
@@ -57,7 +57,7 @@ for k, v in pairs(t) do
 end
 
 
-shell 中
+//shell 中
 //遍历数组类型
 cnt=1
 for i in "$@" //可以不加""
@@ -76,6 +76,12 @@ for((i=10;i<40;i++))
 do
 	...
 done
+
+
+//c#中
+foreach (var val in list) {
+  
+}
 ~~~
 
 go时间

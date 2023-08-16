@@ -1,8 +1,10 @@
-pve还需要留意一个地方，AddGuideTaskEffect.cs这是新手引导的
+
+
+
 
 疑问， 
 
-effectBuilder的BuildEffect发现问题了
+
 
 想问的问题， 多服是怎么实现的。
 

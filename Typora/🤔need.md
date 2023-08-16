@@ -1,4 +1,8 @@
-### 工具
+### 16.bug
+
+1.总击杀人数不对， creategame的时候如果对方已经挂掉了，就会去新建一个player对象放进去，bug的原因是这个新建的player加载了玩家活着的时候最后一次运营结束的数据(hp > 0)， 所以即使击杀了死亡的玩家也算了人头数
+
+### 15.工具
 
 CustomCmdRegister.cs的Start()可以看到大部分客户端作弊码的命令显示行(搜索DebugLogConsole.AddCommand添加debug命令)
 
@@ -39,13 +43,14 @@ SetGuideTaskRecord可能有坑
 
 11.所有的action比如cheataction都继承于playeroperationaction，所有的action都在player.cs中，去里面搜索CheatCmd可以看到作弊码相关的，**具体处理是ExecutePlayerAction函数**(先执行Perform，就去到了playeroperationaction，根据不同的action去执行不同的execute函数)
 
-11.1 各种effet和action的关系， action中可能会初始化一个effet对象的实例，进一步执行里面的perform函数，还有另外一种方式可以在effet.xlsl中直接配置，但effet的类必须要写明标签，将effet表内容通过标签转为具体的effet实例可以看gametask.cs中的BuildLogic函数,  会把这些转换出来的实例都执行一下(effect.Run)
+11.1 各种effet和action的关系， action中可能会初始化一个effet对象的实例，进一步执行里面的perform函数，还有另外一种方式可以在effect.xlsx中直接配置，但effet的类必须要写明标签，将effet表内容通过标签转为具体的effet实例可以看gametask.cs中的BuildLogic函数,  会把这些转换出来的实例都执行一下(effect.Run)
+11.2 各种游戏事件都在GameEvent.cs中， action驱动事件，一种是之前使用getmion作弊码时的显示增加事件，还有一种是在effect表中配置，比如刷新商店的时候去显示的使用TriggerEvent遍历一下entry表中的所有刷新商店才会触发的事件。
 
 12.去HandDeck.cs和BoardDeck.cs可以看到对手牌和战场牌的操作
 
 13.每次战斗结束的时候，需要还原玩家战斗前运营结束的时候的快照数据，在RestorePlayerAfterBattle还原玩家之前的数据(比如战场石灵)
 
-14.在BattleRoyalePlayer.cs中的ProcessOperation可以看到**处理一条actionx消息的流程**
+14.在BattleRoyalePlayer.cs中的ProcessOperation可以看到**处理一条action消息的流程**
 
 15.如果想在局内操作别的玩家的数据，可以看看OperationState.cs的OnRequest函数
 
@@ -59,20 +64,21 @@ SetGuideTaskRecord可能有坑
 
 20.MinionUtils.cs  7AI的任务所需数据就来自这里的CreateGetValueFuncFromStr, 在PVEJudgeState.xlsx里面
 
+21.**加载石灵**是在convertdata.cs的ToMinion根据不同位置加载的，遍历snapShot.AllEntities的时候可以看到, 所以如果要设置一个玩家的状态可以使用LoadSnapShot，因为这里面已经有了AllEntities，
 
+22.玩家的playerskill控制着必刷石灵， 通关hero表配置playerskill，在playerskill表找到mainentries对应着entry.xlsx表，里面每一条对应着一个触发条件(程序上：从LoadAdventurePlayerStat的AddPlayerSkill可以追下去），进一步找到effect的每一项
+
+23.entry和effect并不是所有的都会触发，在GetAllListeningEntries可以看到玩家需要加载的词条有哪些(战场石灵，英雄技能...)
+
+24.1 词条加载流程(LoadEntries函数)， 每一个实体比如技能或者石灵，它们都继承了IEntryOwner，所以它们都各自拥有一个词条记录器(事件类型对应OperationEntry链表，OperationEntry是在LoadSkillFromData中构建出来的，主要包含了对应的entry表实例和判断是否满足触发条件的函数以及对应的effects，接着调用AddToEventList将这些OperationEntry加入到词条记录器) 
+24.2 词条触发流程，先TriggerEvent触发事件，再调用GetAllListeningEntries获取所有监听此事件的实体(minion，英雄技能等)对应的OperationEntry， 然后去遍历这些OperationEntry里面的effects即可(每一个effect调用run函数就会进一步去执行perform函数，可以参考作弊码cheataction进一步调用对应effct的例子)，
 
 ### 13.resultcode整理与显示
 
-~~~c#
-case Pb.ResultCode.RESULT_CODE_SHOP_VERIFICATION_PAYMENT_FAILURE:
-                    resultStr = LocaleManager.GetText("报错信息_商品验证支付失败");
-                    break;
-                case Pb.ResultCode.RESULT_CODE_SHOP_CONFIG_ERROR:
-                    resultStr = LocaleManager.GetText("报错信息_商品配置错误");
-                    break;
-~~~
+1.比如领奖系统，在一开始设计的时候就该注意返回的时候多给个参数记录resultcode，这样在具体函数中处理的时候就可以根据出错原因直接设置resultcode而不局限于只是成功或者，如果出错并且没有设置指定resultcode，就统一用300错误码
+2. 发奖励的时候记录一下该奖励的来源，方便埋点使用
 
-
+在客户端的LocalLanguage.txt中修改，点ci会自动同步到LocaleConfig.xlsx
 
 本地化配置中英文都在 LocaleConfig.xlsx里面
 
