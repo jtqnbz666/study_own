@@ -20,6 +20,32 @@ pie.Map(strings.Split(skinconf.Price, "|"), func(s string) int32 {
 })
 ~~~
 
+将map[int32]int32以json存入mysql再取出来
+
+~~~go
+存进去
+jsonData, err := json.Marshal(guidePrompt)
+res := global.MysqlIns.Where("user_id = ?", userID).
+		Updates(&model.UserGuideInfo{
+			GuidePromptJs: string(jsonData),
+		})
+
+取出来
+var restoredData map[string]int32
+	err := json.Unmarshal([]byte(user.GuidePromptJs), &restoredData)
+	if err != nil {
+		logrus.Fatal(err)
+	}
+
+	for key, value := range restoredData {
+		intKey, err := strconv.ParseInt(key, 10, 32)
+		if err != nil {
+			logrus.Fatal(err)
+		}
+		backmsg.GuidePrompt[int32(intKey)] = value
+	}
+~~~
+
 
 
 ### c++,go,lua,shell 遍历方式区别

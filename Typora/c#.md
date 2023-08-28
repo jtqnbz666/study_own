@@ -98,15 +98,9 @@ foreach (var entry in snapShot.MinionLevel)
             }
 ~~~
 
-12.c#的函数注册与lambda表达式
+13.c#的Task类型， c# 和 lua异步的相似之处
 
-~~~c#
-p.OnBeforeEndGame += (rank, userData, battleRewardInfo, isSpecial) =>{balaba}
-
-+=表示给OnBeforeEndGame函数注册时间， 后边则是lambda表达式
-~~~
-
-13.c#的Task类型
+二者有很大的区别点在于c#是多线程的异步概念， 而lua是单线程靠协程实现异步
 
 ~~~c#
 //1.开始一个异步操作 
@@ -116,8 +110,21 @@ var task = Task.Run(() =>
     System.Threading.Thread.Sleep(1000);
 });
 //2.等待异步操作结束
-
 task.Wait()
+  
+在某种程度上可以说C#中的await和Lua中的协程具有一些相似之处。当遇到await关键字时，当前方法的执行会暂时返回给调用者，线程将返回到线程池中，允许其他任务在此期间执行。一旦异步操作完成，调用将恢复，并继续执行await后面的代码。
+
+虽然C#中的await和Lua中的协程并不完全相同，并且底层实现机制也不同，但它们都提供了一种在异步操作期间暂停当前执行，并在操作完成后继续执行的机制。
+
+使用await的C#异步编程模型是基于任务（Task）和异步编程模式（async/await）的，它通过将任务封装在可等待的类型中，然后使用await等待任务的完成。
+
+而Lua中的协程（Coroutine）是一种轻量级线程，在协程之间可以进行切换，实现非阻塞的异步操作。使用协程，可以暂停一个协程的执行，切换到其他协程进行处理，并在后续某个时机恢复协程的执行。
+
+尽管await和Lua中的协程有一些相似之处，但它们的实现和使用方式有很大的差异。在C#中，await是通过异步编程模式和任务来实现的，而Lua中的协程是通过协程库和提供的API来实现的。
+
+需要注意的是，C#中的await机制更加内置和集成化，而在Lua中使用协程需要显式地管理协程之间的调度与状态。
+
+总结来说，C#中的await和Lua中的协程都提供了一种非阻塞式的异步处理机制，但实现细节和使用方式有所差异。无论如何，它们都可以在处理异步操作时提供更优雅和灵活的编程方式。
 
 ~~~
 
@@ -145,9 +152,12 @@ public override bool IsFull
 
 ~~~
 
-15.Action的使用
+15.Action和Func的使用
 
 ~~~c#
+Action是一个泛型委托类型，它不返回任何值（void），通常用于表示没有返回值的方法。Action可以接受多达16个输入参数，但不返回任何值。Action可用于执行操作，如触发事件、执行异步任务等。
+Func也是一个泛型委托类型，它可以表示具有特定输入参数和返回值的方法。Func的最后一个泛型参数表示返回值类型，对于简单的单行代码，Func委托可以使用隐式返回。但对于复杂的多行代码，仍然需要显式使用return语句来指定返回值
+  
 Action<int, int> myAction = (x, y) => Console.WriteLine("Values: " + x + " and " + y);
 myAction(5, 10);  // Outputs: Values: 5 and 10
 
@@ -155,48 +165,16 @@ lambda和action的关系
 // 定义一个 Action
 Action<int> myAction = (x) => { Console.WriteLine(x); };
 
-// 定义一个 lambda expression
+// 定义一个 lambda expression，注意Func的最后一个参数是返回类型的意思
 Func<int, int> myFunc = x => x * x;
-这两者之间并没有本质上的冲突或者对立，相反，它们经常一起被使用。
+  
+Action和Func这两者之间并没有本质上的冲突或者对立，相反，它们经常一起被使用。
 ~~~
 
-16.值传递和引用传递(ref和out)
-
-17.把string按照',' 分割为int类型数组
+16.delegate 委托(用于表示对一个或**多个方法**的引用)
 
 ~~~c#
-string[] minionIdsStr = minionIds.Split(',');
-int[] minionIdsInt = Array.ConvertAll(minionIdsStr, int.Parse);
-~~~
-
-
-
-18.获取随机种子
-
-~~~c#
- Random random = new Random(DateTime.Now.Millisecond);
- var seed = (uint)random.Next();;
-~~~
-
-19. 把string类型转为int
-
-~~~C#
-var num = int.parse(str)
-~~~
-
-20. ? 和 ？？的区别
-
-~~~c#
-? 以防空值
-?? 左边如果为null，则取右边的值
-string name = person?.Name ?? "Unknown";
-~~~
-
-
-
-21. delegate 委托是使用
-
-~~~c#
+委托（Delegate）是一种类型，用于表示对一个或多个方法的引用。委托可以实现类似函数指针的功能，允许将方法作为参数传递、存储和调用。通过委托，可以将方法作为参数传递给其他方法，实现回调和事件处理等功能。
 例如：
 public delegate void MyDelegate(string message);
 
@@ -216,7 +194,49 @@ MyDelegate del4 = message => Console.WriteLine(message); //注意一下，匿名
   
 ~~~
 
-22.值类型和引用类型的区别
+17. lamda结合委托：
+
+~~~c#
+原型： public delegate void BeforeEndGameDelegate(int rank, UserData userData, List<Reward> battleRewardInfo,bool isSpecial);
+
+p.OnBeforeEndGame += (rank, userData, battleRewardInfo, isSpecial) =>{balaba}
+
++=表示给OnBeforeEndGame函数注册事件， 后边则是lambda表达式
+~~~
+
+18. 值传递和引用传递(ref和out)
+
+19. 把string按照',' 分割为int类型数组
+
+~~~c#
+string[] minionIdsStr = minionIds.Split(',');
+int[] minionIdsInt = Array.ConvertAll(minionIdsStr, int.Parse);
+~~~
+
+20. 获取随机种子
+
+~~~c#
+ Random random = new Random(DateTime.Now.Millisecond);
+ var seed = (uint)random.Next();;
+~~~
+
+21. 把string类型转为int
+
+~~~C#
+var num = int.parse(str)
+~~~
+
+22. ? 和 ？？的区别
+
+~~~c#
+? 以防空值
+?? 左边如果为null，则取右边的值
+string name = person?.Name ?? "Unknown";
+~~~
+
+
+
+23.值类型和引用类型的区别
 
 ~~~c#
 在C#中，可以使用以下方法来区分值类型和引用类型：
@@ -231,10 +251,51 @@ int是值类型，string和Person是引用类型。
 要注意的是，C#中struct类型也被认为是值类型，而class类型是引用类型。
 ~~~
 
-23.as的用法
+24.as的用法
 
 ~~~c#
 使用 as 关键字可以将一个对象转换为指定类型，如果不能转换，则返回 null。
 as 关键字只能用于引用类型之间的转换，对于值类型，可以使用强制类型转换（如 int x = (int)someObject;）。另外，如果进行类型转换的两个类型之间不存在继承关系，则无法使用 as 进行转换，需要使用其他方式（如显式类型转换）。
+~~~
+
+25.把enum类型转为对应的值
+
+~~~c#
+enum Colors
+{
+    Red = 1,
+    Green = 2,
+    Blue = 3
+}
+static void Main(string[] args)
+{
+    Colors color = Colors.Green;
+    int value = (int)color;
+    Console.WriteLine("Enum value: " + value); // 2
+}
+~~~
+
+26. 函数里面可以有本地函数
+
+LoadMirrorData相当于PrepareAIData的本地函数
+
+~~~c#
+private void PrepareAIData()
+        {
+            // 将JSON字符串反序列化为AIHeroMirror对象列表
+            List<AIHeroMirror> mirros = new List<AIHeroMirror>();
+            mirros.Add(MirrorA.ToProtobuf<AIHeroMirror>());
+            foreach (var user in Battle.AllPlayerList)
+            { 
+                LoadMirrorData(user);
+            }
+
+            void LoadMirrorData(BattleRoyalePlayer player)
+            {
+                var used = mirros[0];
+                mirros.RemoveAt(0);
+                player.Player.Mirror = used;
+            }
+        }.   
 ~~~
 

@@ -1,10 +1,18 @@
+章节解锁的关系感觉不明确，现在默认所有章节都是解锁的么
+
+如果章节不锁定， pve任务不加限制条件吗，可能一关都没玩，任务全部做完了
+
+return snapShot.AllEntities.Where(e =>
+    e.EntityStatCase == EntityData.EntityStatOneofCase.**Minion** &&
+    e.Minion.Region == DeckRegion.**Battleground**).
+
+疑问，  1.这些任务是一局还是累加的
+
+需要做的： 先看下有多少种不同的任务类型
 
 
 
-
-疑问， 
-
-
+Todo :1. 章节限制， 2. 任务领奖限制， 3.看下种族解锁
 
 想问的问题， 多服是怎么实现的。
 

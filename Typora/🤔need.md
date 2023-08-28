@@ -1,3 +1,20 @@
+### 17.pve局外新手相关
+
+#### 17.1 任务系统
+
+328也有MergeUserdata
+
+uds：更改任务状态UpdateTaskStats
+
+Project328:在CheckRefreshTask检查生成所有的任务， addNewBPTask添加战令任务,checkDailyTask添加每日任务(进一步使用AddTaskFromConfig去uds)
+
+如何确定当前房间的模式， 构建BattleRoyale对象的时候可以看到， 
+GmaeType枚举类型(Normal和Championship)表示游戏类型，只要不是锦标赛就都是Normal；
+RoomMatchType枚举类型(Public和Private) 表示房间类型，锦标赛和排位是Public， 匹配是Private
+TeamType枚举类型，也表示游戏类型，排位赛(PublicKnockout), 匹配赛(PrivateKnockout), 锦标赛(PublicChampionShip)
+
+**使用toMinion或者toSnapShot可以保留一个状态信息， 简单说就是new了一个对象来存储信息， 就不用担心存储的是c#的指针对象。**
+
 ### 16.bug
 
 1.总击杀人数不对， creategame的时候如果对方已经挂掉了，就会去新建一个player对象放进去，bug的原因是这个新建的player加载了玩家活着的时候最后一次运营结束的数据(hp > 0)， 所以即使击杀了死亡的玩家也算了人头数
@@ -5,6 +22,10 @@
 ### 15.工具
 
 CustomCmdRegister.cs的Start()可以看到大部分客户端作弊码的命令显示行(搜索DebugLogConsole.AddCommand添加debug命令)
+
+修改商店石灵的种族：
+获取种族名字:
+foreach (var minionRaceName in Gen.GetMinionRaceNameMap().Values) =
 
 ### 14.pve对局
 
@@ -72,6 +93,8 @@ SetGuideTaskRecord可能有坑
 
 24.1 词条加载流程(LoadEntries函数)， 每一个实体比如技能或者石灵，它们都继承了IEntryOwner，所以它们都各自拥有一个词条记录器(事件类型对应OperationEntry链表，OperationEntry是在LoadSkillFromData中构建出来的，主要包含了对应的entry表实例和判断是否满足触发条件的函数以及对应的effects，接着调用AddToEventList将这些OperationEntry加入到词条记录器) 
 24.2 词条触发流程，先TriggerEvent触发事件，再调用GetAllListeningEntries获取所有监听此事件的实体(minion，英雄技能等)对应的OperationEntry， 然后去遍历这些OperationEntry里面的effects即可(每一个effect调用run函数就会进一步去执行perform函数，可以参考作弊码cheataction进一步调用对应effct的例子)，
+
+25. 在商店刷新前使用技能在player.PrepareMinionToShop加载好石灵， 然后真正刷新商店的时候先看看这里面有没有石灵
 
 ### 13.resultcode整理与显示
 
