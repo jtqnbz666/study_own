@@ -1,3 +1,39 @@
+游戏线程挂了之后影不影异步
+
+游戏里面的ping值是跟哪个服务器相关的
+
+不清楚现在有哪些东西是我可以直接用的
+
+战斗服列表怎么拿， 328server有吗
+
+~~~c#
+
+CurRoundOpInfo = startMsg;
+            if (startMsg.OnlyAward)
+            {
+                CurRoundOpInfo.UserData = startMsg.UserData;
+                CurRoundOpInfo.BattleRewardBR.AddRange( startMsg.BattleRewardBR);
+                Debug.LogError($"收到更新结算信息{startMsg}");
+                if (!WatchMode && CurShowPlayerID == PlayerDataManager.instance.UserData.ID)
+                {
+                    PlayerDataManager.instance.UserData = startMsg.UserData;
+                }
+                _MsgMgr.Close();
+                return;
+            }
+
+     //记录一下最新的运营消息
+        public BR_OperationStart CurRoundOpInfo ;
+
+CheckBRContinueOperation(CurRoundOpInfo ?? startMsg);
+~~~
+
+
+
+观战的流程是怎样的
+
+大问题，新号就算setGuide 10 ,也会去第5左右
+
 章节解锁的关系感觉不明确，现在默认所有章节都是解锁的么
 
 如果章节不锁定， pve任务不加限制条件吗，可能一关都没玩，任务全部做完了

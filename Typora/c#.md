@@ -254,9 +254,34 @@ int是值类型，string和Person是引用类型。
 24.as的用法
 
 ~~~c#
+BR_SurrenderBackMsg collector = collectMsg as BR_SurrenderBackMsg;  //其中collectMsg是IMessage 类型
+
 使用 as 关键字可以将一个对象转换为指定类型，如果不能转换，则返回 null。
 as 关键字只能用于引用类型之间的转换，对于值类型，可以使用强制类型转换（如 int x = (int)someObject;）。另外，如果进行类型转换的两个类型之间不存在继承关系，则无法使用 as 进行转换，需要使用其他方式（如显式类型转换）。
 ~~~
+
+24.is的用法, 判断一个消息的类型
+
+~~~c#
+ if (message is Uds_SelectStateMergedMsg selectStateMsg) 
+            {
+                await Task.Run(() =>
+                {
+                    // 模拟异步发送消息的操作
+                    var result = SelectStateMergedInfo(selectStateMsg);
+                });
+            }
+            else if (message is Uds_GameOverStateMergedMsg gameOverStateMsg)
+            {
+                await Task.Run(() =>
+                {
+                    // 模拟异步发送消息的操作
+                    var result = GameOverStateMergedInfo(gameOverStateMsg);
+                });
+            }
+~~~
+
+
 
 25.把enum类型转为对应的值
 
@@ -298,4 +323,72 @@ private void PrepareAIData()
             }
         }.   
 ~~~
+
+27. 很多都是引用类型, 用clone方法得到一个拷贝而不是引用
+
+~~~c#
+var res = resp.Heroes.Clone();
+public AllHeroInfo Clone() {
+  return new AllHeroInfo(this);
+}
+~~~
+
+28. Task类型举例
+
+~~~c#
+以下两种方式是等价的。
+public static Task DoSomethingAsync()
+{
+    return Task.Delay(1000);
+}
+
+public static async Task DoSomethingAsync()
+{
+    await Task.Delay(1000);
+}
+~~~
+
+
+
+29. 异步调用举例
+
+~~~c#
+public static async Task<int> CalculateValueAsync()
+{
+    Console.WriteLine("Inside CalculateValueAsync");
+
+    int result = await Task.FromResult(42);
+
+    Console.WriteLine("Calculations done");
+
+    return result;
+}
+
+public static async Task Main()
+{
+    Console.WriteLine("Before calling CalculateValueAsync");
+
+    Task<int> task = CalculateValueAsync();
+
+    Console.WriteLine("After calling CalculateValueAsync");
+
+    int result = await task;
+
+    Console.WriteLine($"Result: {result}");
+具体的调用顺序如下：
+
+1.在 Main 方法中通过 CalculateValueAsync() 调用了 CalculateValueAsync 方法。
+在 CalculateValueAsync 方法内，遇到 await Task.FromResult(42) 这个语句时，会创建一个已完成的 Task<int> 对象，并将其结果设置为 42。然后，由于使用了 await 关键字，任务的执行会返回到 Main 方法，执行后续代码。
+在 Main 方法中，在 int result = await task; 这行代码中，又一次遇到了 await 关键字。这会导致 Main 方法的执行暂停，并等待 CalculateValueAsync 方法的任务完成。
+在 CalculateValueAsync 方法内的所有计算完成之后，将会继续执行 Console.WriteLine("Calculations done") 这行代码，并打印 "Calculations done"。
+CalculateValueAsync 方法将会返回结果 42。
+Main 方法恢复执行，将 task 的结果赋值给 result。
+打印结果 "Result: 42"。在此过程中，只有一个主线程被使用。CalculateValueAsync方法内的任务在主线程上运行，而不会创建新的线程。
+  
+2.在这段代码中，如果不执行 int result = await task;，那么 Console.WriteLine("Calculations done") 将不会被执行。
+因为使用 await 关键字会等待 task 完成，并获取其结果，而不执行后续代码。如果跳过了 await task 这行代码，程序会直接继续向下执行，而不会等待 task 完成。
+因此，在不执行 int result = await task; 的情况下，Console.WriteLine("Calculations done") 不会被执行。
+~~~
+
+
 

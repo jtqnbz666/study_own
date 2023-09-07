@@ -1,3 +1,57 @@
+战斗服ping接口
+
+
+
+2c56689
+
+10313, 66816 , 31180 2417
+
+QA: 1.新英雄必出现 2. 皮肤体验卡使用成功没有 .3游戏历史数据可能影响， 4.每日首胜, 2.死亡的时候好友列表是否正常 56.游戏历史记录
+
+自测过的内容，天梯分变化，战绩、结算奖励(显示发奖与实际货币增长相符)， 首选卡数量， 最近系列英雄排序。
+
+历史数据如果出问题就拆出来
+
+当前已处理的调用：
+
+gamehistory里面：**Setuserguideround**， 把体验控制合并到里面计划
+
+BeforeEndGame之前返回的是reward，太丑了，应该把奖励作为参数
+
+更新天梯分函数返回一个待准备消息
+
+首选卡会阻塞游戏，不能合并
+
+观战要改异步吗，观战是个问题， 也会跟uds交互,  不管还是搞成异步， 合并也不好合并
+
+
+
+### 
+
+### 19. 优化战斗服对uds的调用
+
+一切的请求都围绕BattleRoyale对象，它继承了很多东西。
+
+创建**BattleRoyale对象**的时候会记录每个玩家的信息(RecordTeamMember),建立映射关系， 然后进入到等待确认状态机。
+
+玩家如果点击确认，就会调用join， 这里面就会去调用uds来初始化一个BattleRoyalePlayer对象, 并且会建立userID<-->roomID的映射
+
+OnBeforeEndGame的最后一个参数是isSpecial ， 如果是正常失败或投降，它就是true， 如果是排位组队，ttf会根据队伍最后一名挂掉的玩家来计算， 最后的玩家挂的时候会去调用一同组队的玩家的OnBeforeEndGame，这个时候设置为false， 就只涉及uds的调用，由uds主动推送给组队的玩家
+
+借鉴现在生成AI的TASK实现(BeginCalculateAISnapshot)，
+
+很多地方难免需要调用uds， 比如今日首胜， 不可以避免的要拿到用户最新的任务数据判断一下
+
+添加
+
+### 18.机制bug
+
+Todo: 石灵maxlevel 。2。老号pve任务加载有问题。 3.老夫子bug
+
+在Battle.cs里面的atk.Begin进行一次攻击的计算，两个石灵伤害的扣除在DamageMinion(有两个， 第一个是被打的，第二个是自己受反击)
+
+2. 触发事件的时候有一个是判断函数JudgerFunc(与它相关的是TriggerHelper.cs)，另一个是选择目标函数SelectorFunc(若是石灵则TargetHelper.cs和若是玩家则playerTargetHelper.cs)
+
 ### 17.pve局外新手相关
 
 #### 17.1 任务系统
@@ -12,6 +66,8 @@ Project328:在CheckRefreshTask检查生成所有的任务， addNewBPTask添加�
 GmaeType枚举类型(Normal和Championship)表示游戏类型，只要不是锦标赛就都是Normal；
 RoomMatchType枚举类型(Public和Private) 表示房间类型，锦标赛和排位是Public， 匹配是Private
 TeamType枚举类型，也表示游戏类型，排位赛(PublicKnockout), 匹配赛(PrivateKnockout), 锦标赛(PublicChampionShip)
+
+更新状态还没有处理（八人合并）
 
 **使用toMinion或者toSnapShot可以保留一个状态信息， 简单说就是new了一个对象来存储信息， 就不用担心存储的是c#的指针对象。**
 
@@ -91,14 +147,19 @@ SetGuideTaskRecord可能有坑
 
 23.entry和effect并不是所有的都会触发，在GetAllListeningEntries可以看到玩家需要加载的词条有哪些(战场石灵，英雄技能...)
 
-24.1 词条加载流程(LoadEntries函数)， 每一个实体比如技能或者石灵，它们都继承了IEntryOwner，所以它们都各自拥有一个词条记录器(事件类型对应OperationEntry链表，OperationEntry是在LoadSkillFromData中构建出来的，主要包含了对应的entry表实例和判断是否满足触发条件的函数以及对应的effects，接着调用AddToEventList将这些OperationEntry加入到词条记录器) 
+24.1 词条加载流程(LoadEntries函数)， 每一个实体比如技能或者石灵，它们都继承了IEntryOwner，所以它们都各自拥有一个词条记录器(事件类型对应OperationEntry链表，OperationEntry是在LoadSkillFromData中构建出来的，主要包含了对应的entry表实例和判断是否满足触发条件的函数、selector选择器以及对应的effects，接着调用AddToEventList将这些OperationEntry加入到词条记录器) 
 24.2 词条触发流程，先TriggerEvent触发事件，再调用GetAllListeningEntries获取所有监听此事件的实体(minion，英雄技能等)对应的OperationEntry， 然后去遍历这些OperationEntry里面的effects即可(每一个effect调用run函数就会进一步去执行perform函数，可以参考作弊码cheataction进一步调用对应effct的例子)，
 
 25. 在商店刷新前使用技能在player.PrepareMinionToShop加载好石灵， 然后真正刷新商店的时候先看看这里面有没有石灵
+25. 战吼流程：上场的时候如果该石灵拥有战吼技能就播放战吼动画并且将该战吼石灵(player.BattleCryingMinion)， 过程中如果操作不规范就是退出战吼状态， 如果成功选择目标则把刚才记录的战吼石灵放上战场，并且对被选择的石灵添加属性。
+25. 光环和entry的理解， 光环比如说蝉鸣谋士和猴长老， 光环更像是加的一种效果，但如果你移除蝉鸣谋士或猴长老效果就会消息， 而entry则是一种触发后无法取消的效果
+
+
 
 ### 13.resultcode整理与显示
 
 1.比如领奖系统，在一开始设计的时候就该注意返回的时候多给个参数记录resultcode，这样在具体函数中处理的时候就可以根据出错原因直接设置resultcode而不局限于只是成功或者，如果出错并且没有设置指定resultcode，就统一用300错误码
+
 2. 发奖励的时候记录一下该奖励的来源，方便埋点使用
 
 在客户端的LocalLanguage.txt中修改，点ci会自动同步到LocaleConfig.xlsx

@@ -18,6 +18,11 @@ pie.Map(strings.Split(skinconf.Price, "|"), func(s string) int32 {
 		res, _ := strconv.Atoi(s)
 		return int32(res)
 })
+
+在切片中根据条件找出某个元素
+pie.FindFirstUsing(user.FinishAdventureInfo.ChapterFinishInfo, func(chapterInfo *pb.ChapterInfo) bool {
+			return chapterInfo.ChapterId == task.ExtraInfo.ChapterId && pie.Contains(chapterInfo.CustomsPass, task.ExtraInfo.CustomsId)
+		})
 ~~~
 
 将map[int32]int32以json存入mysql再取出来
@@ -1445,11 +1450,29 @@ fmt.Println(v1.Interface())// "I like hh"
 
 ### gorm
 
+遇到的坑
+
+~~~go
+1.如果使用了select，那么update只能更新select中有的字段， 不会改变其他字段，特别注意，select的多个字段是分开的，不能放在一起，比如"age", "name", 而不是"age, name", 而where是放在一个引号中的，这一点需要特别注意。
+23.表第一次创建好之后，后边修改以前某些字段的属性，不会生效，要么就用新的字段名要么就删除原来的字段结构
+5.使用global.MysqlIns.Model(&model.UserGuideInfo{}).
+		Where("user_id = ?", userID).
+		//Select("new_hand_trigger_guide_info").
+		Updates(model.UserGuideInfo{NewHandTriggerGuideInfo: triggerInfoStr})， 如果triggerInfoStr为空无法更新， 必须加上Select。或者用
+var userGuideInfo model.UserGuideInfo
+global.MysqlIns.Model(&model.UserGuideInfo{}).Where("user_id = ?", userID).First(&userGuideInfo)
+userGuideInfo.NewHandTriggerGuideInfo = triggerInfoStr
+global.MysqlIns.Save(&userGuideInfo)
+~~~
+
+
+
 ~~~go
 1.只要第一次把执行了AutoMigrate创建了表结构，后边就可以不执行这个函数，直接修改表结构(增加或者删除某个字段)也会同步产生效果
 2.通过First(&user)找到一条或者Find(&[]uesr)找到所有符合条件的，就可以通过这个user结构得到查询的结果，使用select对指定字段查询时，user只要与对应字段能够匹配上即可，不是必须要求查询出来的结构体和表的结构体完全一致。
-3.如果使用了select，那么update只能更新select中有的字段， 不会改变其他字段，特别注意，select的多个字段是分开的，不能放在一起，比如"age", "name", 而不是"age, name", 而where是放在一个引号中的，这一点需要特别注意。
-4.表第一次创建好之后，后边修改以前某些字段的属性，有可能不会生效。
+
+
+
 package main
 
 import (
