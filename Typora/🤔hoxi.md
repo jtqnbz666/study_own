@@ -1,54 +1,85 @@
-游戏线程挂了之后影不影异步
+/var/lib/docker/volumes/931bcd98e0d1c986fae253f388316007e0bec9d9932bc367206050fcec686db6/_data
 
-游戏里面的ping值是跟哪个服务器相关的
+/Users/a123/.deploy-tool/dev/mongo
 
-不清楚现在有哪些东西是我可以直接用的
 
-战斗服列表怎么拿， 328server有吗
 
-~~~c#
-
-CurRoundOpInfo = startMsg;
-            if (startMsg.OnlyAward)
+~~~
+public SelectMirrorBackMsg Select()
+        {
+            LogHelper.WriteLog("开始为战斗选择镜像:\n" + _Param);
+            
+            var ret = new SelectMirrorBackMsg();
+            var usedHeroSet = new HashSet<int>();
+            var curUserSet = new HashSet<ulong>(_Param.ExcludeUid);
+          
+            var mirrorCnt = _SavedMirror["AIMirror_KnockoutPool_1_4_101_All|Devil|Insect|Mutant|Neutral|Royale|Wild_Insect|Royale"];
+            for (var i = 0; i <  _Param.NeedCnt; i++)
             {
-                CurRoundOpInfo.UserData = startMsg.UserData;
-                CurRoundOpInfo.BattleRewardBR.AddRange( startMsg.BattleRewardBR);
-                Debug.LogError($"收到更新结算信息{startMsg}");
-                if (!WatchMode && CurShowPlayerID == PlayerDataManager.instance.UserData.ID)
+                var index = RandomUtil.Next(0, mirrorCnt);
+                var json = MirrorRedis.db.ListGetByIndex("AIMirror_KnockoutPool_1_4_101_All|Devil|Insect|Mutant|Neutral|Royale|Wild_Insect|Royale", index);
+                AIHeroMirror mirror = null;
+                try
                 {
-                    PlayerDataManager.instance.UserData = startMsg.UserData;
+                    mirror = ((string)json).ToProtobuf<AIHeroMirror>();
                 }
-                _MsgMgr.Close();
-                return;
+                catch (Exception)
+                {
+                    LogHelper.WriteError($"镜像格式出错,跳过该镜像:\n{"AIMirror_KnockoutPool_1_4_101_All|Devil|Insect|Mutant|Neutral|Royale|Wild_Insect|Royale"}\n{json}");
+                }
+
+                if(mirror == null) continue;
+                // 兼容之前的数据
+                mirror.RedisKey = "AIMirror_KnockoutPool_1_4_101_All|Devil|Insect|Mutant|Neutral|Royale|Wild_Insect|Royale";
+                usedHeroSet.Add(mirror.HeroId);
+                ret.Results.Add(mirror);
+                // 每个RedisKey只选一个,保证多样
+                break;
             }
-
-     //记录一下最新的运营消息
-        public BR_OperationStart CurRoundOpInfo ;
-
-CheckBRContinueOperation(CurRoundOpInfo ?? startMsg);
+            LogHelper.WriteLog($"选择到{ret.Results.Count}个镜像\n" +
+                               $"{string.Join("\n", ret.Results.Select(r => r.RedisKey))}");
+            return ret;
+        }
 ~~~
 
 
 
-观战的流程是怎样的
+SummonPlainMinionNumOneRound
 
-大问题，新号就算setGuide 10 ,也会去第5左右
+日志编码格式？ 190, 532.   98,463.  498 145
 
-章节解锁的关系感觉不明确，现在默认所有章节都是解锁的么
+taptap和google的差异只有gb和fb吗，在哪
 
-如果章节不锁定， pve任务不加限制条件吗，可能一关都没玩，任务全部做完了
+taptap的日志在哪看
 
-return snapShot.AllEntities.Where(e =>
-    e.EntityStatCase == EntityData.EntityStatOneofCase.**Minion** &&
-    e.Minion.Region == DeckRegion.**Battleground**).
+所有的panel，开发新功能的时候记录一下名字？
 
-疑问，  1.这些任务是一局还是累加的
+随机种族是干嘛的
 
-需要做的： 先看下有多少种不同的任务类型
+之前战斗结果是怎么呈现给你的
+
+是不是需要全部模拟战斗得到分档结果才能使用分档模拟战斗
+
+有个字段叫镜像等级我看是根据天梯分计算出来的，跟分档没有关系吧，具体分档还是看实力
+
+分档的档，哪个字段可以看出来她是第几档的 offline
+
+分档是根据啥分的，按照斜率排序吗
+
+g m-tool上的分档数是啥意思， 我看文档写的是4
+
+前x名晋级，x是在哪传递的参数
+
+~~~c#
+case Pb.ResultCode.RESULT_CODE_TASK_NO_REWARDS_TO_CLAIM:
+                    resultStr = LocaleManager.GetText("报错信息_任务_没有可领取的奖励");
+                    break;
+报错信息_任务_没有可领取的奖励~没有可领取的奖励~
+~~~
+
+![image-20231012192210562](/Users/a123/Library/Application Support/typora-user-images/image-20231012192210562.png)
 
 
-
-Todo :1. 章节限制， 2. 任务领奖限制， 3.看下种族解锁
 
 想问的问题， 多服是怎么实现的。
 
@@ -63,9 +94,19 @@ kubectl get pods -n test
 查看某个pod的日志
 kubectl  logs -f test-user-data-service-6fcd5754c6-6frr5 -n test test-user-data-service --tail 100
 
+服务器的所有日志
+/k8s-data/fluentd  联赛服是以k8s_test开头的
+
 查看9005的uds
 docker ps
 docker logs 8fd5abf06c6d -f --tail 10
+
+联赛服数据库
+kubectl get svc -n test
+里面有个test-mysql，能看到extanelname，是个地址
+15:54
+mysql -h 那个地址 -uroot -p
+密码是hoxi0328JING
 ```
 
 

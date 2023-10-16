@@ -8,3 +8,4 @@ goland中：command+shift+f 全局搜索，+o 搜索文件
 
 control+command + f 应用全屏
 
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" 下载brew

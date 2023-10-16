@@ -154,6 +154,7 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH:/opt/homebrew/bin
 
 vim中set list 显示不可见字符， set nu 显示行号
 
+docker logs的时候加个-f 持续看输出内容
 
 在etc/profile 修改配置，就是永久有效的
 

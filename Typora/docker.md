@@ -28,10 +28,9 @@ docker run -it -v mongo_volume:/data/db/mongo -p 27017:27017 --name mongodb -d m
 
 
 查看日志
-
 docker logs 容器名
-
-
+持续看
+docker logs 8fd5abf06c6d -f --tail 10
 
 docker tag : 标记本地镜像，将其归入某一仓库。
 举例：将镜像ubuntu:15.10标记为 runoob/ubuntu:v3 镜像。

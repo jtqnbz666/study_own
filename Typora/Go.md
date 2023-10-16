@@ -1,12 +1,21 @@
+**好用的框架**
+
+~~~go
+1. ini文件读取相关：ini库，"github.com/go-ini/ini"
+~~~
+
+
+
 **小知识**
 
 ~~~
 go的main()执行前，会先执行init函数(这个init函数是别的包中的也是一样)， init函数执行前会先初始化全局变量
 2.时间处理上，用2006那个时间，只要写上固定的时间，format得到的时间戳就是utc时间
-3.把字符串以某个符号分割. strings.Split(str, ",")
+3.把字符串以某个符号分割. strings.Split(str, ",")， 如果是切片合为字符串：strings.Join(切片, ",")
 4.fmt.Sprintf("%v", levelConf.Id)给字符串格式化
 5.如果改了某个框架的东西，go mod tidy
 go get gitlab.hoxigames.com/hoxi-games/hoxi-server@develop  最后的develop表示develop分支
+6.两个切片合并。 append(chan1, chan2...)
 ~~~
 
 实用技能
@@ -558,6 +567,9 @@ make 的第二个参数表示长度， 第三个参数表示容量
 intSlice := make([]int, 0)
 mapStringInt := make(map[strint]int) //加了数字也没用
 ch 	:= make(chan int, 4)
+
+输入类型：chan<- *ProducerMessage
+输出类型：<-chan *ProducerMessage
 ~~~
 
 ### chanel管道使用
@@ -1463,6 +1475,7 @@ var userGuideInfo model.UserGuideInfo
 global.MysqlIns.Model(&model.UserGuideInfo{}).Where("user_id = ?", userID).First(&userGuideInfo)
 userGuideInfo.NewHandTriggerGuideInfo = triggerInfoStr
 global.MysqlIns.Save(&userGuideInfo)
+6. 查询语句标明某个字段的时候要么啥都不加，要么加的是` `而不是 ' '
 ~~~
 
 

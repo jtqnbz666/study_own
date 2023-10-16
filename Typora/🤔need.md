@@ -1,10 +1,4 @@
-战斗服ping接口
 
-
-
-2c56689
-
-10313, 66816 , 31180 2417
 
 QA: 1.新英雄必出现 2. 皮肤体验卡使用成功没有 .3游戏历史数据可能影响， 4.每日首胜, 2.死亡的时候好友列表是否正常 56.游戏历史记录
 
@@ -24,9 +18,203 @@ BeforeEndGame之前返回的是reward，太丑了，应该把奖励作为参数
 
 观战要改异步吗，观战是个问题， 也会跟uds交互,  不管还是搞成异步， 合并也不好合并
 
+### 30. 镜像
+
+一般镜像level-排名-英雄
+
+把测试服的镜像搞到本地：先找到aof文件的位置：
+
+~~~
+docker exec -it dev4-mirror-redis redis-cli config get dir
+~~~
+
+进入mirror-redis
+
+~~~
+docker exec -it dev5-mirror-redis redis-cli
+~~~
 
 
-### 
+
+获取某个redis容器的aof：
+
+~~~
+docker cp 488132640bd0:/data/appendonly.aof  .
+~~~
+
+先清空
+
+~~~
+docker exec -i mirror-redis redis-cli flushall
+~~~
+
+再加载
+
+~~~
+拿到aof文件之后，docker exec -i mirror-redis redis-cli --pipe < aof文件位置(注意没有t)
+~~~
+
+
+
+创建mirror-redis镜像
+
+~~~
+docker run -d --name mirror-redis -p 6379:6379 --memory=4096m -v /Users/a123/.deploy-tool/dev/mirror-redis:/data docker.hoxigames.com/redis:6.2.4-alpine3.13 redis-server --appendonly yes
+~~~
+
+
+
+### 29. pve前端
+
+guidesection中的isClientAction，如果涉及到战吼状态，就应该置为1， 完全让前端去判断是否按照要求做了
+
+失败弹框：ShowAdventureFail();
+
+章节：PVEChapterPanel
+
+pve胜利界面：ResultShowAdapter.ShowAdventureCloseUp(msg, this);]
+
+pve投降结算：ShowAdventureCloseUp
+
+### 28.日志系统
+
+#### docker直接看9001-9005
+
+docker ps -aqf "name=dev5-project328-battle-royale-server" 查看有哪些dockerid
+
+#### 所有日志的地方
+
+看consumer：
+
+~~~
+cat data.20231013.log | grep HoxiConsumer |grep k8s_test | grep 10360
+~~~
+
+看uds：
+
+~~~
+cat data.20231013.log | grep UserDataService | grep 设置玩家战斗状态 | grep 10130
+~~~
+
+
+
+战斗服：BattleRoyaleServer
+
+uds：UserDataService
+
+328:HallServer
+
+broadcast/consumer：HoxiBroadcaster/HoxiConsumer
+
+director：Director
+
+Dev5：172.17.0.1_dev5
+
+taptap服务器：172.24.106.255_taptap231001 
+
+联赛服：k8s_test
+
+grep
+
+~~~
+搜索不包含一下任一字段的内容 grep -vE 'SelectHero|InBattle|IsMatching|WaitingForPreparation|InTeam|Watching|InAdventureBattle'   不要-v就是包含任一字段的意思
+~~~
+
+
+
+### 27. 兜底提示前端
+
+guideprompt表， 用事件(比如GlobalGuideEventType.OnOperationStart)去触发某些效果
+
+### 26. 打包相关
+
+海外包：内测用/海外测试google play打包
+taptap：外部体验客户端/Android外部预览包
+
+ASMDEF文件主要用于管理脚本文件，并定义程序集之间的依赖关系，以及对编译设置进行精细控制。Manifest文件则用于管理Unity Package，定义其属性和依赖关系，以及描述所需资源和文件。ASMDEF文件用于组织和编译一组脚本，而Manifest文件用于定义Unity Package及其属性和依赖项。
+
+### 25. gm前端
+
+在src/components/App.jsx中写布局信息(会引用到路由信息，也就是指向一个具体执行函数的地址)， 写 src/index.jsx下写路由信息， 
+
+### 25.guidepromot 重连问题
+
+客户端战斗阶段重新连接处理：BRBattleSceneManager.c s的ReconnectBROperation可以看到
+
+### 24. 本地化
+
+在客户端的LocalLanguage.txt中修改，点ci会自动同步到LocaleConfig.xlsx
+
+本地化配置中英文都在 LocaleConfig.xlsx里面
+
+如果是在Locale.xlsx里面的修改，先去点下ci会生成内容到待翻译的文本， 然后由LAQ翻译好后再导出就会到LocaleConfig.xlsx
+
+![image-20231010132608946](/Users/a123/Library/Application Support/typora-user-images/image-20231010132608946.png)
+
+如果是添加文本直接在客户端的LocalLanguage.txt加了ci，就会生成到所有.csv中， 如果中途需要修改文本内容，直接在程序赋值使用.csv修改后点ci会进一步到待翻译的文本.csv, 让LQA翻译即可
+
+### 23. 战绩拉取优化
+
+游戏类型(gamemode)， 锦标赛：1020100， 排位赛：1010100， 匹配赛：1010200
+
+mongo保存快照，mysql只做简单信息存储
+
+查看战绩详情流程：**核心是mysql的recordid（也就是主键id）对应mongo的记录id**
+ mongo记录玩家自己的快照信息以及历史记录的recordId(对应mysql的历史记录表的id)，如果点击查看详情，就会立马给大厅服发送请求GetBattleResultMsg， 通过recordid可以知道gameid， 同一局游戏玩家记录的gameid是相同的，筛选出gameid相同的记录，依次用这些记录的recordid去mongo里面拿到这局游戏的所有玩家快照，再通过rank进行一个排序，返回给客户端进行展示
+
+个人主页信息都是uds通过buildStatisticsInfo得到的，游戏历史记录也是，通过mysql的UserGameHistoryRecord表得到所有记录，用这些记录的主键id也就是上边说的recordid去mongo里面拿数据再返回给客户端
+
+玩家历史游戏记录存在于PersonalGameHistory
+
+展示结算页面(其实战绩的详情页也是打开了结算页)ResultPanel
+
+### 22. 开宝箱
+
+更新周进度：NotifyServerUpdateLottery
+
+### 21.前端记录
+
+获取战斗服的链接
+
+~~~c#
+ var battleSer = new BattleRoyaleMsgMgrAdapter();
+            _msgMgr = battleSer;
+            _msgMgr.RegisterPushMessage<BR_OperationStart>(MessageType.MESSAGE_TYPE_BR_OPERATION_START,
+                EnterBattleScene);
+~~~
+
+
+
+好友：1.loadingUtils 好友增删消息监听 2.MateInfo: 好友状态相关  3.好友申请界面ApplicationView 4.单个好友申请对象ApplicationCard
+个人主页: personalPagePanel.cs(战绩以及个人主页信息)
+
+邮箱处理：mailPanel.cs
+
+音乐音效类型：audioPathConst.cs
+
+游戏内倒计时：countdownbar(RefreshSecond)
+
+展示4个英雄槽位：firstpanel.    beforefanel是禁用种族那个界面
+
+选择英雄倒计时: secondpanel.cs（点了firstpanel就会进这个）
+
+前端也有不同的状态， 可能会在不同的状态注册相同的信息比如英雄选择界面也得注册**MESSAGE_TYPE_BR_OPERATION_START**，以及运营状态， 状态切换的时候记得取消注册UnRegisterPushMessage
+
+前端收到**MESSAGE_TYPE_BR_GAME_START**进入选择英雄界面，这个消息里面带了选择游戏的时间戳**(60s)**
+
+前端收到**MESSAGE_TYPE_MATCH_CONFIRM_DATA_CHANGE**表示有玩家点了确认加入房间按钮
+
+获取某个panel对象：UIManager.Instance.GetPanelInstance<SecondPanel>().
+
+运营阶段的左下角个人信息:PlayerDisplay
+
+游戏过程中，进入下一回合更新画面信息：PlayerDisplayData()
+
+### 20.好友系统
+
+1.mysql表(friend_ships)，每条记录对应一个user_one和一个user_two。一条好友记录只用记录一条，不用交换记录两条
+
+2.双方只会有一个人有未读消息，好友关系表记录未读的人，以及未读条数
 
 ### 19. 优化战斗服对uds的调用
 
@@ -56,6 +244,10 @@ Todo: 石灵maxlevel 。2。老号pve任务加载有问题。 3.老夫子bug
 
 #### 17.1 任务系统
 
+一键领取战令奖励：GetAllBPTasksReward
+
+一键领取任务奖励：GetAllWeekDailyTasksReward
+
 328也有MergeUserdata
 
 uds：更改任务状态UpdateTaskStats
@@ -73,15 +265,59 @@ TeamType枚举类型，也表示游戏类型，排位赛(PublicKnockout), 匹配
 
 ### 16.bug
 
-1.总击杀人数不对， creategame的时候如果对方已经挂掉了，就会去新建一个player对象放进去，bug的原因是这个新建的player加载了玩家活着的时候最后一次运营结束的数据(hp > 0)， 所以即使击杀了死亡的玩家也算了人头数
+1. 总击杀人数不对， creategame的时候如果对方已经挂掉了，就会去新建一个player对象放进去，bug的原因是这个新建的player加载了玩家活着的时候最后一次运营结束的数据(hp > 0)， 所以即使击杀了死亡的玩家也算了人头数
+
+2. 模拟战斗工具， game在一开始运营就会创建，并且加入gamelist， game里面有一个curbattle会在计算战斗的时候创建，并且会连接在game上， 所以不要轻易改动玩家的game对象
+
+3. 组队相关：邀请好友会先去328然后回到被邀请者的客户端MESSAGE_TYPE_TEAM_JOIN_REQUEST， 被邀请者的响应为MESSAGE_TYPE_TEAM_JOIN_RESPONSE。
+
+4. 匹配成功会客户端会收到OnMatchFinish，进一步打开确认UI，这些相关的操作可以在客户端的Scripts/Battleroyale/Team下看到
+
+5. 孔苏bug： 投降玩家也会有还原玩家数据的步骤，需要注意player转储
+
+6. 蝉， 主要是光环问题， aura对象，里面会构建一些东西，比如GetBuffAtk和GetBuffHp，根据配表的值配合CreateGetValueFuncFromStr得到需要增加的攻击和生命， 这里面有一个BeginReceiveAuraFlag控制是否开始接收光环效果， 每次去获取石灵的atk，就会遍历玩家的光环列表auraList，比如蝉的光环列表就有加攻击和生命，所以在auraList.Add(aura)，add的那一刻就会给商店的石灵加上攻击和生命, 但BeginReceiveAuraFlag加完攻击和生命之后就会置为false，当你买石灵的时候回去遍历玩家光环，这个时候会把光环的效果转化为实际的buff，获取石灵的Attack时，虽然BeginReceiveAuraFlag为false，但buff里面有数据了，就会从buff里面给石灵加上永久的增效， 所以本质上还是通过buff加的，光环只是临时的效果
+
+7. 华鹿bug， 游戏技能可以在playerskill中看到技能类型， 可以在BuildPlayerSkill看到加载词条的过程， 不管是什么类型如果有词条都会加载（如果不是被动类型的技能是通过ActiveSkill构造基类ActiveEntity加载的词条）。
+   如果是普通的词条判断是否可用在EntryBuilder.cs中的judgeFunc判断， 而如果是技能类型的词条(被动技能除外)判断是否可用在ActiveEntity中， 但实质上他们都是同一个委托类型(EntryImplementation.JudgerFunc), 具体的判断函数都是用的TriggerHelper.cs中的函数。
+
+   一句话：前端显示英雄技能是否可用，每次执行一个操作都会去ExecutePlayerAction，然后会检测是否需要播放动画， 这里面就包含了前端技能状态的更新，调用了CheckCanUse来检测这个技能是否可用
+
+   不是只有targethelper和triggerhelper， 比如NumberCompare(MyGoldMinionCount,NoSmallerThan,6)，MyGoldMinionCount会去**CreateGetValueFuncFromStr(用的很多，通过字符串获取用户某个属性经常用)**中，进一步使用GetNumWithCounter利用反射去遍历configCountUtils.cs里面的计数函数。
+
+8. pve回溯，玩家的计数器没有清空， 用到了GetSummonPlainMinionNumOneRoundFromPlayerCounter，这里面的Get和FromPlayerCounter是固定的
 
 ### 15.工具
+
+AI模拟战斗：
+
+最小二乘拟合直线: 就是给一些坐标点，求一条坐标上的直线，使得这条直线到这些点的总和最小
+
+~~~
+最小二乘法的目标是找到一条直线，使得数据点到直线的距离之和最小，也就是使得拟合误差最小化。具体做法是通过最小化平方误差和来估计直线的斜率和截距。
+
+在最小二乘拟合直线中，斜率代表直线的倾斜程度，而截距则是直线与y轴的交点。拟合直线的斜率和截距可以用来描述两个变量之间的关系。斜率反映了自变量单位变化时因变量的变化情况，而截距表示在自变量为0时因变量的取值。
+
+最小二乘法广泛应用于许多领域，包括回归分析、数据拟合和线性模型等。它为数据建模提供了一种简单而有效的方法，并且在许多情况下可以提供可靠的结果
+~~~
+
+方差
+
+~~~
+方差可以用来判断数据的离散程度。如果方差较小，表示数据点较集中；如果方差较大，表示数据点较分散。
+方差的数学表达式为：Var(X) = Σ[(X - μ)^2] / N    μ是平均值的意思
+~~~
+
+
 
 CustomCmdRegister.cs的Start()可以看到大部分客户端作弊码的命令显示行(搜索DebugLogConsole.AddCommand添加debug命令)
 
 修改商店石灵的种族：
 获取种族名字:
 foreach (var minionRaceName in Gen.GetMinionRaceNameMap().Values) =
+
+snapshot最好还是在pb里写一份， tmd在外边如果是list类型，一直被优化成同一个对象了。
+
+-  锦标赛灵宝获取debug
 
 ### 14.pve对局
 
@@ -161,10 +397,6 @@ SetGuideTaskRecord可能有坑
 1.比如领奖系统，在一开始设计的时候就该注意返回的时候多给个参数记录resultcode，这样在具体函数中处理的时候就可以根据出错原因直接设置resultcode而不局限于只是成功或者，如果出错并且没有设置指定resultcode，就统一用300错误码
 
 2. 发奖励的时候记录一下该奖励的来源，方便埋点使用
-
-在客户端的LocalLanguage.txt中修改，点ci会自动同步到LocaleConfig.xlsx
-
-本地化配置中英文都在 LocaleConfig.xlsx里面
 
 客户端：BuildUnknownError  <====>. 服务器: result-code.go
 

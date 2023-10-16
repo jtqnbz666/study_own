@@ -224,5 +224,11 @@ git push origin test
 情况四：继情况三结束后，main分支比test分支多了一个文件xx，此时如果在test分支对某个文件进行修改但是未提交或者暂存，则无法切换到main分支去。 所以必须要在test分支下git push， 如果是多个协作者在test分支下进行操作， 那么自然需要先处理好test分支下的冲突，并且在test分支下完成提交(我平时在公司和家就可以理解为多协作者解决test分支的冲突)，再切换到main分支下进行合并。
 ~~~
 
-删除commit记录
+何时多个分支会在同一个commit节点
+~~~
+比如在一次从release新开了一个分支online，那么他两在同一个节点， 此时release有多次修改， 那么站在online分支上，将relase合并到online上，此时是不会产生心的commit的（可以理解为online只是落后了release，但他们在同一条线上）此时你如果不小心把online搞到release上了， 可以使用revert(不雅观会多一个commit节点)也可以reset到之前的online位置；
+而如果release和online都进行的大量的不同修改， 此时在online(release)分支合并release(online)分支都会产生新的commit节点。 
+
+简而言之就是：同一条分支上就不会产生新的commit， 如果是分叉路上的两个节点就会有新的commit
+~~~
 

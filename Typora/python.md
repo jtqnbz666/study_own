@@ -173,3 +173,31 @@ str = json.dumps(js, ensure_ascii=False)	#这样就是utf-8字符串了
 field1 = js['name']  #如果你的name对应的value是一个json对象，那么可以直接把field1当成json对象使用， 否则必须把field1转化为json对象才可以进一步解析field1中的子字段
 ~~~
 
+12. 如果需要把一个已经含有转义字符的字符串搞成正常json串
+
+~~~
+import redis
+import ast
+
+# 连接到特定的Redis容器
+redis_client = redis.Redis(host='localhost', port=6379, password='', db=0)
+
+# 读取文件内容
+with open('opDamage.txt', 'r') as file:
+    new_str = file.read().strip()
+
+# 将字符串转换为字典
+new_dict = ast.literal_eval(new_str)
+
+# 获取所有以AIMirror_KnockoutPool为前缀的key
+#keys = redis_client.scan_iter("AIMirror_KnockoutPool*")
+keys = redis_client.scan_iter("AIMirror_KnockoutPool_1_8_117_All|Devil|Insect|Mutant|Neutral|Wild_Devil|Wild")
+# 遍历每个key并进行操作
+for key in keys:
+    # 获取list的长度和元素
+    list_len = redis_client.llen(key)
+    for index in range(list_len):
+        # 将元素替换为新字符串
+        redis_client.lset(key, index, new_dict)
+~~~
+

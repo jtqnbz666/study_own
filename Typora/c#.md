@@ -100,7 +100,7 @@ foreach (var entry in snapShot.MinionLevel)
 
 13.c#的Task类型， c# 和 lua异步的相似之处
 
-二者有很大的区别点在于c#是多线程的异步概念， 而lua是单线程靠协程实现异步
+二者有很大的区别点在于c#是多线程的异步概念(不是说异步就一定会新开线程，而是一般会配合task使用， task会创建新的线程， 对应lua而言，会阻塞等待去执行别的地方，而c#不会阻塞主线程继续往后执行。)， 而lua是单线程靠协程实现异步
 
 ~~~c#
 //1.开始一个异步操作 
@@ -348,47 +348,109 @@ public static async Task DoSomethingAsync()
 }
 ~~~
 
-
-
-29. 异步调用举例
+29. 异步代码演示
 
 ~~~c#
-public static async Task<int> CalculateValueAsync()
+namespace  tt 
 {
-    Console.WriteLine("Inside CalculateValueAsync");
-
-    int result = await Task.FromResult(42);
-
-    Console.WriteLine("Calculations done");
-
-    return result;
+    class Test
+    {
+        public Test () {}
+        public static async Task<int> CalculateValueAsync()
+        {
+            Console.WriteLine("Inside CalculateValueAsync");
+            int threadId1 = Thread.CurrentThread.ManagedThreadId;
+            Console.WriteLine("当前线程1ID为：" + threadId1);
+            int result = await Task.FromResult(42);
+            int threadId5 = Thread.CurrentThread.ManagedThreadId;
+            Console.WriteLine("当前线程5ID为：" + threadId5);
+            await Task.Delay(3000);
+            Console.WriteLine("Calculations done");
+            int threadId2 = Thread.CurrentThread.ManagedThreadId;
+            Console.WriteLine("当前线程2ID为：" + threadId2);
+            return result;
+        }
+        public static async Task TT()
+        {
+            int threadId0 = Thread.CurrentThread.ManagedThreadId;
+            Console.WriteLine("当前线程0ID为：" + threadId0);
+            Console.WriteLine("Before calling CalculateValueAsync");
+            Task<int> task = CalculateValueAsync();
+            Console.WriteLine("After calling CalculateValueAsync");
+            await task;
+            int threadId6 = Thread.CurrentThread.ManagedThreadId;
+            Console.WriteLine("当前线程6ID为：" + threadId6);
+            await Task.Delay(3000);
+            Console.WriteLine($"Result: {0}");
+        }
+        public static void Main()
+        {
+            int threadId4 = Thread.CurrentThread.ManagedThreadId;
+            Console.WriteLine("当前线程4ID为：" + threadId4);
+            Console.WriteLine("1");
+            var test = TT();
+            Console.WriteLine("2");
+            test.Wait();
+            Console.WriteLine("3");
+            int threadId7 = Thread.CurrentThread.ManagedThreadId;
+            Console.WriteLine("当前线程7ID为：" + threadId7);
+        }
+    }
 }
 
-public static async Task Main()
-{
-    Console.WriteLine("Before calling CalculateValueAsync");
+打印结果如下：
+当前线程4ID为：1
+1
+当前线程0ID为：1
+Before calling CalculateValueAsync
+Inside CalculateValueAsync
+当前线程1ID为：1
+当前线程5ID为：1
+After calling CalculateValueAsync
+2
+Calculations done
+当前线程2ID为：4
+当前线程6ID为：4
+Result: 0
+3
+当前线程7ID为：1
 
-    Task<int> task = CalculateValueAsync();
-
-    Console.WriteLine("After calling CalculateValueAsync");
-
-    int result = await task;
-
-    Console.WriteLine($"Result: {result}");
-具体的调用顺序如下：
-
-1.在 Main 方法中通过 CalculateValueAsync() 调用了 CalculateValueAsync 方法。
-在 CalculateValueAsync 方法内，遇到 await Task.FromResult(42) 这个语句时，会创建一个已完成的 Task<int> 对象，并将其结果设置为 42。然后，由于使用了 await 关键字，任务的执行会返回到 Main 方法，执行后续代码。
-在 Main 方法中，在 int result = await task; 这行代码中，又一次遇到了 await 关键字。这会导致 Main 方法的执行暂停，并等待 CalculateValueAsync 方法的任务完成。
-在 CalculateValueAsync 方法内的所有计算完成之后，将会继续执行 Console.WriteLine("Calculations done") 这行代码，并打印 "Calculations done"。
-CalculateValueAsync 方法将会返回结果 42。
-Main 方法恢复执行，将 task 的结果赋值给 result。
-打印结果 "Result: 42"。在此过程中，只有一个主线程被使用。CalculateValueAsync方法内的任务在主线程上运行，而不会创建新的线程。
-  
-2.在这段代码中，如果不执行 int result = await task;，那么 Console.WriteLine("Calculations done") 将不会被执行。
-因为使用 await 关键字会等待 task 完成，并获取其结果，而不执行后续代码。如果跳过了 await task 这行代码，程序会直接继续向下执行，而不会等待 task 完成。
-因此，在不执行 int result = await task; 的情况下，Console.WriteLine("Calculations done") 不会被执行。
 ~~~
 
+30. 把一个父类转为子类，针对某一元素求和
 
+~~~c#
+opDamage 为 List<IEventRecord>类型
+pDamageSum = opDamage
+.Cast<PlayerDamageRecord>()
+.Where(val =>val.Source == PlayerDamageRecord.SourceType.Effect)
+.Sum(m =>  m.Damage);
+~~~
+
+31.list使用sort排序
+
+~~~c#
+返回-1表示第一个优先级高，1表示第二个优先级高，0表示相同
+list.Sort((a, b) =>
+            {
+                // 大的在前，return -1
+                if (a.Player.Hp > b.Player.Hp)
+                {
+                    return -1;
+                }
+
+                if (a.Player.Hp < b.Player.Hp)
+                {
+                    return 1;
+                }
+                return 0;
+            });
+~~~
+
+32.c#中不能直接把proto的字典赋值给Dictionary<int, int>，但可以
+
+~~~c#
+AccountTriggerTimes = test.GuidePrompt.ToDictionary(x => x.Key, x => x.Value);
+        
+~~~
 

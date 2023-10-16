@@ -1,6 +1,6 @@
 mongo和mysql区别：mysql是规范的，结构化很清楚， mysql中可以多表联合查询，mongo数据通常存储在单个集合中，使用嵌入式文档将其分隔开，没有联合的概念
 
- mongosh 运行命令
+ mongosh/mongod运行命令
 use database_name
 
 show dbs 	查看所有数据库
