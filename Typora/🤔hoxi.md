@@ -1,3 +1,30 @@
+测试服的mysql查询的时候不能输入中文， 而且name字段有特殊的编码
+
+待做：buff增伤， 光环+atk有问题？ buff增伤，
+
+之前0表示的是临时buff，现在需要处理一下， 不然全部加成永久buff； 
+
+
+
+蛤蟆3281buff判断局内外,3281entry+Growth，亡语狼entry1381触发成长效果(6666)， 增加蝉aura6666
+
+857:3000. Atm:1500
+
+配表反射怎么搞
+
+1. 局内临时成长，怎么控制，如果这个石灵既存在临时又存在永久的buff增加
+
+2. 把buff改成成长效果(不然没法控制是否永久)   或者给buff表多加一个字段？
+
+3. 早上说要三个effect没理解()
+
+4. 增伤用光环的方式可以吗(minion.cs的AddDamageTemp)
+
+5. 新增机制[击杀] 不是有了吗
+
+6. 超杀计划改法 ()， 会不会影响触发顺序，会不会不太好控制
+
+
 /var/lib/docker/volumes/931bcd98e0d1c986fae253f388316007e0bec9d9932bc367206050fcec686db6/_data
 
 /Users/a123/.deploy-tool/dev/mongo
@@ -107,13 +134,28 @@ kubectl get svc -n test
 15:54
 mysql -h 那个地址 -uroot -p
 密码是hoxi0328JING
+mysql -h rm-2ze3rkvpx9768m99v.rwlb.rds.aliyuncs.com  -u root -p
+
+taptap服务器
+kubectl get svc -n taptap
+里面有个taptap-mysql
+mysql -h rm-2zevgb9724yvm7951.rwlb.rds.aliyuncs.com -u root -p
+
+redis-cli -h r-2zez1ogv1gfirvpzda.redis.rds.aliyuncs.com
+UDS_USER_
 ```
 
 
 
 %system.teamcity.build.checkoutDir%/Assets/ 路径
 
-数据看板：账号 jiangtao	密码 nswdsm58
+数数，数据看板：账号 jiangtao	密码 nswdsm58， 用的是本地时间
+
+~~~
+点击用户-》用户细查-》搜索user_explicit_id外显id查看玩家事件
+~~~
+
+
 
 ssh [deploy@47.95.6.108](mailto:deploy@47.95.6.108)
 
@@ -142,8 +184,8 @@ ci：https://hoxigames.feishu.cn/wiki/wikcnPfIzdcQk1qL7Z69hSgZaKb
 ```
 9003 ：
 ssh deploy@47.95.6.108
-docker exec -it dev3-mysql /bin/bash
-docker exec -it dev3-data-redis redis-cli
+docker exec -it dev5-mysql /bin/bash
+docker exec -it dev5-data-redis redis-cli
 ```
 
 装备码

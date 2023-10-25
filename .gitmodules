@@ -1,0 +1,3 @@
+[submodule "resource"]
+	path = resource
+	url = git@github.com:jtqnbz666/test.git
