@@ -5,6 +5,8 @@
 ~~~
 1.redis命令删除全部内容: flushdb
 2. redis-cli FLUSHALL
+3.查看list类型数据: lrange key 0 -1 
+4.查看list类型的个数: LLEN key
 ~~~
 
 

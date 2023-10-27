@@ -186,7 +186,7 @@ redis_client = redis.Redis(host='localhost', port=6379, password='', db=0)
 with open('opDamage.txt', 'r') as file:
     new_str = file.read().strip()
 
-# 将字符串转换为字典
+# 将字符串转换为字典, 核心就是这步
 new_dict = ast.literal_eval(new_str)
 
 # 获取所有以AIMirror_KnockoutPool为前缀的key

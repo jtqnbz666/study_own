@@ -38,6 +38,8 @@ OwnPlayer.AuraMgr.ToBuff(minion, BuffType.Temporary);
 
 7.羊铃奶奶：她和奇迹奶牛一样，目的是让具有成长效果的石灵的成长效果额外触发一次， 拓展：大闹鹅的遗言是让友方触发成长效果，但他本身不是一张成长效果的牌，蛤蟆才是，所以他的tag上不需要加growth。
 
+8.entry里面alltarget， 如果是战斗阶段加载的词条，就包含了敌方，如果是运营阶段的词条就只有己方
+
 ### 31.动画
 
 以changeheroskill为例，后端先添加动画ClipType.**ChangeHeroSkill**，前端在script/animation/animclips中找到对应的类的GenAnimation就可以看出来，最终调用RefreshRuneDress
@@ -77,6 +79,21 @@ docker exec -i mirror-redis redis-cli flushall
 ~~~
 拿到aof文件之后，docker exec -i mirror-redis redis-cli --pipe < aof文件位置(注意没有t)
 ~~~
+
+如果需要指定选择镜像
+
+~~~
+如果只是同一个服务器上 ，直接改镜像服，获取指定key
+如果不在同一个服务器上，就先把比如9002的aof导到9005上
+~~~
+
+本地将所有镜像的value搞成同一个
+
+~~~
+/Users/a123/project328/db/mirror-redis执行python脚本可以处理成同一个value, 但这种方法不可取， 就算是同一个value，拿到镜像的概率也低，因为有规则， 还是直接拿指定key比较好
+~~~
+
+
 
 
 

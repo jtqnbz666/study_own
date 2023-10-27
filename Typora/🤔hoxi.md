@@ -1,4 +1,11 @@
-测试服的mysql查询的时候不能输入中文， 而且name字段有特殊的编码
+Utils.IsPermanent(config.Permanent, Owner.OwnPlayer)
+
+ownplayer.game.is
+
+山魈长老831: 登场触发成长，
+鸮药师 721， 开战触发登场。
+
+测试服的mysql查询的时候不能输入ssh deploy@47.95.6.108中文， 而且name字段有特殊的编码
 
 待做：buff增伤， 光环+atk有问题？ buff增伤，
 
@@ -135,6 +142,10 @@ kubectl get svc -n test
 mysql -h 那个地址 -uroot -p
 密码是hoxi0328JING
 mysql -h rm-2ze3rkvpx9768m99v.rwlb.rds.aliyuncs.com  -u root -p
+data-redis:redis-cli -h r-2zetze23jyxg4napzr.redis.rds.aliyuncs.com
+conn-redis:redis-cli -h r-2zepujqfoaycm0u7en.redis.rds.aliyuncs.com
+mirror-redis:redis-cli -h r-2ze3br4wfpg5hja167.redis.rds.aliyuncs.com
+
 
 taptap服务器
 kubectl get svc -n taptap

@@ -40,3 +40,15 @@ docker tag : 标记本地镜像，将其归入某一仓库。
 
 
 docker上的容器如果不指定网络，默认和本机上一个网络中。如果给docker容器指定了network，那么本地就跟docker容器不在同一个网段内了，docker和本机就不能进行通讯了，但是docker中放到同一个network的容器可以相互通信。
+
+**拷贝docker里面的文件到本地**
+
+~~~
+docker cp <容器名称或ID>:<容器内文件路径> <本地目标路径>
+然后配合scp搞到本地, 
+
+scp deploy@47.95.6.108:~/divideLevel.json .
+或者上传服务器
+scp divideLevel.json  deploy@47.95.6.108:~/
+~~~
+
