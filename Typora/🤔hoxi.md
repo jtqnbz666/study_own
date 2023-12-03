@@ -1,123 +1,26 @@
-Utils.IsPermanent(config.Permanent, Owner.OwnPlayer)
-
-ownplayer.game.is
-
-山魈长老831: 登场触发成长，
-鸮药师 721， 开战触发登场。
-
-测试服的mysql查询的时候不能输入ssh deploy@47.95.6.108中文， 而且name字段有特殊的编码
-
-待做：buff增伤， 光环+atk有问题？ buff增伤，
-
-之前0表示的是临时buff，现在需要处理一下， 不然全部加成永久buff； 
+todo: ，  1. notify 2. paycenter修改确认订单流程，因为加了外部id， 3.多线路
 
 
 
-蛤蟆3281buff判断局内外,3281entry+Growth，亡语狼entry1381触发成长效果(6666)， 增加蝉aura6666
 
-857:3000. Atm:1500
+
+疑问：为啥一级指针赋值为null，作为参数传递不会影响到值
+
+lbs检测ac时间调长一点，解开25限制
+
+Todo: 完善排行榜日志， 缓存加载更替细节
+
+埋点看某一时刻玩家领取的东西
 
 配表反射怎么搞
 
-1. 局内临时成长，怎么控制，如果这个石灵既存在临时又存在永久的buff增加
-
-2. 把buff改成成长效果(不然没法控制是否永久)   或者给buff表多加一个字段？
-
-3. 早上说要三个effect没理解()
-
-4. 增伤用光环的方式可以吗(minion.cs的AddDamageTemp)
-
-5. 新增机制[击杀] 不是有了吗
-
-6. 超杀计划改法 ()， 会不会影响触发顺序，会不会不太好控制
-
-
-/var/lib/docker/volumes/931bcd98e0d1c986fae253f388316007e0bec9d9932bc367206050fcec686db6/_data
-
-/Users/a123/.deploy-tool/dev/mongo
-
-
-
-~~~
-public SelectMirrorBackMsg Select()
-        {
-            LogHelper.WriteLog("开始为战斗选择镜像:\n" + _Param);
-            
-            var ret = new SelectMirrorBackMsg();
-            var usedHeroSet = new HashSet<int>();
-            var curUserSet = new HashSet<ulong>(_Param.ExcludeUid);
-          
-            var mirrorCnt = _SavedMirror["AIMirror_KnockoutPool_1_4_101_All|Devil|Insect|Mutant|Neutral|Royale|Wild_Insect|Royale"];
-            for (var i = 0; i <  _Param.NeedCnt; i++)
-            {
-                var index = RandomUtil.Next(0, mirrorCnt);
-                var json = MirrorRedis.db.ListGetByIndex("AIMirror_KnockoutPool_1_4_101_All|Devil|Insect|Mutant|Neutral|Royale|Wild_Insect|Royale", index);
-                AIHeroMirror mirror = null;
-                try
-                {
-                    mirror = ((string)json).ToProtobuf<AIHeroMirror>();
-                }
-                catch (Exception)
-                {
-                    LogHelper.WriteError($"镜像格式出错,跳过该镜像:\n{"AIMirror_KnockoutPool_1_4_101_All|Devil|Insect|Mutant|Neutral|Royale|Wild_Insect|Royale"}\n{json}");
-                }
-
-                if(mirror == null) continue;
-                // 兼容之前的数据
-                mirror.RedisKey = "AIMirror_KnockoutPool_1_4_101_All|Devil|Insect|Mutant|Neutral|Royale|Wild_Insect|Royale";
-                usedHeroSet.Add(mirror.HeroId);
-                ret.Results.Add(mirror);
-                // 每个RedisKey只选一个,保证多样
-                break;
-            }
-            LogHelper.WriteLog($"选择到{ret.Results.Count}个镜像\n" +
-                               $"{string.Join("\n", ret.Results.Select(r => r.RedisKey))}");
-            return ret;
-        }
-~~~
-
-
-
-SummonPlainMinionNumOneRound
-
-日志编码格式？ 190, 532.   98,463.  498 145
-
-taptap和google的差异只有gb和fb吗，在哪
-
-taptap的日志在哪看
-
-所有的panel，开发新功能的时候记录一下名字？
-
-随机种族是干嘛的
-
-之前战斗结果是怎么呈现给你的
-
-是不是需要全部模拟战斗得到分档结果才能使用分档模拟战斗
-
-有个字段叫镜像等级我看是根据天梯分计算出来的，跟分档没有关系吧，具体分档还是看实力
-
-分档的档，哪个字段可以看出来她是第几档的 offline
-
-分档是根据啥分的，按照斜率排序吗
-
-g m-tool上的分档数是啥意思， 我看文档写的是4
-
-前x名晋级，x是在哪传递的参数
-
-~~~c#
-case Pb.ResultCode.RESULT_CODE_TASK_NO_REWARDS_TO_CLAIM:
-                    resultStr = LocaleManager.GetText("报错信息_任务_没有可领取的奖励");
-                    break;
-报错信息_任务_没有可领取的奖励~没有可领取的奖励~
-~~~
-
 ![image-20231012192210562](/Users/a123/Library/Application Support/typora-user-images/image-20231012192210562.png)
-
-
 
 想问的问题， 多服是怎么实现的。
 
-test.hall.project328.hoxigames.com 8999 联赛服        
+test.hall.project328.hoxigames.com 8999 联赛服   
+
+taptap.hall.project328.hoxigames.com 8999 taptap服     
 
 approve.project328.hoxigames.com:8999 提审服    
 
@@ -142,12 +45,12 @@ kubectl get svc -n test
 mysql -h 那个地址 -uroot -p
 密码是hoxi0328JING
 mysql -h rm-2ze3rkvpx9768m99v.rwlb.rds.aliyuncs.com  -u root -p
-data-redis:redis-cli -h r-2zetze23jyxg4napzr.redis.rds.aliyuncs.com
-conn-redis:redis-cli -h r-2zepujqfoaycm0u7en.redis.rds.aliyuncs.com
-mirror-redis:redis-cli -h r-2ze3br4wfpg5hja167.redis.rds.aliyuncs.com
+
+redis-cli -h r-2ze3br4wfpg5hja167.redis.rds.aliyuncs.com
 
 
 taptap服务器
+
 kubectl get svc -n taptap
 里面有个taptap-mysql
 mysql -h rm-2zevgb9724yvm7951.rwlb.rds.aliyuncs.com -u root -p
@@ -160,7 +63,7 @@ UDS_USER_
 
 %system.teamcity.build.checkoutDir%/Assets/ 路径
 
-数数，数据看板：账号 jiangtao	密码 nswdsm58， 用的是本地时间
+数数，数据看板：账号 jiangtao	密码 nswdsm58， 用的是我的本地时间
 
 ~~~
 点击用户-》用户细查-》搜索user_explicit_id外显id查看玩家事件
@@ -175,6 +78,24 @@ Reddit: AcademicLandscape180   nswdsm58
 Kindly_Owl_6770
 
 debug代码：/Users/jiangtao/data/project328-client/Assets/Scripts/DebugCmd/CustomCmdRegister.cs
+
+### token登录
+
+~~~
+// 生成token
+token := fmt.Sprintf("%v_%v_%v_%v", global.TapTapLoginType, account.ID, msg.ObjectID, time.Now().Add(global.TokenLoginTimeout).Unix())
+token = encrypt.EncryptString(token, global.TokenEncryptKey)
+拿到这个token去unity登录
+在main函数开头debug一下， 主要是获取时间戳和编码一下
+
+token := fmt.Sprintf("%v%v", "TapTap_1063_652ff1e95cc71c58cd4fb756_", time.Now().Add(30*24*time.Hour).Unix())
+test := encrypt.EncryptString(token, "H*a&OJgx^@eI14)s")
+fmt.Printf(test)
+
+//1063_652ff1e95cc71c58cd4fb756这串是需要换的，右边这个看起来是密码的串
+~~~
+
+
 
 测试包：
 
@@ -206,7 +127,7 @@ docker exec -it dev5-data-redis redis-cli
 宝箱信息在LotteryMain表，各种宝箱
 ~~~
 
-![image-20230524150351313](/Users/jiangtao/Library/Application Support/typora-user-images/image-20230524150351313.png)
+
 
 作弊码
 

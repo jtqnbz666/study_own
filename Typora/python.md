@@ -29,12 +29,13 @@ line = splice[2]
 json和字符串转换
 
 ~~~python
+#简单使用
 字符串转json
 json_list = json.loads(string)
 
 json转字符串
 new_string = json.dumps(json_list,ensure_ascii=False,indent=2)
-#ensure_ascii=False是为了防止中文乱码， indent=2打印好看
+#ensure_ascii=False是为了防止中文乱码， indent=2, 2表示换行后的前置缩进，打印好看
 
 import json
 
@@ -56,6 +57,22 @@ str = json.dumps(data, ensure_ascii=False)
 print(data)
 print(str)
 
+# 文件中的使用
+import json
+# 从文件中读取原始的 JSON 数据
+with open('/Users/a123/project328/gm-tool/dealDivideLevel.json', 'r') as file:
+    json_data = file.read().replace('\n','')
+#重点是合理使用replace，如果原文件就是json对象形式并且每行都换行了，就可以用   
+    
+# 将 JSON 字符串解析为 Python 对象， 如果是json对象而不是字符串就不用这行
+#data = json.loads(json_data)
+
+# 将 Python 对象转换为 JSON 字符串（包含缩进和换行符）
+new_json_str = json.dumps(json_data, ensure_ascii=False, indent=2)
+
+# 将新的 JSON 字符串写入文件
+with open('/Users/a123/project328/gm-tool/new.json', 'w') as file:
+    file.write(new_json_str)
 ~~~
 
 4. 删除最后两个字符

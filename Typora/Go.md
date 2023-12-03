@@ -16,6 +16,14 @@ go的main()执行前，会先执行init函数(这个init函数是别的包中的
 5.如果改了某个框架的东西，go mod tidy
 go get gitlab.hoxigames.com/hoxi-games/hoxi-server@develop  最后的develop表示develop分支
 6.两个切片合并。 append(chan1, chan2...)
+7.%v无法打印出切片内容，而是打印他的地址， 可以用%+v或%#
+8.遍历切片的时候，比如, 'for i, entity := range Entities'不能直接修改entity，因为它是临时变量，Entities 是[]*pb.lb类型(尽管是指针切片)
+9.使用ret := RawData{} 和 ret := &RawData{}来调用自己的指针方法，二者都可以，没有区别
+10.更新依赖：go get -u； 清除缓存：go clean -modcache
+11. 目前10位是s， 13为时间戳才是毫秒
+12. 记得养成加recover的习惯， 注意定时任务那里
+13. go中得到interface{}对象如果本身是json，可以用json.RawMessage来接收
+
 ~~~
 
 实用技能
@@ -32,7 +40,86 @@ pie.Map(strings.Split(skinconf.Price, "|"), func(s string) int32 {
 pie.FindFirstUsing(user.FinishAdventureInfo.ChapterFinishInfo, func(chapterInfo *pb.ChapterInfo) bool {
 			return chapterInfo.ChapterId == task.ExtraInfo.ChapterId && pie.Contains(chapterInfo.CustomsPass, task.ExtraInfo.CustomsId)
 		})
+
+3. 判断某个key是否存在于map中
+rank, exists := rankMap[msg.Uid]
+if exists {
+  //如果有排名就记录一下
+  heroRankMap[hero.Id] = rank
+}
+
+4. int与string转换
+int32-->string strconv.Itoa(int(num))
+uint64-->string strconv.FormatUint(uid, 10)		
+string-->uint64 strconv.ParseUint(fieldArr[1], 10, 64)	//十进制，64位
+string-->int32 num, err := strconv.Atoi(str)
+
+5.
+rank, exists := rankMap[msg.Uid]
+if exists {
+  //如果有排名就记录一下
+  heroRankMap[hero.Id] = rank
+}
+
+6. string和[]byte可以随时转， 比如
+jsonData, _ := json.Marshal(guidePrompt)
+	userData.UserGuideInfo.GuidePromptJs = string(jsonData)， 反过来也是一样
+json.Unmarshal([]byte(userData.UserGuideInfo.GuidePromptJs), &restoredData)
+7. json.Marshal配合结构体生成json对象
+type MiID struct {
+	MID string `json:"mid"`
+}
+miID := MiID{
+  MID: "666",
+}
+miIDJson, err := json.Marshal(miID)
+这样得到的miIDJson的json串就是"{/"mid/":/"666/"}"
+		
+8.如果有匿名字段，json.Unmarshal时要注意格式，比如
+Unmarshal函数需要一个指向结构体的指针，才能完成对结构体的修改
+type SyncOrderReq struct {
+	QueryParam
+}
+type QueryParam struct {
+	OutOrderId string `json:"out_order_id"`
+}
+ExtraParamJsonStr的内容为
+extraParam := map[string]string{
+    "out_order_id": msg.OutTradeNo,
+}
+ExtraParamJsonStr, _ := json.Marshal(extraParam)
+
+
+json.Unmarshal([]byte(orderInfo.ExtraParamJsonStr), syncOrderReq)//这里必须用syncOrderReq，不能是syncOrderRe.QueryParam.或者syncOrderRe.QueryParam.OutOrderId
+
+		
 ~~~
+
+**[]*model.UserHero和[]model.UserHero的区别**
+
+~~~go
+type UserHero struct {
+    Name string
+    Level int
+}
+func main() {
+    heroes := []*UserHero{
+        {Name: "Hero A", Level: 10},
+        {Name: "Hero B", Level: 20},
+    }   
+    ptrSlice := []*UserHero{}
+    valSlice := []UserHero{}
+    for _, hero := range heroes {
+        ptrSlice = append(ptrSlice, hero) // 将指针追加到切片
+        valSlice = append(valSlice, *hero) // 将指针指向的值追加到切片
+    }
+    heroes[0].Name = "Updated Hero A"
+    fmt.Println(ptrSlice[0].Name) // 输出：Updated Hero A
+    fmt.Println(valSlice[0].Name) // 输出：Hero A
+}
+~~~
+
+
 
 将map[int32]int32以json存入mysql再取出来
 
@@ -607,9 +694,10 @@ func main() {
 
 
 
-### switch-case 操作
+### switch-case 操作()
 
 ~~~go
+默认每个case后都跟着break(未显示出来)， 就算啥都不写也不会继续往下执行
 switch a {
 case 1:
     fmt.Println("1")
@@ -1556,6 +1644,62 @@ for _,v := range result{
 			sum += v
 }
 
+~~~
+
+使用select和不使用select的区别
+
+~~~go
+// 使用select
+1.select没有选中这个字段， 这个字段的值就不会被读取出来，只能读出select选择的字段的值
+2.select没有选中这个字段，就算新的结构有对应字段的值也不会更新
+3.select选中这个字段， 新结构中该字段为空(只要不额外赋非空值，都算空)， 也能成功更新为空
+4.跟3有关系 ，如果新结构体中并没有该字段(第三点是有字段，但没复制)， 则不会更新为空
+// 不使用select
+1.如果select没有选中这个字段，新的结构对应字段赋值为空，gorm 不会 把它更新为空
+~~~
+
+model函数的作用：决定查询哪张表， 建议是都加上，以免出现歧义
+
+~~~go
+如果不显示指定model， 会通过后边的Where、First、Find来判断model， 让程序知道操作哪张表，如果都没有就判断updates里面的(以第一个得到的model类型为准)
+
+前置说明：mysql中现在只有people表， 没有user表
+
+//错误案例
+1. 
+var userTest user
+db.Where("age = ?", 18).Find(&userTest).Updates(&People{
+			Season: "S7",
+			Name:   "xx",
+		})
+//并没有user表，会默认用第一个Find得到的模型因为是user类型，所以会去查user表，但没有，会报错
+2.
+people1是people类型
+db.Where("age = ?", 18).Updates(&user{
+			//Season: "S7",
+			Name: "gg",
+		}).Find(people1)
+//这里同样把updates里面得到的模型作为要查询的表了， 同样报错
+
+//正确案例
+1.
+var userTest = &user{}
+	if user3.Season == "" {
+		db.Where("age = ?", 18).Updates(&People{
+			//Season: "S7",
+			Name: "gg",
+		}).Find(userTest)
+	} //这种写法也是ok的， 可以通过Updates得到model类型是people
+
+如果user里面的字段和people里面的字段不对应， userTest对象只能得到people里面有的对应字段的值
+
+~~~
+
+model中是否加引用， 别的函数比如Find是否加引用??
+
+~~~go
+1.在 .Model() 方法里是否使用 & 并不会影响对应的数据库操作
+2.在Find中需要引用对象， 因为需要将查询到的值赋值到对应的地址上
 ~~~
 
 

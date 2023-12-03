@@ -1,4 +1,4 @@
-1. =>的含义
+=>的含义
 
 ~~~c#
 lambda表达式, 表达一个匿名函数，  => 前面的是参数， 后面的是函数体
@@ -452,5 +452,41 @@ list.Sort((a, b) =>
 ~~~c#
 AccountTriggerTimes = test.GuidePrompt.ToDictionary(x => x.Key, x => x.Value);
         
+~~~
+
+33. 消息流转为pb对象  &  pb对象， json串与string的转换
+
+```c#
+头文件
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using CardGameCalculator;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using Log;
+using Pb;
+using WatsonWebserver;
+using ProtobufSerializer = CardGameCalculator.ProtobufSerializer;
+```
+
+- 消息流转为pb对象
+
+~~~c#
+
+ctx是HttpContext类型
+var stream = new StreamReader(ctx.Request.Data);
+var body = await stream.ReadToEndAsync();
+var msg = ProtobufSerializer.DeSerialize<AiAllSimulateMsg>(body);
+~~~
+
+- pb转json串
+
+~~~c#
+Ret.MirrorList.Add(ConvertData.ToJson(pb对象));
+等价于
+Ret.MirrorList.Add(pb对象.ToJson());
+//MirrorList是list<string>类型
 ~~~
 

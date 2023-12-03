@@ -1,22 +1,325 @@
+### 46. 服务器相关
+
+1. docker的镜像的名字的第一部分是分支commit，第二部分是数值commit
+
+### 45.战令系统
+
+1. 单个领奖get-battle-pass-reward
+2. 全部领奖get-all-battle-pass-reward
+
+### 44. 支付
+
+看pay center相关日志
+
+~~~
+1. 搜索日志服务SLS进一步找到aliyun-fc-cn-进一步找到上下文浏览
+2. 函数计算FC
+~~~
 
 
-QA: 1.新英雄必出现 2. 皮肤体验卡使用成功没有 .3游戏历史数据可能影响， 4.每日首胜, 2.死亡的时候好友列表是否正常 56.游戏历史记录
 
-自测过的内容，天梯分变化，战绩、结算奖励(显示发奖与实际货币增长相符)， 首选卡数量， 最近系列英雄排序。
+**小米支付**
 
-历史数据如果出问题就拆出来
+https://dev.mi.com/distribute/doc/details?pId=1428
 
-当前已处理的调用：
+细节点： 
 
-gamehistory里面：**Setuserguideround**， 把体验控制合并到里面计划
+1. 在对方notify我的时候，判断消息里面的状态是不是完成支付（有可能是未支付)， 如果是才设置已支付状态
+2. notify我的时候， 返回给他的时候要告诉他我已经成功处理了这个notify， 不然他会定时发
+3. 注意别人发我的http请求中，消息不一定在body里面，可能在query里, http就三部分，body，query，head
+4. io.readall(reso.body)一般就是我们需要的数据(json应该是)， 可以直接通过json.unmarshl解析成json串
 
-BeforeEndGame之前返回的是reward，太丑了，应该把奖励作为参数
+**登录：**
 
-更新天梯分函数返回一个待准备消息
+![](/Users/a123/Library/Application Support/typora-user-images/image-20231127152831518.png)
 
-首选卡会阻塞游戏，不能合并
+**支付：**
 
-观战要改异步吗，观战是个问题， 也会跟uds交互,  不管还是搞成异步， 合并也不好合并
+![image-20231127165411165](/Users/a123/Library/Application Support/typora-user-images/image-20231127165411165.png)
+
+加密流程：
+
+https://mis.migc.xiaomi.com/api/biz/service/verifySession.do?appId=2882303761520282579&session=cm56jSgp57ExdWFY&uid=2023112800235103&signature=1d0f88a5197c2b38a7663d47ca89cba44a40dc01
+
+~~~go
+func getRequestUrl(params map[string]string) string {
+	signString := getSortQueryString(params)
+	signature := getSign(params)
+	return orderQueryURL + "?" + signString + "&signature=" + signature
+}
+//1. params是除了signature的其他对象，要先进行排序，以一个value为对象，比对value的大小，从小到大排序
+
+func getSign(params map[string]string) string {
+	signString := getSortQueryString(params)
+	return HmacSHA1Encrypt(signString, miSecret)
+}
+
+func getSortQueryString(params map[string]string) string {
+	keys := make([]string, 0, len(params))
+	for k := range params {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	var sb strings.Builder
+	for _, k := range keys {
+		sb.WriteString(fmt.Sprintf("%s=%s&", k, params[k]))
+	}
+
+	s := sb.String()
+	return strings.TrimSuffix(s, "&")
+}
+
+~~~
+
+辅助测试方法
+
+~~~
+params := make(map[string]string)
+	params["appId"] = "2882303761520282579"
+	params["uid"] = "2023112800235103"
+	params["cpOrderId"] = "20231128220517857725190"
+	req := "{\"headers\":{\"Accept-Encoding\":\"gzip,deflate\",\"Connection\":\"Keep-Alive\",\"Traceparent\":\"00-8fd4024561e34d23bee47d257d9dd11a-639b33679c5458b5-01\",\"User-Agent\":\"Apache-HttpClient/4.4.1 (Java/1.8.0_202)\"},\"body\":\"\",\"queryParameters\":{\"appId\":\"2882303761520282579\",\"cpOrderId\":\"20231128213023991193595\",\"orderId\":\"20231128213024472797migc\",\"orderStatus\":\"TRADE_SUCCESS\",\"payFee\":\"600\",\"payTime\":\"2023-11-28 21:30:34\",\"productCode\":\"gem_bundle1\",\"productCount\":\"1\",\"productName\":\"6元奥晶礼包\",\"signature\":\"c5b2348362f2536753ccf3f4a8e7deb9d6ff16c1\",\"uid\":\"2023112800235103\"},\"rawPath\":\"/mi-notify\",\"PathParam\":[\"mi-notify\"]}"
+	request := message.FcRequest{}
+	_ = json.Unmarshal([]byte(req), &request)
+	s := getHandler(request.PathParam)
+	s.Handler(request)
+~~~
+
+
+
+### 43. 手机验证码登录
+
+1. 登录有很多方式， 第一次登录的时候，比如验证码登录会先检验一些基础信息， 如果通过的话会返回一个token，玩家之后就用这个token进行登录， token格式如下:
+
+   ~~~go
+   token := fmt.Sprintf("%v_%v_%v_%v", global.MobileNumberLoginType, account.ID, msg.PhoneNumber, time.Now().Add(global.TokenLoginTimeout).Unix())
+   	token = encrypt.EncryptString(token, global.TokenEncryptKey)
+   ~~~
+
+2. 使用token登录的时候，又把这个token反解出来看看password对不对的上，如果是手机号登录，那password一般就是手机号，小米的话，就是小米唯一id，当然也可以采取对密码进一步加密。
+
+3. 验证码校验需要加限制，比如15s内只能尝试3次，  验证码请求次数阿里已经做了限制， 比如一分钟只能请求2次
+4. 注意是验证码用字符串， 不然0开头的有问题
+
+### 42.bug前端记录
+
+1. 收到新一轮回合开始BattleScene.BattleSceneManager.ReceiveBRNewRoundMsg
+
+### 41.新版uds架构
+
+1. 新的RespError可以作为error对象返回，因为实现了Error()方法, 涉及到资源花费的时候，如果有resultcode，最后会在currency.go中的errors.As方法进行转化，返回给前端实际的错误原因
+
+~~~
+if err != nil {
+		var respErr *errors2.RespError
+		if errors.As(err, &respErr) {
+			return TransRet{
+				Err:        err,
+				ResultCode: respErr.Code,
+			}
+		} else {
+			return TransRet{
+				Err:        err,
+				ResultCode: pb.RESULT_CODE_ERROR,
+			}
+		}
+	}
+	
+	
+	if ret.Err != nil {
+			respErr, ok := ret.Err.(errors2.RespError)
+			if ok {
+				ret.ResultCode = respErr.Code
+			}
+		}
+~~~
+
+
+
+### 40.商店系统
+
+1.皮肤商店的道具在shopGoods.xsls中，比如手选卡对应216
+
+2.道具里面的8个东西(每日礼品和每日金币，以及开宝箱的单抽和十连抽都属于道具，在shopMain里面, 指向shopGoods.xsls)， 对应的状态存储在user_shop_item_data中
+
+3.购买记录都会在buy_records的sql表记录， 比如神秘商店对应type为3
+
+~~~
+select * from buy_records where user_id = 10001 and type = 3\G;
+~~~
+
+4. 道具比如手选卡和钥匙记录在user_bag_items中
+4. 商店中的礼包在ShopGift中,在user_shop_gift_bag_data记录购买情况
+4. 随机石灵碎片，第四个参数是决定分多少组的
+4. 目前商店的礼包栏中，会在splitGiftBagReward函数去解析礼包里面包含的东西，直接存放在user_shop_gift_bag_data中的content字段
+
+### 39. 服务搭建
+
+~~~
+1. 先bin下搜索user-data-service,
+2./Users/a123/ku/deploy-tool/config/tmpl加一个tmpl.ini
+3./Users/a123/ku/deploy-tool/project加一个sh
+4./Users/a123/ku/deploy-tool/config 这里面的env.sh加一个新服务的配置信息
+~~~
+
+**39.1 ci上部署服务，打包机缓存没清问题**
+
+~~~
+47.95.6.108 /data/deploy-tool/
+进去stash一下
+
+然后pull下来
+
+在stash pop回去
+~~~
+
+39.2 加入到ci数值部署中
+
+~~~
+数值部署增加服务:config-tool下修改
+新服务自身需要有一个deploy文件夹(仿照uds加)
+~~~
+
+
+
+### 38.AI优化
+
+
+
+### 37. 邮件
+
+前端在mailpanel.cs中的btmmail发送MESSAGE_TYPE_GET_MAIL_REWARD
+
+~~~
+328先发送mail-get-single获取这封邮件， 如果存在的话并且没有领取则进一步调用mail-set-status设置状态为删除(表示这次就会领取他)
+~~~
+
+
+
+### 36.排行榜
+
+~~~
+zadd CriticalHitBoard 34.745070318774509 10354
+~~~
+
+
+
+
+
+之前想的是uds有改动的时候都去通知排行榜服务(拿数据的时候就可以省去向uds拿最新数据的步骤)， 但这样并不好，任何改动都需要同步排行榜服，改动很大，容易漏
+
+1.如果分数一样，会用member的字典序，因为zset的value不支持复杂类型数据结构, 所以可以key做调整
+
+~~~c++
+ZSET leaderboard
+"1637081601_10001" => 666
+"1637081602_10002" => 666
+按字典序。"1637081601_10001"排在前
+
+问题：无法通过uid拿到分数， 因为不知道时间戳
+
+注意:zset的member对应的score不能是字符串， 只能是float
+
+~~~
+
+2.分数相同时间用基准值实现先到的排在前边
+
+~~~
+zsetScore = 玩家游戏分 + ((基准时间 - 玩家获得某分数时间) / 基准时间)，就实现了分数相同，先达到该分数的排在前面的功能。
+这样就能以uid作为member， 最终的score取zset里存的value的整数即可， 比如上边的zsetScore算出来是666.66， 那么取整数666就是自己最初的得分
+~~~
+
+3.在2的基础上
+
+~~~
+2保障了score的准确， 但是member却不好控制， 如果member用"uid_其他信息", 但zset不支持通过uid模糊查询， 所以这里可以再用一个map<uid,member>的映射， 找到具体的对象，如果信息改变了，删除member，用它的score新建一个member-score
+~~~
+
+
+
+知识
+
+~~~
+ZSET 查询复杂度：在 Redis 的 ZSET 数据结构中，基础操作的时间复杂度通常为 O(log(N))，其中 N 是 ZSET 中元素的数量。例如，ZADD、ZREM、ZRANK、ZSCORE等操作的时间复杂度都是O(log(N))。如果想获取ZSET中所有的元素，比如ZRANGE key 0 -1，那么时间复杂度为O(N)。
+
+使用通配符查询 key：在 Redis 中，可以使用 KEYS 命令配合通配符对 key 进行模糊查询，但是这个命令会遍历整个数据库的 key，时间复杂度是 O(N)，N 是数据库的 key 的数量
+在你的场景中，如果你的 key 是 "uid_其他信息" 这样的格式，且 uid 是唯一的，在知道 uid 的情况下，你可以直接通过完整的 key 进行查询，这样查询的复杂度是 O(1)，而不需要使用 KEYS uid_* 这样的模糊查询。如果非要使用模糊查询，建议使用 SCAN 命令，虽然复杂度仍为 O(N)，但 SCAN 是游标型命令，会分多次返回结果，不会阻塞服务器。
+~~~
+
+
+
+### 35.mysql和redis数据处理
+
+~~~mysql
+#导出联赛服的mysql,sed '24,25d' 表示删除这两行(SET @@GLOBAL.GTID_PURGED长这样)
+mysqldump -h rm-2ze3rkvpx9768m99v.rwlb.rds.aliyuncs.com -u root -phoxi0328JING project328 | sed 's/utf8mb4_0900_ai_ci/utf8mb4_general_ci/g' | sed '24,25d' > /tmp/project328.sql
+
+taptap服
+mysqldump -h  rm-2zevgb9724yvm7951.rwlb.rds.aliyuncs.com -u root -phoxi0328JING project328 | sed 's/utf8mb4_0900_ai_ci/utf8mb4_general_ci/g' | sed '24,25d' > /tmp/project328.sql
+
+#本地创建一个docker镜像
+docker run -d --name=mysql-remote -p 3306:3306 -v mysql-data:/var/lib/mysql -e MYSQL_RO    OT_PASSWORD=123456 docker.hoxigames.com/mysql:5.7
+
+# 创建本地数据库
+docker exec -i mysql-remote mysql -u root -p123456 -e "CREATE DATABASE IF NOT EXISTS project328"
+
+# 导入数据库到本地
+docker exec -i mysql-remote mysql -u root -p123456 project328 < project328.sql
+
+#更改玩家密码为nswdsm58;如果是taptap登录，就把账号一起改了
+update hoxi_accounts set password = 'BDC6CF885AA4C40E883D8B69B39072DF', account = 'jtnb' where id = 81;;  #比如此时uid为10080
+~~~
+
+
+
+### 34.指定镜像
+
+~~~c#
+public SelectMirrorBackMsg Select()
+        {
+            LogHelper.WriteLog("开始为战斗选择镜像:\n" + _Param);
+            
+            var ret = new SelectMirrorBackMsg();
+            var usedHeroSet = new HashSet<int>();
+            var curUserSet = new HashSet<ulong>(_Param.ExcludeUid);
+          
+            var mirrorCnt = _SavedMirror["AIMirror_KnockoutPool_1_4_101_All|Devil|Insect|Mutant|Neutral|Royale|Wild_Insect|Royale"];
+            for (var i = 0; i <  _Param.NeedCnt; i++)
+            {
+                var index = RandomUtil.Next(0, mirrorCnt);
+                var json = MirrorRedis.db.ListGetByIndex("AIMirror_KnockoutPool_1_4_101_All|Devil|Insect|Mutant|Neutral|Royale|Wild_Insect|Royale", index);
+                AIHeroMirror mirror = null;
+                try
+                {
+                    mirror = ((string)json).ToProtobuf<AIHeroMirror>();
+                }
+                catch (Exception)
+                {
+                    LogHelper.WriteError($"镜像格式出错,跳过该镜像:\n{"AIMirror_KnockoutPool_1_4_101_All|Devil|Insect|Mutant|Neutral|Royale|Wild_Insect|Royale"}\n{json}");
+                }
+
+                if(mirror == null) continue;
+                // 兼容之前的数据
+                mirror.RedisKey = "AIMirror_KnockoutPool_1_4_101_All|Devil|Insect|Mutant|Neutral|Royale|Wild_Insect|Royale";
+                usedHeroSet.Add(mirror.HeroId);
+                ret.Results.Add(mirror);
+                // 每个RedisKey只选一个,保证多样
+                break;
+            }
+            LogHelper.WriteLog($"选择到{ret.Results.Count}个镜像\n" +
+                               $"{string.Join("\n", ret.Results.Select(r => r.RedisKey))}");
+            return ret;
+        }
+~~~
+
+
+
+### 33.手选卡
+
+model.UserBagItem{}中，是道具类型(RewardType_Item), item_id为9(*BagItemId_BagItemId_HeroSelectCard*)
+
+在神秘商店中买(就是用皮肤碎片兑换那里)， 具体的东西在ShopGoods.xlsx中
 
 ### 32. 机制
 
@@ -39,6 +342,10 @@ OwnPlayer.AuraMgr.ToBuff(minion, BuffType.Temporary);
 7.羊铃奶奶：她和奇迹奶牛一样，目的是让具有成长效果的石灵的成长效果额外触发一次， 拓展：大闹鹅的遗言是让友方触发成长效果，但他本身不是一张成长效果的牌，蛤蟆才是，所以他的tag上不需要加growth。
 
 8.entry里面alltarget， 如果是战斗阶段加载的词条，就包含了敌方，如果是运营阶段的词条就只有己方
+
+9.entry里面的triggerCondition要看细节就在TriggerFuncContent函数看，每个section对应一个小条件
+
+10.AfterEffectPerform： 每个词条都会触发一次亡语效果的地方
 
 ### 31.动画
 
@@ -117,21 +424,27 @@ pve胜利界面：ResultShowAdapter.ShowAdventureCloseUp(msg, this);]
 
 pve投降结算：ShowAdventureCloseUp
 
+pve点击投降：ServerSurrender
+
 ### 28.日志系统
+
+经验：1.查uds战绩未结算， 先去找到大致发生时间， 然后grep时间看uds的完整日志，看到了panic
 
 #### docker直接看9001-9005
 
-docker ps -aqf "name=dev5-project328-battle-royale-server" 查看有哪些dockerid
-
 #### 所有日志的地方
 
-
-
-过滤时间：T03:5
+过滤时间：T03:59
 
 战斗服：BattleRoyaleServer
 
-uds：UserDataService
+~~~
+docker ps -aqf "name=dev5-project328-battle-royale-server" 查看有哪些dockerid
+~~~
+
+lbs:   RankBoardService
+
+uds：UserDataService（success deal:UdsAddUserGameHistory）
 
 328:HallServer
 
@@ -151,6 +464,12 @@ grep
 
 ~~~
 搜索不包含一下任一字段的内容 grep -vE 'SelectHero|InBattle|IsMatching|WaitingForPreparation|InTeam|Watching|InAdventureBattle'   不要-v就是包含任一字段的意思
+~~~
+
+实时看某个文件的日志
+
+~~~
+tail -n 10 -f data.b60b4195543d60247dca3e117fc9b12af.log | grep RankBoardService
 ~~~
 
 
@@ -176,15 +495,21 @@ ASMDEF文件主要用于管理脚本文件，并定义程序集之间的依赖�
 
 ### 24. 本地化
 
-在客户端的LocalLanguage.txt中修改，点ci会自动同步到LocaleConfig.xlsx
+**客户端弹框：**
+
+1. CommonPopupWindow.Instance.ShowToRestart(LocaleManager.GetText("报错信息_更新_游戏更新失败", "游戏更新失败"));
 
 本地化配置中英文都在 LocaleConfig.xlsx里面
 
-如果是在Locale.xlsx里面的修改，先去点下ci会生成内容到待翻译的文本， 然后由LAQ翻译好后再导出就会到LocaleConfig.xlsx
+1. 如果是在Locale.xlsx里面的修改，先去点下ci会生成内容到待翻译的文本， 然后由LAQ翻译好后再导出就会到LocaleConfig.xlsx
 
 ![image-20231010132608946](/Users/a123/Library/Application Support/typora-user-images/image-20231010132608946.png)
 
-如果是添加文本直接在客户端的LocalLanguage.txt加了ci，就会生成到所有.csv中， 如果中途需要修改文本内容，直接在程序赋值使用.csv修改后点ci会进一步到待翻译的文本.csv, 让LQA翻译即可
+2. 如果是添加文本直接在客户端的LocalLanguage.txt加了ci，就会生成到所有.csv中， 如果中途需要修改**中文文本内容(而不是key)**，直接在程序赋值使用.csv修改后(这个时候客户端的LocalLanguage.txt对应的中文翻译和你在程序赋值使用.csv修改的中文翻译应该是不一样的，以程序赋值使用.csv里面的为准，因为本来**一开始**也是根据客户端的LocalLanguage.txt生成了一个相同的中文翻译的)， 点ci会进一步到待翻译的文本.csv, 让LQA翻译即可 , 翻译好之后需要剪切到翻译好的文本中去再次点ci即可。(如果翻译好的文本.csv和程序赋值使用的key一致但中文文本不一致，以翻译好的文本.csv为准， 但最终在LocaleConfig.xlsx中的位置取决于程序赋值使用.csv的位置)
+
+    客户端的**LocalLanguage.txt本质是为了直接在客户端操作，减少直接操作程序赋值使用.csv**
+    
+3. 中途在程序赋值使用.csv中修改了中文，那必须也把对应的英文也得翻译一下，不然配表中看不到新的英文， 如果你直接在翻译好的文本.csv中加上新的中文对应的新的英文翻译， 去点ci的时候就不会生成到待翻译的文本.csv中了
 
 ### 23. 战绩拉取优化
 
@@ -203,15 +528,27 @@ mongo保存快照，mysql只做简单信息存储
 
 展示结算页面(其实战绩的详情页也是打开了结算页)ResultPanel
 
+最后一名结束游戏的时候会在gamehistoryrecord中记录这场战斗， 然后通过gameid把这场战斗所有玩家的战绩的缓存给删了， 下次玩家打开主页的时候就能拿到最新的信息， 就不会显示**进行中**了, **注意**：战绩相关的有两张表GameHistoryRecord和UserGameHistoryRecord,其实还有一个MongoUserGameHistoryRecord暂未细看
+
 ### 22. 开宝箱
 
-更新周进度：NotifyServerUpdateLottery
+更新周进度：NotifyServerUpdateLottery， 领取周奖励：GetLotteryWeekAward
 
 uds流程：BuyShopData-->case pb.SaleType_GoodItem-->buyShopGoods（如果是宝箱直接看 if isChest）-->OpenLotteryUtil(shopGoods表的的goods字段的第二个值作为参数，开宝箱现在是1)-->OpenLottery（目前lotteryId 为1）-->genLibraries(通过lotteryId（1）去LotteryMain表拿更详细的信息，根据一定规则生成获得的奖励库id(LotteryMain表的awardLibrary字段的第一个字段)<==>对应的是LotteryAward的library)
 
 宝箱配表ShopGoods，98(单抽), 99(十抽) ，goods字段的第二个值为lotteryID， 这个lotteryID对应的是LotteryMain的id
 
-碎片是 1:3:数量 （*RewardType_Currency*:*helper.CurrencyIDFragment*:数量）
+皮肤碎片是 1:3:数量 （*RewardType_Currency*:*helper.CurrencyIDFragment*:数量）
+
+手选卡是 2:9:数量（*RewardType_Item*：BagItemId_BagItemId_HeroSelectCard:数量
+
+石灵碎片：10:-2/-3:数量（*RewardType_MinionStone*， -2表示紫色， -3橙色
+
+宝箱周奖励表：LotteryWeekAward.xlsx, 周奖励进度是user表的lottery_week_award_count，周奖励已经领取进度是user的finish_lottery_week_award_id_list_str
+
+10连抽的逻辑，后端会优先走消耗9个钥匙的逻辑，如果够的话就把需要消耗的钻石设为0，如果不够，就去尝试用钻石
+
+开宝箱奖励如果是皮肤碎片：12|601|3， 12对应gift，601对应giftbag.xlsx,
 
 ### 21.前端记录
 
@@ -306,6 +643,17 @@ TeamType枚举类型，也表示游戏类型，排位赛(PublicKnockout), 匹配
 
 **使用toMinion或者toSnapShot可以保留一个状态信息， 简单说就是new了一个对象来存储信息， 就不用担心存储的是c#的指针对象。**
 
+#### 17.2 pve加载章节
+
+~~~
+1.328启动的时候会去checkAdventureTask
+2.pve不存在锁章节的逻辑， 只要加载了就不会再上锁了，加载的时候就把任务都加上了
+~~~
+
+
+
+
+
 ### 16.bug
 
 1. 总击杀人数不对， creategame的时候如果对方已经挂掉了，就会去新建一个player对象放进去，bug的原因是这个新建的player加载了玩家活着的时候最后一次运营结束的数据(hp > 0)， 所以即使击杀了死亡的玩家也算了人头数
@@ -321,7 +669,7 @@ TeamType枚举类型，也表示游戏类型，排位赛(PublicKnockout), 匹配
 6. 蝉， 主要是光环问题， aura对象，里面会构建一些东西，比如GetBuffAtk和GetBuffHp，根据配表的值配合CreateGetValueFuncFromStr得到需要增加的攻击和生命， 这里面有一个BeginReceiveAuraFlag控制是否开始接收光环效果， 每次去获取石灵的atk，就会遍历玩家的光环列表auraList，比如蝉的光环列表就有加攻击和生命，所以在auraList.Add(aura)，add的那一刻就会给商店的石灵加上攻击和生命, 但BeginReceiveAuraFlag加完攻击和生命之后就会置为false，当你买石灵的时候回去遍历玩家光环，这个时候会把光环的效果转化为实际的buff，获取石灵的Attack时，虽然BeginReceiveAuraFlag为false，但buff里面有数据了，就会从buff里面给石灵加上永久的增效， 所以本质上还是通过buff加的，光环只是临时的效果
 
 7. 华鹿bug， 游戏技能可以在playerskill中看到技能类型， 可以在BuildPlayerSkill看到加载词条的过程， 不管是什么类型如果有词条都会加载（如果不是被动类型的技能是通过ActiveSkill构造基类ActiveEntity加载的词条）。
-   如果是普通的词条判断是否可用在EntryBuilder.cs中的judgeFunc判断， 而如果是技能类型的词条(被动技能除外)判断是否可用在ActiveEntity中， 但实质上他们都是同一个委托类型(EntryImplementation.JudgerFunc), 具体的判断函数都是用的TriggerHelper.cs中的函数。
+   如果是普通的词条判断是否可用在EntryBuilder.cs中的judgeFunc判断， 而如果是技能类型的词条(被动技能除外)判断是否可用在ActiveEntity中， 但实质 [🤔need.md](🤔need.md) 上他们都是同一个委托类型(EntryImplementation.JudgerFunc), 具体的判断函数都是用的TriggerHelper.cs中的函数。
 
    一句话：前端显示英雄技能是否可用，每次执行一个操作都会去ExecutePlayerAction，然后会检测是否需要播放动画， 这里面就包含了前端技能状态的更新，调用了CheckCanUse来检测这个技能是否可用
 
@@ -329,9 +677,34 @@ TeamType枚举类型，也表示游戏类型，排位赛(PublicKnockout), 匹配
 
 8. pve回溯，玩家的计数器没有清空， 用到了GetSummonPlainMinionNumOneRoundFromPlayerCounter，这里面的Get和FromPlayerCounter是固定的
 
+9. 战绩异常，先去查这个game_id，看是否有8条数据， 大概率是ai保存战绩的时候出了问题
+
 ### 15.工具
 
+- gm-tool发邮件奖励的时候会走AddSingleRewardToUser
+
+- 单独重启gm-tool工具
+
+~~~
+/data/build-server/src 可以看到deploy-gm-tool-agent.sh, 第一个参数表示分支
+比如deploy-gm-tool-agent.sh dev
+~~~
+
+
+
 AI模拟战斗：
+
+~~~
+核心思路，不管一回合打了多少人以及多少回合， 都先只做记录（记录到下边三个数据结构中）， 并没有区分是因为打谁造成或受到的伤害。
+
+全部模拟逻辑：
+1.先InitMirrors中初始化，用镜像得到player对象(核心是MirrorId字段)，并且会检查一下这些镜像是否正常(使用loadsnapshot)，如果正常会放到AiHeroMirrorPlayers对象中.
+2.三个重要结构：AiPoolBattleWinRecords(每回合的总战斗次数和赢的次数)，AiPoolBattleDamageRecords(每回合造成的总伤害)，AiPoolBattleBeDamageRecords(每回合受的总伤)
+~~~
+
+
+
+
 
 最小二乘拟合直线: 就是给一些坐标点，求一条坐标上的直线，使得这条直线到这些点的总和最小
 
@@ -446,6 +819,25 @@ SetGuideTaskRecord可能有坑
 客户端的LocaleManager.cs有一些默认的显示
 
 比如“报错信息_UnknownError”，既在LocalLanguage.txt配置了中文 ，也在dicDefaultEN和dicDefaultCN单独配置了中英文
+
+3. 前端弹框
+
+~~~
+1.1  CommonPopupWindow.Instance.Show_WithBtn("报错信息_网络_测试".ToLocal()); //简单弹框不重新连接
+1.2.账号密码输入提示
+CommonPopupWindow.Instance.ShowToast(LocaleManager.GetText("报错信息_注册_密码格式错误"), Toast.Mod.Negative);
+
+报错信息_BuyShopGoodFailed
+  CommonPopupWindow.Instance.DirectlyShowRestartPopup(                    InGameText.BuildUnknownError(result.ResultCode));
+2.1需要重新连接
+ CommonPopupWindow.Instance.DirectlyShowRestartPopup("报错信息_网络_长时间未操作".ToLocal());
+或者
+2.2CommonPopupWindow.Instance.ShowToRestart(LocaleManager.GetText("报错信息_更新_获取更新内容失败", "获取更新内容失败，请稍后重试"));
+              
+
+~~~
+
+
 
 ### 12.android包共存 
 

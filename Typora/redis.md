@@ -7,6 +7,55 @@
 2. redis-cli FLUSHALL
 3.查看list类型数据: lrange key 0 -1 
 4.查看list类型的个数: LLEN key
+5.删除相同前缀的key EVAL "local keys=redis.call('keys', ARGV[1]) for i=1,#keys do redis.call('del', keys[i]) end return keys" 0 "UDS_USER_1*"
+~~~
+
+### 基础知识
+
+~~~
+1. hash没办法针对某个filed做定时，都是针对key来定时，比如验证码可以加上相同的前缀
+~~~
+
+### hash操作
+
+~~~
+1. hgetall 获取所有字段
+
+2. hlen获取长度
+3. hset key field value
+~~~
+
+
+
+### zset操作
+
+~~~redis
+1. 添加或更新member的score：使用ZADD命令来添加或更新一个或多个member及其对应的score。
+ADD key score member [score member ...]
+例如，要将member1的score设置为10，可以执行以下命令：
+ZADD myzset 10 member1
+如果member1已经存在于有序集合中，那么执行上述命令将更新member1的score为10。
+
+2.增加member的score：使用ZINCRBY命令来增加一个member的score。
+ZINCRBY key increment member
+例如，要将member1的score增加5，可以执行以下命令：
+ZINCRBY myzset 5 member1
+如果member1不存在于有序集合中，那么执行上述命令将添加一个新的member1，并设置其score为5。
+
+3.获取member的score：使用ZSCORE命令来获取一个member的score。
+ZSCORE key member
+例如，要获取member1的score，可以执行以下命令：
+ZSCORE myzset member1
+如果member1不存在于有序集合中，那么该命令返回nil。
+
+4.删除member：使用ZREM命令来删除一个或多个member。
+ZREM key member [member ...]
+例如，要删除member1，可以执行以下命令：
+ZREM myzset member1
+如果member1不存在于有序集合中，那么该命令不执行任何操作。
+
+5.从高到低看分数
+zrevrange BeastBoard 0 -1 withscores
 ~~~
 
 
@@ -98,7 +147,7 @@ zset是一个有序集合, 	用来实现排行榜
 应用场景：排行榜，热榜
 
 通过zset可以引申出很多功能：
-1.延时队列：zset中包含key 和 member， 用member做消息命令， key 做到期时间，zset是有序(通过key排序)的，通过不断获取当前时间，来跟zset中的value对比，若超时了，就执行member这个消息。
+1.延时队列：zset中包含key 和 member， 用member做消息命令， key 做到期时间，zset是有序(通过key排序)的，通过不断获取当前时间，来跟zset中的key对比，若超时了，就执行member这个消息。
 2.分布式锁， 比如A,B,C,D同时去获取redis的锁，只有A获取到了，则B,C,D使用延时队列的方式，定时(随机一个时间)重新去获取锁，依靠延时队列来实现。也可也用redis中的发布订阅机制实现，
 3.窗口限流：比如5分钟内只能点击10次， 通过时间的对比，维护一个5分钟内的所有点击数据的窗口， 计算这五分钟点击次数。2.我自己想的，点击的动作作为key，value为时间，每次点击都获取前边第九次点击的对象，将它的value与当前时间做比对，如果超过五分钟，那么此次点击有效并加入zset中，反之无视。
 对于大量数据的情况，比如黑客攻击，就不能使用窗口限流，因为一个时间段内数据量可能很大， 需要使用漏斗限流

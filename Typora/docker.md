@@ -6,15 +6,31 @@ docker官网镜像：https://hub.docker.com/
 下载好docker后去设置中配置引擎加上一行
  "registry-mirrors":["https://mirror.ccs.tencentyun.com"],
 
-
+```
+// 查看所有容器， 包括异常停止的 (docker ps看不到停止的)
+docker container ls -a | grep dev2
+```
 
 docker pull mongo //拉取mongo的最新版本
 
 docker run -p 27017:27017 --name mongodb -d mongo    //启动容器， 第一个端口号是host的，第二个是container中的
 
-docker run -d --name=mysql-server -p 3306:3306 -v mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 mysql  //运行mysql
+### mysql
+
+~~~
+docker run -d --name=mysql-server -p 3306:3306 -v mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 mysql  //运行mysql,  最后这个mysql表示镜像名(比如hoxi的时候是docker.hoxigames.com/mysql:5.7)
 
 docker exec -it mymysql mysql  -u root -p  //连接mysql
+
+~~~
+
+### redis
+
+~~~
+docker run --name conn-redis -v ~/.deploy-tool/dev/conn-redis:/data -p 6381:6379 -d docker.hoxigames.com/redis:6.2.4-alpine3.13
+~~~
+
+
 
 docker exec -it mongodb	mongosh  admin   //mongodb是容器名，mongosh是sh， admin是用户表(不加也可以)，默认还有config和local
 
@@ -50,5 +66,12 @@ docker cp <容器名称或ID>:<容器内文件路径> <本地目标路径>
 scp deploy@47.95.6.108:~/divideLevel.json .
 或者上传服务器
 scp divideLevel.json  deploy@47.95.6.108:~/
+~~~
+
+停掉所有9005开头的docker容器
+
+~~~
+containers=$(docker ps -aq --filter "name=^/9005")
+docker stop $containers
 ~~~
 

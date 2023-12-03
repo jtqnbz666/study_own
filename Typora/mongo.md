@@ -2,7 +2,7 @@
 
 启动不了可能是因为本地有多个mongo服务，得删掉多余的
 
-启动mongo：brew services start mongodb-community@6.0
+启动mongo：brew services start mongodb-community@6.0 , mongosh起不来的时候就去下载一个mongosh
 
 mongo和mysql区别：mysql是规范的，结构化很清楚， mysql中可以多表联合查询，mongo数据通常存储在单个集合中，使用嵌入式文档将其分隔开，没有联合的概念
 

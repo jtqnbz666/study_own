@@ -30,6 +30,8 @@ FROM emp e JOIN emp mgr
 ON e.empno=mgr.mgr;
 
 查询语句标明某个字段的时候要么啥都不加，要么加的是` `而不是 ' '
+
+设置mysql的编码格式：set names utf8mb4;
 ~~~
 
 

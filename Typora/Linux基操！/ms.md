@@ -286,7 +286,6 @@ sed
 sed -n '5,10p' filename #这样你就可以只查看文件的第5行到第10行。
 
 
-
 cat test | tail -n 10 | head -n 5  显示test文件的第5~9行
 
 tail -n 10  #显示最后10行
@@ -295,6 +294,8 @@ tail -n +10 #从10行开始显示，显示10行以后的
 
 head -n 10  #显示前面10行
 
+// 动态查看文件内容
+tail -n 10 -f data.log | grep RankBoardService
 ~~~
 
 
