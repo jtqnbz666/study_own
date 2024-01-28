@@ -1,3 +1,87 @@
+### 53. 抽奖系统
+
+### 活动
+
+**吞吞:**
+
+判断上次使用时间是否是昨天 lastUseTime.Before(timeUtil.GetFixedHourTime(userData.LoadTime(), conf.NEW_DAY)) 
+
+**新年活动:**
+
+子模块(player.cs)和battleRoyale可以通过Campaign进行数据的关联
+
+### 52.线上
+
+/data/tool/
+
+### 51. 匹配
+
+~~~
+match_success
+~~~
+
+
+
+### 50.实名认证
+
+*MESSAGE_TYPE_REAL_NAME_AUTH*
+
+### 49.锦标赛
+
+尝试开启锦标赛：*MESSAGE_TYPE_BR_START_NEW_CHAMPIONSHIP*
+
+路由搜索start-championship
+
+### 48. UGC存储
+
+OSS(Object Storage Service) 是阿里云提供的一种云存储服务，更像是一个文件存储系统，主要用于存储和访问大量非结构化的数据，例如图片，视频等。而 MySQL，HBase 是数据库管理系统，用于存储和管理结构化的数据。这些系统通常需要更复杂的查询操作，例如关联查询，索引查询等。
+
+测试数据：
+
+~~~go
+上传音频资源：
+328中
+audioFilePath := "/Users/a123/a.mp3"
+audioData, err := ioutil.ReadFile(audioFilePath)
+objectKey := fmt.Sprintf("%v%v", "dubbing/", "123456")
+err = global.OssClient.PutObject("assets/"+objectKey, audioData)
+
+// uds中
+var dubbing = &model.UserDubbing{
+		UserID:      10000,
+		DubbingPath: "123456",
+		DubbingName: "测试",
+		UpUserName:  "jt",
+		IsPublic:    true,
+		DubStatus:   pb.DubbingStatus_Dub_WaitingForReview,
+		DubType:     pb.DubbingType_Dub_Attack,
+	}
+	utils.Create(dubbing)
+	
+	// gm-tool仿照查询
+	dubbing.SearchByCondition(map[string]interface{}{
+		"heroID":   float64(101),
+		"isPublic": false,
+	}, 5, 0)
+	// gm-tool更新状态
+	msg := pb.UpdateDubAuditStatus{
+		ID:     uint64(1),
+		IsHot:  false,
+		OpType: pb.DubbingOp_Dub_UpdateIsHot,
+	}
+	jsonStr, _ := json.Marshal(msg)
+	dubbing.UpdateDubbingStatus(jsonStr, nil)
+~~~
+
+### 47. PC登录
+
+1. Conn_redis里的s_10000记录玩家所在大厅服标识， b_(大厅服标识)是对应的地址
+2. 看328的RegisterToBroadcaster, 328先发送*MsgSetServerID*给广播服告诉广播服自己的唯一标识id，然后就建立连接了， 广播服维护了一个ServerConnIDMap来管理所有的大厅服连接
+3. s_10000是在LockSetSession里生成的
+4. 在func (c *Connection) Stop() {看具体移除的连接的connID
+5. 在328的func (mgr *Manager) send(可以看到发送消息给客户端的流程，可以看出来是通过userID来找到玩家的
+6. OnConnStart和OnConnStop分别是刚连接和刚断开的hook函数，在InitTCPServer的时候设置好的，可以算在线时长
+
 ### 46. 服务器相关
 
 1. docker的镜像的名字的第一部分是分支commit，第二部分是数值commit
@@ -72,35 +156,33 @@ func getSortQueryString(params map[string]string) string {
 
 ~~~
 
-辅助测试方法
+**B站登录**
 
-~~~
-params := make(map[string]string)
-	params["appId"] = "2882303761520282579"
-	params["uid"] = "2023112800235103"
-	params["cpOrderId"] = "20231128220517857725190"
-	req := "{\"headers\":{\"Accept-Encoding\":\"gzip,deflate\",\"Connection\":\"Keep-Alive\",\"Traceparent\":\"00-8fd4024561e34d23bee47d257d9dd11a-639b33679c5458b5-01\",\"User-Agent\":\"Apache-HttpClient/4.4.1 (Java/1.8.0_202)\"},\"body\":\"\",\"queryParameters\":{\"appId\":\"2882303761520282579\",\"cpOrderId\":\"20231128213023991193595\",\"orderId\":\"20231128213024472797migc\",\"orderStatus\":\"TRADE_SUCCESS\",\"payFee\":\"600\",\"payTime\":\"2023-11-28 21:30:34\",\"productCode\":\"gem_bundle1\",\"productCount\":\"1\",\"productName\":\"6元奥晶礼包\",\"signature\":\"c5b2348362f2536753ccf3f4a8e7deb9d6ff16c1\",\"uid\":\"2023112800235103\"},\"rawPath\":\"/mi-notify\",\"PathParam\":[\"mi-notify\"]}"
-	request := message.FcRequest{}
-	_ = json.Unmarshal([]byte(req), &request)
-	s := getHandler(request.PathParam)
-	s.Handler(request)
-~~~
+1. 返回的时候要求是[success]而不能是["success"]， 只要不使用json.Marshal就是前者的效果
 
+**华为登录支付**
 
+开发者服务器创建好了内部订单号后， 前端在吊起支付的时候把我们自己的订单号发过去，到时候支付完杀端，前端查询SDK数据的时候，就可以看到我们自己的订单号， 然后再传给开发者服务器
 
 ### 43. 手机验证码登录
+
+阿里云不支持游戏通知短信， 可以用这个https://www.mysubmail.com/documents/49BVE
 
 1. 登录有很多方式， 第一次登录的时候，比如验证码登录会先检验一些基础信息， 如果通过的话会返回一个token，玩家之后就用这个token进行登录， token格式如下:
 
    ~~~go
    token := fmt.Sprintf("%v_%v_%v_%v", global.MobileNumberLoginType, account.ID, msg.PhoneNumber, time.Now().Add(global.TokenLoginTimeout).Unix())
    	token = encrypt.EncryptString(token, global.TokenEncryptKey)
+   前端在PathHelper.cs修改指定token
    ~~~
 
 2. 使用token登录的时候，又把这个token反解出来看看password对不对的上，如果是手机号登录，那password一般就是手机号，小米的话，就是小米唯一id，当然也可以采取对密码进一步加密。
 
 3. 验证码校验需要加限制，比如15s内只能尝试3次，  验证码请求次数阿里已经做了限制， 比如一分钟只能请求2次
+
 4. 注意是验证码用字符串， 不然0开头的有问题
+
+   
 
 ### 42.bug前端记录
 
@@ -135,24 +217,47 @@ if err != nil {
 		}
 ~~~
 
-
-
 ### 40.商店系统
+
+RewrdType：12是礼包， 4是宝箱
+
+2.资源转换：buyShopGoods的时候info字段会携带相关信息
 
 1.皮肤商店的道具在shopGoods.xsls中，比如手选卡对应216
 
 2.道具里面的8个东西(每日礼品和每日金币，以及开宝箱的单抽和十连抽都属于道具，在shopMain里面, 指向shopGoods.xsls)， 对应的状态存储在user_shop_item_data中
 
-3.购买记录都会在buy_records的sql表记录， 比如神秘商店对应type为3
+3.购买记录都会在buy_records的sql表记录， 比如**神秘商店**对应type为3
 
 ~~~
 select * from buy_records where user_id = 10001 and type = 3\G;
+
+把buy_records的记录全删了，神秘商店就可以全部重新购买
 ~~~
 
 4. 道具比如手选卡和钥匙记录在user_bag_items中
-4. 商店中的礼包在ShopGift中,在user_shop_gift_bag_data记录购买情况
 4. 随机石灵碎片，第四个参数是决定分多少组的
-4. 目前商店的礼包栏中，会在splitGiftBagReward函数去解析礼包里面包含的东西，直接存放在user_shop_gift_bag_data中的content字段
+
+**礼包系统：**
+
+增加一些有时间限制的礼包：addTimeShopGiftBag
+
+**目前可以这样理解：LotterMain.xslx就是宝箱， 里面的具体奖励在LotteryAward.xslx看**
+
+相关表：ShopGift、ShopGoods, GiftBag、LotteryMain、LotteryAward、LotteryNew
+
+1. 目前商店的礼包栏中，商店中的礼包在ShopGift中(进一步是GiftBag中),在user_shop_gift_bag_data记录购买情况，会在splitGiftBagReward函数去解析礼包里面包含的东西，直接存放在user_shop_gift_bag_data中的content字段
+
+2. 举例：比如ShopGift的主键3，可以看到award字段对应的是12,203,1 其中12表示是个礼包，203是主键(对应GiftBag的id)，然后去GiftBag看203，可以看到reward字段又有一个12|503|1, 通用12表示礼包，503同样是GiftBag的主键(当前是一个随机史师级英雄)， 然后目光来到503对应的reward，里面是4|23|1, 其中4为RewardType_RewardBox(表示宝箱，23对应LotteryMain表的id), 然后目光来到 LotteryMain主键23对应的awardLibrary字段为23|1|1|1, 重点来了，这个23表示libraryID(对应LotteryAward表的library字段) 
+
+3. 接着第二点说明， 看OpenLottery函数，通过genLibraries得到libraries之后，会遍历一遍libraries，每次筛选了LotteryAward中library值一样的对象。
+4. lotteryNew表会提升中奖概率（原因是每次如果获取了重复的英雄，LastGetNewHero字段就会+1， 当这个数越来越大，就会提升中奖概率，
+5. 礼包可以再开礼包和宝箱， 但宝箱不能再开宝箱
+6. getRewardCount根据权重决定这个宝箱的奖励有多少个（看LotteryMain的count字段）
+7. **宝箱的核心**是通过OpenLottery里面的genLibraries函数计算宝箱里面包含的奖励（也就是LotteryMain的awardLibrary字段）对应LotteryAward的library（而不是ID
+8. 权重计算的本质就是， 把所有比重加起来， 比如20+100+200, 那么就是320，然后在320中随机一个数，比如180，那就是20<180, 20+100 < 180 , 20+100+200 > 180,于是就选中了这个200比重的物品 
+
+9. 宝箱的最终奖励就是LotteryAward的内容（比如你抽到libraryID是23，就找到library为23的所有行根据一定概率选一个出来）， 所以如果要操纵宝箱得到的奖励，比如宝箱开出来的英雄， 如果是重复的，可以动手脚给这项加一个字段， 表示，如果这个奖励被抽中并且重复了，就给她换成不重复的。
 
 ### 39. 服务搭建
 
@@ -203,9 +308,7 @@ select * from buy_records where user_id = 10001 and type = 3\G;
 zadd CriticalHitBoard 34.745070318774509 10354
 ~~~
 
-
-
-
+获取榜单玩家基础数据的时候用pipeline的方式，能极大减少访问redis次数
 
 之前想的是uds有改动的时候都去通知排行榜服务(拿数据的时候就可以省去向uds拿最新数据的步骤)， 但这样并不好，任何改动都需要同步排行榜服，改动很大，容易漏
 
@@ -315,15 +418,27 @@ public SelectMirrorBackMsg Select()
 
 
 
-### 33.手选卡
+### 33.道具
+
+#### 手选卡
 
 model.UserBagItem{}中，是道具类型(RewardType_Item), item_id为9(*BagItemId_BagItemId_HeroSelectCard*)
 
 在神秘商店中买(就是用皮肤碎片兑换那里)， 具体的东西在ShopGoods.xlsx中
 
+#### 
+
 ### 32. 机制
 
-1.战斗开始前会加载一次词条(比如亡语狼和双角宝宝的词条生效阶段)
+3.指定发现：ForceDiscoverDedicatedMinion
+
+2.检查**是否需要加载词条**：GetEnableStageEnum
+
+1.发现石灵相关看waitingForSelectionQueue， PlayerSelectMinionAction.cs
+
+具有主动战吼的石灵不会加载词条（搜PrepareBattle
+
+1.战斗开始前会加载一次词条(比如亡语狼和双角宝宝的词条生效阶段,看StartBattle)
 
 2.火角山羊实质上是添加了一个叫BoomCounter的计数器(IncrPureCounter, 计数器一般都是通过配置表来添加的)，炎豚触发效果的伤害就会去累加这个值,  这种伤害效果叫*造成爆炸伤害*
 
@@ -352,6 +467,8 @@ OwnPlayer.AuraMgr.ToBuff(minion, BuffType.Temporary);
 以changeheroskill为例，后端先添加动画ClipType.**ChangeHeroSkill**，前端在script/animation/animclips中找到对应的类的GenAnimation就可以看出来，最终调用RefreshRuneDress
 
 ### 30. 镜像
+
+一开始所有的ai都会把镜像ai置为true，然后分配镜像，没拿到镜像的就把镜像ai置为false，然后设置为生成ai， 
 
 一般镜像level-排名-英雄
 
@@ -530,9 +647,15 @@ mongo保存快照，mysql只做简单信息存储
 
 最后一名结束游戏的时候会在gamehistoryrecord中记录这场战斗， 然后通过gameid把这场战斗所有玩家的战绩的缓存给删了， 下次玩家打开主页的时候就能拿到最新的信息， 就不会显示**进行中**了, **注意**：战绩相关的有两张表GameHistoryRecord和UserGameHistoryRecord,其实还有一个MongoUserGameHistoryRecord暂未细看
 
+个人主页的战绩连胜是前端自己算的， 用了一个栈，根据拿到的战绩数据的rank自己算出来的，没有区分模式
+
 ### 22. 开宝箱
 
-更新周进度：NotifyServerUpdateLottery， 领取周奖励：GetLotteryWeekAward
+ShopLottery_Open_Multi修改宝箱抽奖次数
+
+更新周进度(所有定时刷新的都是前端发的)：1.前端发*MESSAGE_TYPE_REFRESH_LOTTERY_WEEK_AWARD*， 2. 登录的时候去刷新RefreshLotteryWeekAward
+
+ 领取周奖励：GetLotteryWeekAward
 
 uds流程：BuyShopData-->case pb.SaleType_GoodItem-->buyShopGoods（如果是宝箱直接看 if isChest）-->OpenLotteryUtil(shopGoods表的的goods字段的第二个值作为参数，开宝箱现在是1)-->OpenLottery（目前lotteryId 为1）-->genLibraries(通过lotteryId（1）去LotteryMain表拿更详细的信息，根据一定规则生成获得的奖励库id(LotteryMain表的awardLibrary字段的第一个字段)<==>对应的是LotteryAward的library)
 
@@ -614,6 +737,10 @@ OnBeforeEndGame的最后一个参数是isSpecial ， 如果是正常失败或投
 
 ### 18.机制bug
 
+特性构造器:GetAttributesFromArray
+
+三连合金：CombineMinions
+
 Todo: 石灵maxlevel 。2。老号pve任务加载有问题。 3.老夫子bug
 
 在Battle.cs里面的atk.Begin进行一次攻击的计算，两个石灵伤害的扣除在DamageMinion(有两个， 第一个是被打的，第二个是自己受反击)
@@ -624,39 +751,71 @@ Todo: 石灵maxlevel 。2。老号pve任务加载有问题。 3.老夫子bug
 
 #### 17.1 任务系统
 
-一键领取战令奖励：GetAllBPTasksReward
+应该思考，任务表里边的任务的可复用性
 
-一键领取任务奖励：GetAllWeekDailyTasksReward
+~~~
+case1:皮肤对应的任务，不可能重复，那就不用额外增加skin字段标识
+case2:活动任务可能复用，就得有额外的标志
+~~~
 
-328也有MergeUserdata
+
+
+任务类型
+
+~~~
+搜PlayerTaskType看任务类型，
+1.通行证里面的: 1.1.挑战是活动任务2.1.任务是每日任务
+2.主界面的: 2.1.挑战是新手任务
+3.还有就是pve任务
+~~~
+
+涉及的表
+
+~~~
+最终都会指向playerTask.xlsx
+1.新手任务(也就是现在的主界面的那个挑战任务)在newhandtask.xsls,
+2.全胜任务在328的AddNewHandTaskGroup可以看到，
+3.每日任务在dailytask.xsls中, 
+4.周奖励任务在weektaskreward.xsls
+~~~
+
+1. 只要是单个任务领奖都走get-task-reward(章节奖励，全胜奖励，周宝箱奖励也是)， 在getRewardMsg根据类型区分领取不同奖励
+2. 作弊码设置任务状态走：set-user-task-stat
+3. **一键领取挑战奖励**：get-all-bp-tasks-reward(获取所有通行证里面的挑战奖励(它只会发章节的任务id，然后把这个章节下的所有任务领取了，在判断章节奖励是否可以领取)， 
+4. **一键领取任务奖励**(获取所有通行证里面的任务模块的奖励)：get-all-week-daily-tasks-reward
+5. 添加章节任务addNewBPChapterTask，再添加章节内的普通任务addNewBPNormalTask
+6. 普通任务领奖时，会更新关联父任务UpdateParentTaskProgress
+7. 刷新所有任务数据(新号也会走，我主要关注pve任务)
+   userdataservice.GetUDSInstance().UpdateNewPlayerTask(user.ID)， 新手任务AddAllNewHandTaskGroup()
+8. 通行证里面的挑战对应的活跃度宝箱是根据宝箱对应的任务的progress字段， 简单来说就是每领取这个界面的每日奖励，就会更新一下这些宝箱对应的任务的progress进度，这几个宝箱的slot字段不一样，分别是1，2，3，4，5， 比如第五个宝箱，在数据库的记录是cfg_id:5, type:12, progress:30, 这个五个宝箱的任务挨的比较近可以观察确认
+9. 通行证的任务， 第二天更新的时候会实时通知，会发送NOTIFY_UPDATE_PLAYER_TASK
+
+10. 通行证里面的任务模块有个刷新时间， 这个依赖于后端的addTaskRefreshTimeStamp来给返回的userdata添加上刷新时间
+
+11. 任务类型PlayerTaskType，周任务(通行证里面的圆圈任务宝箱)是*PlayerTaskType_PT_Week*，奖励在weektaskreward表
 
 uds：更改任务状态UpdateTaskStats
 
 Project328:在CheckRefreshTask检查生成所有的任务， addNewBPTask添加战令任务,checkDailyTask添加每日任务(进一步使用AddTaskFromConfig去uds)
 
-如何确定当前房间的模式， 构建BattleRoyale对象的时候可以看到， 
-GmaeType枚举类型(Normal和Championship)表示游戏类型，只要不是锦标赛就都是Normal；
-RoomMatchType枚举类型(Public和Private) 表示房间类型，锦标赛和排位是Public， 匹配是Private
-TeamType枚举类型，也表示游戏类型，排位赛(PublicKnockout), 匹配赛(PrivateKnockout), 锦标赛(PublicChampionShip)
 
-更新状态还没有处理（八人合并）
 
 **使用toMinion或者toSnapShot可以保留一个状态信息， 简单说就是new了一个对象来存储信息， 就不用担心存储的是c#的指针对象。**
 
 #### 17.2 pve加载章节
 
+有关系的表， pvemap.xlsx, pvechapter.xlsx
+
 ~~~
+
 1.328启动的时候会去checkAdventureTask
 2.pve不存在锁章节的逻辑， 只要加载了就不会再上锁了，加载的时候就把任务都加上了
+3.添加玩家的冒险信息，AddPveInfo(
 ~~~
-
-
-
-
 
 ### 16.bug
 
-1. 总击杀人数不对， creategame的时候如果对方已经挂掉了，就会去新建一个player对象放进去，bug的原因是这个新建的player加载了玩家活着的时候最后一次运营结束的数据(hp > 0)， 所以即使击杀了死亡的玩家也算了人头数
+1. 总击杀人数不对， creategame的时候如果对方已经挂掉了，就会去新建一个player对象放进去，bug的原因是这个新建的player加载了玩家活着的时候最后一次运营结束的数据(hp > 0)， 所以即使击杀了死亡的玩家也算了人头数(搜if (g.P2 == null))
 
 2. 模拟战斗工具， game在一开始运营就会创建，并且加入gamelist， game里面有一个curbattle会在计算战斗的时候创建，并且会连接在game上， 所以不要轻易改动玩家的game对象
 
@@ -679,6 +838,8 @@ TeamType枚举类型，也表示游戏类型，排位赛(PublicKnockout), 匹配
 
 9. 战绩异常，先去查这个game_id，看是否有8条数据， 大概率是ai保存战绩的时候出了问题
 
+10. 同时开了两场对局， 战斗服成功开始游戏的时候会有一个match_success埋点， 游戏结束是match_result
+
 ### 15.工具
 
 - gm-tool发邮件奖励的时候会走AddSingleRewardToUser
@@ -688,6 +849,13 @@ TeamType枚举类型，也表示游戏类型，排位赛(PublicKnockout), 匹配
 ~~~
 /data/build-server/src 可以看到deploy-gm-tool-agent.sh, 第一个参数表示分支
 比如deploy-gm-tool-agent.sh dev
+~~~
+
+- 活动管理工具
+
+~~~
+1.活动名，2.活动类型，3.活动id，2.是否禁止活动， 3. 活动开始时间， 4.活动截止时间
+
 ~~~
 
 
@@ -847,6 +1015,17 @@ CommonPopupWindow.Instance.ShowToast(LocaleManager.GetText("报错信息_注册_
 
 ### 10. 跑马灯
 
+石灵能量那个：13对应的是品质， 从大->小的配置， 比如13，12，11，后边的value就是3，3，3这样
+
+**前端部分**
+
+~~~~
+1.发送MESSAGE_TYPE_MARQUEE_NORMAL
+2.MQMsg.cs中可以看到文本的设置
+~~~~
+
+
+
 目前想法， 只放一个消息进kafka， 然后大厅服消费的时候根据类型决定是广播给所有在线玩家还是自己。
 
 ~~~
@@ -885,6 +1064,8 @@ CommonPopupWindow.Instance.ShowToast(LocaleManager.GetText("报错信息_注册_
 
 
 ### 2.赛季需求
+
+4.现在改为了再用到的时候才会去创建对应的表可以看getByConfId
 
 
 

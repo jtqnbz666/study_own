@@ -1,3 +1,11 @@
+### 小知识
+
+~~~
+json不能有注释，yaml可以有
+~~~
+
+
+
 json.loads和json.dumps的使用
 如果一开始是json对象/字符串，使用loads方法，再dumps，得到的就是json对象/字符串
 如果一开始是json对象，没有使用loads方法，直接dumps，得到的是一个json字符串

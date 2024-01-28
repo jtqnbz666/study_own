@@ -6,6 +6,8 @@
 
 mongo和mysql区别：mysql是规范的，结构化很清楚， mysql中可以多表联合查询，mongo数据通常存储在单个集合中，使用嵌入式文档将其分隔开，没有联合的概念
 
+mongoDB中一条记录的主键为 " _id " 字段，如果不显式添加，则会默认为你加上
+
  mongosh/mongod运行命令
 use database_name
 
@@ -18,9 +20,9 @@ show tables  查看所有集合(表)
 
 插入一条数据
 
-db.info.insert( { "姓名" : "江涛" "age" : 12}) //info是表的名字，没有就自动创建
-
-mongoDB中一条记录的主键为 " _id " 字段，如果不显式添加，则会默认为你加上
+~~~
+db.info.insert( { "姓名" : "江涛" "age" : 12}) //**info是表的名字**，没有就自动创建
+~~~
 
 插入多条数据
 
@@ -44,11 +46,22 @@ db.info.insert(myEmploy);
 
 查询数据（json的方式）
 
-db.info.find().forEach(printjson)   // 必须是forEach不能是foreach
+
+
+查询数据
+
+~~~mongo
+findOne区分大小写
+db.UserGameHistoryRecord.findOne({id:"3727928"})
+json方式
+db.UserGameHistoryRecord.find().forEach(printjson)   // 必须是forEach不能是foreach
+~~~
 
 
 
 查询指定条件的数据
 
-db.info.find({"name" : "jt"}).forEach(printjson)
+~~~ db.info.find({"name" : "jt"}).forEach(printjson)
 db.info.find({"age": {$gt : 12}}).forEach(printjson)  //>=12岁的人
+~~~
+

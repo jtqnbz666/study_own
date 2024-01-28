@@ -72,6 +72,8 @@ INSERT INTO mystudent(name,age,sex) SELECT * FROM student WHERE sex='女';
 ### 3.表结构
 
 ~~~mysql
+#删除索引
+alter table tableNmae drop index 索引名
 #修改表名
 alter table new_table rename to old_table;
 #修改字段名

@@ -8,28 +8,44 @@
 
 **小知识**
 
-~~~
-go的main()执行前，会先执行init函数(这个init函数是别的包中的也是一样)， init函数执行前会先初始化全局变量
+~~~go
+7.时间戳是没有时区概念的
+6.copy可以拷贝切片对象
+5.gorm方法表有数据之后再修改表的索引，可能重新同一字段重复索引，可以删除不要的索引
+alter table table_name drop index idx_name;
+4.创建gorm的索引比如`gorm:"type:varchar(100);index:idx_name,unique"` //注意;和,的区别，如果把里面的,换成;就会创建两个索引，一个是unique创建的，一个是index创建的， 或者直接换成uniqueIndex:idx_name
+3.go的main()执行前，会先执行init函数(这个init函数是别的包中的也是一样)， init函数执行前会先初始化全局变量
 2.时间处理上，用2006那个时间，只要写上固定的时间，format得到的时间戳就是utc时间
-3.把字符串以某个符号分割. strings.Split(str, ",")， 如果是切片合为字符串：strings.Join(切片, ",")
+3.把字符串以某个符号分割. strings.Split(str, ",")， 如果是切片合为字符串：strings.Join(切片, ","), 不会在最后多加一个","
 4.fmt.Sprintf("%v", levelConf.Id)给字符串格式化
 5.如果改了某个框架的东西，go mod tidy
 go get gitlab.hoxigames.com/hoxi-games/hoxi-server@develop  最后的develop表示develop分支
 6.两个切片合并。 append(chan1, chan2...)
 7.%v无法打印出切片内容，而是打印他的地址， 可以用%+v或%#
-8.遍历切片的时候，比如, 'for i, entity := range Entities'不能直接修改entity，因为它是临时变量，Entities 是[]*pb.lb类型(尽管是指针切片)
+8.遍历切片的时候，比如, 'for i, entity := range Entities'不能直接修改entity，因为它是临时变量，Entities 是[]*pb.lb类型(尽管是指针切片)(有问题，待验证)
 9.使用ret := RawData{} 和 ret := &RawData{}来调用自己的指针方法，二者都可以，没有区别
 10.更新依赖：go get -u； 清除缓存：go clean -modcache
 11. 目前10位是s， 13为时间戳才是毫秒
 12. 记得养成加recover的习惯， 注意定时任务那里
 13. go中得到interface{}对象如果本身是json，可以用json.RawMessage来接收
-
+14. 传过来的数据如果是用interface{}类型来接收的数字，一定是float64,需要自己再转成需要的, 如果不用interface{}, 那么你可以用任意类型来接收，比如是个整数，你可以用int32,int,int64, 如果是小数，就用float相关的， 这里还有小细节，就是接收的这个结构体的字段必须是大写字母开头的
+15.如果HonorRecord是指针类型对象，*HonorRecord = *test 和 HonorRecord = test是等价的，是浅拷贝， 
+以下是深拷贝
+HonorRecord = proto.Clone(test).(*model.UserHonorRecord)
+16.如果对一个字符串进行了json.marshal，他就会多一层引用，有时候不能这么搞，可以使用strconv.Unquote给他去掉这层引用
+17.打印堆栈观察信息
+var buf [10240]byte
+n := runtime.Stack(buf[:], false)
+fmt.Printf("=== Stacktrace ===\n%s\n", buf[:n])
 ~~~
 
 实用技能
 
 ~~~go
-将字符串分割
+5.nil不能直接类型转换，但可以配合ok
+tt := interface{}(nil) // 可以通过这种方式给对象赋值为nil
+res, ok := tt.(*model.UserRLActivity)
+4.将字符串分割
 "github.com/elliotchance/pie/v2"
 pie.Map(strings.Split(skinconf.Price, "|"), func(s string) int32 {
 		res, _ := strconv.Atoi(s)
@@ -92,7 +108,20 @@ ExtraParamJsonStr, _ := json.Marshal(extraParam)
 
 json.Unmarshal([]byte(orderInfo.ExtraParamJsonStr), syncOrderReq)//这里必须用syncOrderReq，不能是syncOrderRe.QueryParam.或者syncOrderRe.QueryParam.OutOrderId
 
-		
+9.redis的返回
+value, err := global.ConnRedis.Get(context.Background(), "tt").Result()
+if err == redis.Nil {
+  // 如果没有该键	
+		fmt.Sprintf("%v,%v", value, err)
+} else if value == "" {
+  // 有，但是没值
+}
+10.csv文件写入，‘,’会自动切换下一个格子
+str := ""
+for i := 0; i < len(res); i++ {
+  str += fmt.Sprintf("%v,%v\n", i+1, res[i])
+}
+os.WriteFile(resFile, []byte(str), 0666)
 ~~~
 
 **[]*model.UserHero和[]model.UserHero的区别**
@@ -1569,6 +1598,7 @@ global.MysqlIns.Save(&userGuideInfo)
 
 
 ~~~go
+2.gorm中同一张表是允许存在相同名字的索引的
 1.只要第一次把执行了AutoMigrate创建了表结构，后边就可以不执行这个函数，直接修改表结构(增加或者删除某个字段)也会同步产生效果
 2.通过First(&user)找到一条或者Find(&[]uesr)找到所有符合条件的，就可以通过这个user结构得到查询的结果，使用select对指定字段查询时，user只要与对应字段能够匹配上即可，不是必须要求查询出来的结构体和表的结构体完全一致。
 

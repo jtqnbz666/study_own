@@ -1,8 +1,16 @@
+keys和scan
 
+~~~
+keys是阻塞的，大规模数据不适合
+scan是分批且异步的
+scan 0 match "b_*" count 38 (0是开始游标，在扫描到的38个结果里筛选出b_*的结果集)
+~~~
 
 ### 小tips
 
 ~~~
+3.线上一般用的unlin(异步)比用del多
+2.info命令可以看到redis的一些信息，常用info keyspace看key数量
 1.redis命令删除全部内容: flushdb
 2. redis-cli FLUSHALL
 3.查看list类型数据: lrange key 0 -1 
@@ -15,6 +23,27 @@
 ~~~
 1. hash没办法针对某个filed做定时，都是针对key来定时，比如验证码可以加上相同的前缀
 ~~~
+
+### 发布订阅
+
+~~~go
+发布之前先设置变化值
+global.ConnRedis.Set(context.Background(), global.ServerMaintainStatus, statusStr, 0)
+发布
+global.ConnRedis.Publish(context.Background(), global.ServerMaintainChannel, 1)
+
+
+订阅
+db.SubScribe(global.ConnRedis, global.ServerMaintainChannel, OnChangeServerMaintainStatus)  这个OnChangeServerMaintainStatus是在收到消息后的回调处理
+~~~
+
+### 锁
+
+~~~
+1. 对某个函数加用户锁
+~~~
+
+
 
 ### hash操作
 
@@ -308,7 +337,7 @@ bin = encode(data, sz); // io-threads
 send(fd, bin, sz1);
 ~~~
 
-注意主线程只处理do_comman, 和 send ， 而其他线程去除了 解压缩和压缩的逻辑(decode, encode), 所以还是不需要加锁， fd通过roundrobin算法分配给其他线程， 这些线程去处理对应fd  中的信息的压缩和解压逻辑。
+注意主线程只处理do_comman, 和 send ， 而其他线程去处理解压缩和压缩的逻辑(decode, encode), 所以还是不需要加锁， fd通过roundrobin算法分配给其他线程， 这些线程去处理对应fd  中的信息的压缩和解压逻辑。
 
 ## redis协议
 
@@ -336,12 +365,6 @@ redis中执行   set hello world
 其实就是设置回调函数， 跟reactor模型一样， epoll + 回调函数配合
 
 使用协程可以实现同步的编码方式，实现异步的效果。
-
-
-
-
-
-
 
 第四节课
 

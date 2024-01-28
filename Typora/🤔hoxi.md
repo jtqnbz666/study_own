@@ -1,6 +1,144 @@
-todo: ，  1. notify 2. paycenter修改确认订单流程，因为加了外部id， 3.多线路
+新抽奖活动资源检查
+
+周榜更新可能有问题，操作mysql数量太多
+
+[]*int 和 *[]int的区别
+
+搞懂删除镜像的命令
 
 
+
+疑问：十连==10次单抽吗
+
+日志级别调整
+
+// 找到大于并最接近newAwardCnt的限制组，比如newAwardCnt=9, limit(10:1)就是最接近的 findK对应10，findCnt对应1
+
+空切片append空切片
+
+index := pie.FindFirstUsing(data.ChapterFinishInfo, func(chapterInfo *pb.ChapterInfo) bool {
+    return chapterInfo.ChapterId == chapterId
+})
+
+学一下循环调用的设计
+
+获取皮肤的时候需要检查是否拥有基础皮
+
+限制进入飞
+
+看一下pve的任务是怎么加载的，做两个事情：1.活动任务， 2.加载活动时机
+
+优化手机号的索引
+
+会议纪要
+
+~~~
+1.专门搞一个密钥的配置仓库来管理权限
+2.vpc是什么
+3.写个脚本10分钟获取一下动态ip，发过来
+4.滚动更新会断一部分玩家
+5.服务器通过lb暴露ip， lb只有一个
+6.logrus是同步写日志
+~~~
+
+utils.Base64Unmarshal()解码userdata
+
+没做的事， hotfix/20231228的礼包奖励还没切到dev,  2. douyin分支合到dev上
+
+1. 匹配成功会发送BR_GameStartMsg里面包含了可选英雄的信息，比如是否免费手选卡之类的
+1. ubs_10000是战斗状态
+1. 如何确定当前房间的模式， 构建BattleRoyale对象的时候可以看到， 
+   GmaeType枚举类型(Normal和Championship)表示游戏类型，只要不是锦标赛就都是Normal；
+   RoomMatchType枚举类型(Public和Private) 表示房间类型，锦标赛和排位是Public， 匹配是Private
+   TeamType枚举类型，也表示游戏类型，排位赛(PublicKnockout), 匹配赛(PrivateKnockout), 锦标赛(PublicChampionShip)
+1. cardhero的deckrace表示卡池种族(在商店卖的)， race是显示出来的种族
+
+Todo:
+
+1. ugc分支合并(包含协议分支), 华为渠道分支合并
+
+2. 学习go的切片和指针切片等
+
+~~~
+// 单个赛季信息
+message SingleSeason {
+  int32 season = 1;                         //赛季
+  int32 total1stCount = 2;                  //总夺冠次数
+	int32 totalWinCount = 3;                  //总胜利场数
+  int32 matchTotalCount = 4;                //匹配总场数
+  int32 qualifyingTotalCount = 5;           //排位总场数
+	int32 csTotalCount = 6;                   //锦标赛总场数
+	int32 csWinCount = 7;                     //锦标赛总胜利场数
+	int32 csCompletionCount = 8;              //锦标赛通关次数
+  int32 csHighestSingleRoundWin = 9;        //锦标赛单轮最高胜场
+}
+
+~~~
+
+
+
+需要支持的，
+
+// UserAttackDubbing 攻击配音
+type UserDubbing struct {
+    gorm.Model
+    UserID uint64 `gorm:"index:i_dubbing_user"`
+    // 音频唯一标识
+    DubbingPath string
+    // 上传者名字
+    HeroID     int32  `gorm:"index:i_dubbing_hero"`
+    UpUserName string `gorm:"index:i_name;collate:utf8mb4"`
+    IsPublic   bool
+    IsHot      bool
+    DubType    pb.DubbingType
+}
+
+服务器维护中返回码处理
+
+~~~go
+
+func test() {
+	params := map[string]interface{}{
+		"game_id":     bili.BiliGameID,
+		"merchant_id": bili.BiliMerchantID,
+		"server_id":   bili.BiliServerID,
+		"uid":         172372941,
+		"version":     bili.BiliVersion,
+		"timestamp":   uint64(time.Now().UTC().UnixNano()) / uint64(time.Millisecond),
+		"order_no":    "20231204181701458434157",
+	}
+	// post构建请求参数
+	postParams := url.Values{}
+	for key, val := range params {
+		postParams.Add(key, fmt.Sprintf("%v", val))
+	}
+	postParams.Set("sign", bili.GetBiliSign(params))
+	urls := []string{bili.BiliQueryUrl, bili.BiliBackUpUrl1, bili.BiliBackUpUrl2}
+	for _, url := range urls {
+		resp, err := bili.SendRequest(url, postParams)
+		if err != nil {
+			global.Logger.Warnf("查询B站订单失败失败, 尝试换线:url:%v, resp:%v", url, resp)
+			continue
+		}
+
+		// 读取响应内容
+		body, err := ioutil.ReadAll(resp.Body)
+		resp.Body.Close()
+
+		var order bili.QueryOrderBili
+		err = json.Unmarshal(body, &order)
+		if err != nil {
+		}
+
+		if order.OrderStatus == bili.Payed {
+
+		}
+		// 只要有一个url可用就退出
+		break
+	}
+}
+
+~~~
 
 
 
@@ -55,7 +193,7 @@ kubectl get svc -n taptap
 里面有个taptap-mysql
 mysql -h rm-2zevgb9724yvm7951.rwlb.rds.aliyuncs.com -u root -p
 
-redis-cli -h r-2zez1ogv1gfirvpzda.redis.rds.aliyuncs.com
+redis-cli -h r-bp1lb2qpinvy0ze8ae.redis.rds.aliyuncs.com
 UDS_USER_
 ```
 
@@ -81,7 +219,9 @@ debug代码：/Users/jiangtao/data/project328-client/Assets/Scripts/DebugCmd/Cus
 
 ### token登录
 
-~~~
+~~~~
+
+
 // 生成token
 token := fmt.Sprintf("%v_%v_%v_%v", global.TapTapLoginType, account.ID, msg.ObjectID, time.Now().Add(global.TokenLoginTimeout).Unix())
 token = encrypt.EncryptString(token, global.TokenEncryptKey)
@@ -95,6 +235,15 @@ fmt.Printf(test)
 //1063_652ff1e95cc71c58cd4fb756这串是需要换的，右边这个看起来是密码的串
 ~~~
 
+手机号渠道token
+
+~~~go
+直接复制到328， 92是account_id 
+token := fmt.Sprintf("%v_%v_%v_%v", global.MobileNumberLoginType, 92, "15652660058", time.Now().Add(global.TokenLoginTimeout).Unix())
+	token = encrypt.EncryptString(token, global.TokenEncryptKey)
+~~~
+
+抖音的token获取方式比较特别， 可以直接修改自己的账号的account_id为需要登录的那个号的account_id, 然后登录自己的账号，信息就是你需要的那个人的
 
 
 测试包：
