@@ -5,6 +5,7 @@
 -d:后台运行
 -v:挂载
 -p:端口映射
+-it: i表示交互式，t表示terminal终端
 ~~~
 
 如果因为修改容器内配置导致容器无法启动
@@ -77,7 +78,12 @@ docker start mongodb
 
 ### mysql
 
-~~~
+~~~shell
+328项目:
+docker run --name mysql -v /Users/a123/.deploy-tool/dev/mysql:/var/lib/mysql -p 3306:3306  -e MYSQL_ROOT_PASSWORD=123456     -e MYSQL_DATABASE=project328   -d docker.hoxigames.com/mysql:8.0 --default-authentication-plugin=mysql_native_password
+
+
+// 自测
 docker run --name=mysql-server -p 3306:3306 -v mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 -d mysql  //运行mysql,  最后这个mysql表示镜像名(比如hoxi的时候是docker.hoxigames.com/mysql:5.7)
 
 docker exec -it mymysql mysql  -u root -p  //连接mysql

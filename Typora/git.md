@@ -1,3 +1,11 @@
+3.修改文件名大小写问题
+
+```shell
+git mv --force filename FileName
+```
+
+
+
 2.切分支流程(从某个节点创建新分支)
 
 ~~~

@@ -1,3 +1,21 @@
+4.字典累加数字
+
+~~~c#
+ Dictionary<string, int> dict = new Dictionary<string, int>();
+    for (int i = 0; i < 10000; i++)
+    {
+        var res = RandomUtil.ChooseFromListByProbWithString("0.1|1,0.1|2,0.2|3,0.2|4,0.2|5,0.2|6".Split(","));
+        if (!dict.ContainsKey(res))
+        {
+          // 主要是这里需要赋初值
+            dict[res] = 0; // 初始化Value为0
+        }
+        dict[res]++;
+    }
+~~~
+
+
+
 3.list对象有时候会用count，但如果是null对象，不能调用count方法
 
 =>的含义

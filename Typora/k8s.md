@@ -1,19 +1,175 @@
 通用技巧
 
 ~~~shell
+5.集群中可以通过svc暴露的地址访问服务， 如果是在pod中，可以直接用svc的名字
+nginx的例子:
+集群中: curl 10.106.82.96:8080 (集群中所有主机都可以用这个clusterIP访问)
+pod中: curl nginx-service:8080 (用一次性pod验证，集群中所有pod都可以访问)
 4.pod理解为一个虚拟机，也就是说一个pod中的两个容器不可能是同一个端口
 3.-A获取所有命名空间的资源
 2.--watch 动态看资源的变化
-1.进入pod比如exec -it 必须接上--，比如 kubectl exec -it mytest -- mysql -u root -p
+1.进入pod比如exec -it 后边必须接上--，比如 kubectl exec -it mytest -- mysql -u root -p
 ~~~
 
 删除操作
 
 ~~~shell
 1.把副本集删了不会影响deploy, 但把deploy删了，pod也会被删
+2.删除命名空间会把该命名空间下的所有内容都删了，如果遇到错误，需要先删除错误状态的对象
+~~~
+
+选择器
+
+~~~yaml
+标签选择器可以识别一组对象，标签不支持唯一性
+标签选择器最常见的用法是为service选择一组pod作为后端
+# my-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app.kubernetes.io/name: MyApp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9376
 ~~~
 
 
+
+标签相关
+
+~~~shell
+# 标签使用户能够以松散耦合的方式将他们自己的组织结构映射到系统对象，而无需客户端存储这些映射。
+# label-demo.yaml内容
+apiVersion: v1
+kind: Pod
+metadata:
+  name: label-demo
+  labels:
+    environment: production
+    app: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.14.2
+    ports:
+    - containerPort: 80
+#
+
+~~~
+
+查看pod的标签
+
+~~~shell
+kubectl get pod --show-labels
+~~~
+
+获取具有某标签的pod
+
+~~~shell
+kubectl get pod -l "app=nginx"
+# 如果是多个标签，用逗号分隔
+kubectl get pod -l "app=nginx,environment=production"
+~~~
+
+
+
+使用yaml文件创建和删除
+
+~~~yaml
+# nginx.yaml内容
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.22
+    ports:
+    - containerPort: 80
+
+# 上边是内容， 下边是执行命令
+# 创建
+kubectl apply -f nginx.yaml 
+# 删除 （不是根据名字，而是根据yaml文件
+kubectl delete -f nginx.yaml
+~~~
+
+
+
+设置默认命名空间
+
+~~~shell
+# 如果不设置，默认查询/创建对象用的都是default命名空间
+kubectl config set-context $(kubectl config current-context) --namespace=develop
+~~~
+
+创建指定命名空间pod
+
+~~~shell
+kubectl run nginx --image=nginx:1.22 -n=develop# -n=develop等效-n develop
+~~~
+
+创建命名空间
+
+~~~shell
+kubectl create namespace(可缩写为ns) develop
+~~~
+
+查看命名空间
+
+~~~shell
+kubectl get namespace 
+~~~
+
+k8s中参数用 -- 和 - 的区别
+
+~~~
+"-"作为前缀这种方式通常用于简短的、容易记忆的参数。
+"--"作为前缀，通常用于更详细、更复杂的参数，需要明确指定参数的名称以及对应的值。
+~~~
+
+不同场景下访问pod的方法
+
+![](/Users/a123/study/study_own/pic/20240129-004855.jpeg)
+
+NodePort类型（集群外主机访问访问集群的服务
+
+~~~shell
+kubectl expose deploy/nginx-deploy --type=NodePort --name=nginx-outside --port=8081 --target-port=80
+# 查看服务
+kubectl get svc -n default
+NAME            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+nginx-service   ClusterIP   10.106.82.96    <none>        8080/TCP         16m
+nginx-outside   NodePort    10.110.131.94   <none>        8081:30358/TCP   14sw
+# 这个30358是随机生成的外部访问端口, 在浏览器上输入114.55.88.127:30358(8081是集群内用的端口)就可以访问到集群内的nginx服务了
+~~~
+
+
+
+验证nginx多节点负载均衡的效果（本质是k8s的负载均衡而不是nginx服务负载均衡
+
+~~~shell
+cd /usr/share/nginx/html/
+echo hello > index.html
+然后用 curl 10.106.82.96:8080，有概率看到hello
+~~~
+
+一次性使用pod， 用完自动删除
+
+~~~
+kubectl run test -it --image=nginx:1.22 --rm -- bash
+~~~
+
+把deployment暴露为service
+
+~~~
+kubectl expose deploy/nginx-deploy --name=nginx-service --port=8080 --target-port=80
+~~~
 
 版本回滚(比如过程更新了镜像版本又想回退回去)
 
@@ -60,7 +216,7 @@ kubectl delete hpa nginx-deployment
 
 ~~~shell
 kubectl create deployment nginx-deploy --image=nginx:1.22 --replicas=3
-kubectl delete pod 删除任意一个，他会自愈(重新创建一个，保证有副本集数量为3)， 跟下边这个查看副本集是关联的
+kubectl delete pod 删除任意一个，他会自愈(会重新创建一个，保证有副本集数量为3)， 跟下边这个查看副本集是关联的
 ~~~
 
 查看副本集
@@ -225,8 +381,6 @@ Pod 可以独立存在，也可以是服务的一部分。服务通常使用 Pod
 总结： 服务列表和 Pod 列表在 Kubernetes 中担任不同的角色和功能。Pod 是实际运行应用程序或服务的基本单位，而服务提供网络抽象和负载均衡的能力，使应用程序能够通过稳定的入口地址对外提供服务。服务通常关联多个具有相同标签的 Pod，以提供可扩展和可靠的访问机制
 ~~~
 
-
-
 查看pod的内存占用
 
 ~~~shell
@@ -276,6 +430,22 @@ Containers:
     Container ID:   containerd://76a7858511f78f618204805ae12b2be967fb15490e927b639544a25020cc1d77
 ~~~
 
+命名缩写
+
+![](../pic/image-20240212104959897.png)
+
 
 
 学习地址：课件地址：https://www.yuque.com/wukong-zorrm/qdoy5p
+
+~~~shell
+安装k8s
+curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+# 授权
+chmod +x k8s.sh
+curl -o check.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/check.sh
+chmod +x check.sh
+# 执行安装命令
+sudo ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh
+~~~
+

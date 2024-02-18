@@ -312,6 +312,8 @@ zadd CriticalHitBoard 34.745070318774509 10354
 
 之前想的是uds有改动的时候都去通知排行榜服务(拿数据的时候就可以省去向uds拿最新数据的步骤)， 但这样并不好，任何改动都需要同步排行榜服，改动很大，容易漏
 
+2.redis排行榜更新时不应该用清榜操作， 最好是每个周期的榜单用一个单独的key(用日期拼)，然后再手动或者定时删除上个周期的key,  也可以保证多节点lbs情况下，只有一个lbs会执行清榜操作
+
 1.如果分数一样，会用member的字典序，因为zset的value不支持复杂类型数据结构, 所以可以key做调整
 
 ~~~c++
@@ -429,6 +431,8 @@ model.UserBagItem{}中，是道具类型(RewardType_Item), item_id为9(*BagItemI
 #### 
 
 ### 32. 机制
+
+4.添加道具的技能：ActiveEntity
 
 3.指定发现：ForceDiscoverDedicatedMinion
 
@@ -737,6 +741,8 @@ OnBeforeEndGame的最后一个参数是isSpecial ， 如果是正常失败或投
 
 ### 18.机制bug
 
+2.如果没有词条，就搜索：not found with key:Entry
+
 特性构造器:GetAttributesFromArray
 
 三连合金：CombineMinions
@@ -814,6 +820,10 @@ Project328:在CheckRefreshTask检查生成所有的任务， addNewBPTask添加�
 ~~~
 
 ### 16.bug
+
+3. 战斗服获取userdata字段比如UserData.**ActivityInfoFieldNumber**， 实际上发送的是activityInfo而不是ActivityInfo
+
+2. 血量变化:直接grep玩家的id，然后搜update player 62742 hp to 25, damage: 9
 
 1. 总击杀人数不对， creategame的时候如果对方已经挂掉了，就会去新建一个player对象放进去，bug的原因是这个新建的player加载了玩家活着的时候最后一次运营结束的数据(hp > 0)， 所以即使击杀了死亡的玩家也算了人头数(搜if (g.P2 == null))
 
