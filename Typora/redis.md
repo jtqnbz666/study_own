@@ -4,12 +4,16 @@ keys和scan
 keys是阻塞的，大规模数据不适合
 scan是分批且异步的
 scan 0 match "b_*" count 38 (0是开始游标，在扫描到的38个结果里筛选出b_*的结果集)
+
+线上用scan 0 match TeamData_* 而不是 keys TeamData_*
 ~~~
 
 ### 小tips
 
 ~~~
-3.线上一般用的unlin(异步)比用del多
+5.如果已经expire了key，不管对这个key增删改，expire的时间都正常流逝
+4.redis的主要瓶颈在于网络io，所以多次查询的时候都用pipeline
+3.线上一般用的unlink(异步)比用del多
 2.info命令可以看到redis的一些信息，常用info keyspace看key数量
 1.redis命令删除全部内容: flushdb
 2. redis-cli FLUSHALL
@@ -64,7 +68,6 @@ ADD key score member [score member ...]
 例如，要将member1的score设置为10，可以执行以下命令：
 ZADD myzset 10 member1
 如果member1已经存在于有序集合中，那么执行上述命令将更新member1的score为10。
-
 2.增加member的score：使用ZINCRBY命令来增加一个member的score。
 ZINCRBY key increment member
 例如，要将member1的score增加5，可以执行以下命令：
@@ -85,6 +88,15 @@ ZREM myzset member1
 
 5.从高到低看分数
 zrevrange BeastBoard 0 -1 withscores
+~~~
+
+### zset知识
+
+~~~
+ZSET 查询复杂度：在 Redis 的 ZSET 数据结构中，基础操作的时间复杂度通常为 O(log(N))，其中 N 是 ZSET 中元素的数量。例如，ZADD、ZREM、ZRANK、ZSCORE等操作的时间复杂度都是O(log(N))。如果想获取ZSET中所有的元素，比如ZRANGE key 0 -1，那么时间复杂度为O(N)。
+
+使用通配符查询 key：在 Redis 中，可以使用 KEYS 命令配合通配符对 key 进行模糊查询，但是这个命令会遍历整个数据库的 key，时间复杂度是 O(N)，N 是数据库的 key 的数量
+在你的场景中，如果你的 key 是 "uid_其他信息" 这样的格式，且 uid 是唯一的，在知道 uid 的情况下，你可以直接通过完整的 key 进行查询，这样查询的复杂度是 O(1)，而不需要使用 KEYS uid_* 这样的模糊查询。如果非要使用模糊查询，建议使用 SCAN 命令，虽然复杂度仍为 O(N)，但 SCAN 是游标型命令，会分多次返回结果，不会阻塞服务器。
 ~~~
 
 

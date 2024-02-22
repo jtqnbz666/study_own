@@ -1,3 +1,73 @@
+5.垃圾回收(GC)
+
+~~~
+在 C# 中，确实存在自动内存管理机制（垃圾回收器），它负责跟踪和释放不再被引用的对象所占用的内存空间。垃圾回收器会自动回收不再被引用的对象，并释放其占用的内存。垃圾回收器可以管理托管堆上的内存，但在某些情况下，应用程序可能会使用非托管资源（如文件句柄、数据库连接、网络资源等），这些资源不受垃圾回收器管理。
+~~~
+
+代码演示不受管理的资源手动释放
+
+~~~c#
+using System;
+using System.IO;
+using System.Data.SqlClient;
+
+class Program
+{
+    static void Main()
+    {
+        ResourceHandler resourceHandler = new ResourceHandler();
+        resourceHandler.DoWork();
+        
+        // 调用 Dispose 方法释放资源
+        resourceHandler.Dispose();
+    }
+}
+
+class ResourceHandler : IDisposable
+{
+    private FileStream fileStream;
+    private SqlConnection sqlConnection;
+ 		private HttpClient httpClient;
+    public ResourceHandler()
+    {
+        // 初始化文件句柄和数据库连接
+        fileStream = new FileStream("example.txt", FileMode.OpenOrCreate);
+        // 数据库连接
+        sqlConnection = new SqlConnection("Data Source=ServerName;Initial Catalog=DatabaseName;Integrated Security=True");
+        // 初始化 HttpClient 对象(网络资源)
+        httpClient = new HttpClient();
+    }
+
+    public void DoWork()
+    {
+        // 例如读取文件内容、执行数据库操作、使用HttpClient进行网络操作
+    }
+
+    public void Dispose()
+    {
+        // 释放资源的操作
+        if (fileStream != null)
+        {
+            fileStream.Close(); // 关闭文件句柄
+            fileStream.Dispose(); // 释放文件句柄资源
+        }
+
+        if (sqlConnection != null)
+        {
+            sqlConnection.Close(); // 关闭数据库连接
+            sqlConnection.Dispose(); // 释放数据库连接资源
+        }
+    
+        if (httpClient != null)
+        {
+            httpClient.Dispose(); // 释放 HttpClient 资源
+        }
+    }
+}
+~~~
+
+
+
 4.字典累加数字
 
 ~~~c#

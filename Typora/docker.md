@@ -28,16 +28,12 @@ RUN gem install fluent-plugin-<your-plugin-name>:<version> --no-document
 USER fluent
 ~~~~
 
-
-
 ~~~
 1.构建镜像
 docker build -t my-fluentd .
 2.运行镜像
 docker run -d --name my-fluentd-container my-fluentd
 ~~~
-
-
 
 进入容器
 
@@ -56,6 +52,20 @@ docker inspect fluentd 查看某个容器的详情(比如想看文件挂载相�
 
 ~~~shell
 docker container ls -a | grep dev2
+~~~
+
+### zookeeper
+
+~~~shell
+docker run -d --name zookeeper -p 2181:2181 -t docker.hoxigames.com/zookeeper:1.0
+~~~
+
+### kafka
+
+~~~shell
+# 先跑起来zookeeper
+set kafkaIp 192.168.0.104
+docker run -d --name kafka -p 9092:9092 -e KAFKA_BROKER_ID=0 -e KAFKA_ZOOKEEPER_CONNECT=$kafkaIp:2181 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://$kafkaIp:9092 -e KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092 -t docker.hoxigames.com/kafka:1.0
 ~~~
 
 ### mongo
