@@ -4,11 +4,12 @@
 1. ini文件读取相关：ini库，"github.com/go-ini/ini"
 ~~~
 
-
-
 **小知识**
 
 ~~~go
+10.strings.Split("", ",") 返回的切片大小是1
+9.strconv.ParseBool(str)，只有字符串为"1"/"true"才能解析为true
+8.json.Unmarshal如果内容为""会出错
 7.时间戳是没有时区概念的
 6.copy可以拷贝切片对象
 5.gorm方法表有数据之后再修改表的索引，可能重新同一字段重复索引，可以删除不要的索引
@@ -42,6 +43,9 @@ fmt.Printf("=== Stacktrace ===\n%s\n", buf[:n])
 实用技能
 
 ~~~go
+9.架构迁移时出现包循环调用问题，新创建一个包比如utilsBridge, 然后在这里面定义函数比如var GetTotalUserData func(userID uint64) *pb.UserData， 在main函数初始化它比如utilsBridge.GetTotalUserData = utils.GetTotalUserData
+8.var test []string, 不给test任何内容也是可以range的，但如果是var test *[]string, 使用 range *test 就会抛异常
+6.选择json.Unmarshal而不是proto.Unmarshal,因为前者支持任意对象
 5.nil不能直接类型转换，但可以配合ok
 tt := interface{}(nil) // 可以通过这种方式给对象赋值为nil
 res, ok := tt.(*model.UserRLActivity)
@@ -111,10 +115,11 @@ json.Unmarshal([]byte(orderInfo.ExtraParamJsonStr), syncOrderReq)//这里必须�
 9.redis的返回
 value, err := global.ConnRedis.Get(context.Background(), "tt").Result()
 if err == redis.Nil {
-  // 如果没有该键	
-		fmt.Sprintf("%v,%v", value, err)
-} else if value == "" {
-  // 有，但是没值
+		logrus.Infof("test%v", err)
+} else if err != nil {
+  logrus.Infof("test:%v", err)
+} else {
+  logrus.Infof("%v", oldScore)
 }
 10.csv文件写入，‘,’会自动切换下一个格子
 str := ""
@@ -123,6 +128,22 @@ for i := 0; i < len(res); i++ {
 }
 os.WriteFile(resFile, []byte(str), 0666)
 ~~~
+
+泛型编程
+
+~~~go
+// 这个函数只能不是公共的，不能是某个对象的，比如func (p *leaderboardStruct) ParseHashDataFromJson [T any](key, member string) *T
+func ParseHashDataFromJson[T any](key, member string) *T {
+	var boardData T
+  json.Unmarshal([]byte(res), &boardData)
+	return &boardData
+}
+
+~~~
+
+
+
+
 
 **[]*model.UserHero和[]model.UserHero的区别**
 

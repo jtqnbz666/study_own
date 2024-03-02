@@ -1,4 +1,8 @@
-### 53. 抽奖系统
+### 54.装扮系统
+
+头像/框/称号，其实用一个表就行了，不用分别用一个类型
+
+53. 抽奖系统
 
 ### 活动
 
@@ -180,7 +184,7 @@ func getSortQueryString(params map[string]string) string {
 
 3. 验证码校验需要加限制，比如15s内只能尝试3次，  验证码请求次数阿里已经做了限制， 比如一分钟只能请求2次
 
-4. 注意是验证码用字符串， 不然0开头的有问题
+4. 注意是验证码前后端发送协议要用字符串， 不然0开头的有问题
 
    
 
@@ -379,6 +383,8 @@ model.UserBagItem{}中，是道具类型(RewardType_Item), item_id为9(*BagItemI
 #### 
 
 ### 32. 机制
+
+5.根据战斗结果更新数据在UpdatePlayerWithResult
 
 4.添加道具的技能：ActiveEntity
 

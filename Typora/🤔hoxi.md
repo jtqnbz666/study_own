@@ -1,3 +1,79 @@
+uds的滚动更新是k8s保证的吗， 如果正在执行业务怎么办
+
+```
+合并分支尝试用下rebase而不是merge
+
+b.getMinion 724,BuffID:11681 老虎
+b.getMinion 429,BuffID:11681 恶霸
+b.getMinion 729,BuffID:11681 豹冰冰
+
+```
+
+24:26
+
+7:27
+
+18:51
+
+234（小蜂，239(女王+2391的buff)， 230(任意), 913河马
+
+数据双写, 定时任务的异常捕获
+
+
+
+
+
+设置200个连续玩家的榜单分数
+
+~~~shell
+for i in $(seq 10001 10199); do
+  docker exec -it redis redis-cli ZADD ChampionshipBoard_2_25 666 $i
+done
+~~~
+
+~~~go
+// 使用pipeline
+	pipe := global.DataRedis.Pipeline()
+	for _, uid := range users {
+		res := pipe.HMGet(context.Background(), GetUserDataKey(uid), redisFieldList...)
+		cmdList[uid] = res
+	}
+
+	_, _ = pipe.Exec(context.Background())
+	for uid, cmd := range cmdList {
+		userData, err := userRawData.LoadFromPipelineResult(uid, prepareSet, cmd)
+		if err != nil {
+			logUtil.FormatLogError(logUtil.LeaderBoard, "GetUserLBInfo", "获取玩家数据失败", uid)
+			return ret
+		}
+
+		// 拼数据
+		var entity = &pb.LeaderboardEntity{}
+		entity.Uid = uid
+		entity.PersonInfo = makePersonInfoFromRawData(userData)
+
+		switch lbType {
+		case pb.LeaderboardType_HERO_BOARD:
+			// 英雄榜
+			entity.HeroInfo = HeroInfo2HeroDetail(resource.Hero.GetPbById(userData, heroId))
+		case pb.LeaderboardType_CRITICALHIT_BOARD:
+			// 暴击榜
+			entity.MinionInfo = getMaxDamageMinionInfo(uid)
+		case pb.LeaderboardType_BEAST_BOARD:
+			// 巨灵榜
+			entity.MinionInfo = getBeastMinionInfo(uid)
+		}
+
+		// 添加进返回给lbs的集合中
+		ret = append(ret, entity)
+	}
+
+~~~
+
+
+
+确认英雄选择的时候要带上当前英雄和使用的皮肤
+
 ### 埋点关键字眼
 
 battle_hero_choose: 选择英雄信息

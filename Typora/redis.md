@@ -11,6 +11,7 @@ scan 0 match "b_*" count 38 (0是开始游标，在扫描到的38个结果里筛
 ### 小tips
 
 ~~~
+6.一般认为 Redis 每秒至少 3 万 QPS。
 5.如果已经expire了key，不管对这个key增删改，expire的时间都正常流逝
 4.redis的主要瓶颈在于网络io，所以多次查询的时候都用pipeline
 3.线上一般用的unlink(异步)比用del多
@@ -22,9 +23,11 @@ scan 0 match "b_*" count 38 (0是开始游标，在扫描到的38个结果里筛
 5.删除相同前缀的key EVAL "local keys=redis.call('keys', ARGV[1]) for i=1,#keys do redis.call('del', keys[i]) end return keys" 0 "UDS_USER_1*"
 ~~~
 
-### 基础知识
+### 基础操作
 
 ~~~
+3.修改key名: RENAMENX
+2.redis-cli info memory查看内存信息
 1. hash没办法针对某个filed做定时，都是针对key来定时，比如验证码可以加上相同的前缀
 ~~~
 
@@ -72,14 +75,12 @@ ZADD myzset 10 member1
 ZINCRBY key increment member
 例如，要将member1的score增加5，可以执行以下命令：
 ZINCRBY myzset 5 member1
-如果member1不存在于有序集合中，那么执行上述命令将添加一个新的member1，并设置其score为5。
-
+如果member1不存在于有序集合中，那么执行上述命令将添加一个新的member1，并设置其score为5
 3.获取member的score：使用ZSCORE命令来获取一个member的score。
 ZSCORE key member
 例如，要获取member1的score，可以执行以下命令：
 ZSCORE myzset member1
 如果member1不存在于有序集合中，那么该命令返回nil。
-
 4.删除member：使用ZREM命令来删除一个或多个member。
 ZREM key member [member ...]
 例如，要删除member1，可以执行以下命令：
@@ -88,6 +89,8 @@ ZREM myzset member1
 
 5.从高到低看分数
 zrevrange BeastBoard 0 -1 withscores
+6.查看指定玩家排名
+zrank BeastBoard 10000
 ~~~
 
 ### zset知识

@@ -1,10 +1,15 @@
+4.更改用户名/邮箱地址
+
+```sh
+git config --global user.name "Your Name"
+git config --global user.email "your_email@example.com"
+```
+
 3.修改文件名大小写问题
 
 ```shell
 git mv --force filename FileName
 ```
-
-
 
 2.切分支流程(从某个节点创建新分支)
 
@@ -32,11 +37,17 @@ git mv --force filename FileName
 
 4.有时候发现git reset --hard 无法删除本地工作区新增的文件， 两种方法，采用git clean --df 或者 先git add . 添加到暂存区，再 git reset --hard 一次，因为git reset 删除的是已跟踪的文件，将已commit的回退。 git clean 删除的是未跟踪的文件
 
-5.rebase和merge的区别是前者会先隐藏本地最新的commit内容，暂时只能看到对方最新push的commit内容，然后去解决冲突，逐渐就能看到自己本地的commit内容，然后git add . 再 git rebase --continue(可以用git rebase --skip跳过冲突的解决)， 而merge是将对方最新push的commit内容和自己本地的最新commit内容合并在一起， 解决完冲突后先执行git add . 再 git merge --continue，其实我感觉merge更好用，因为rebase用时候需要解决多个阶段有点复杂。 它们都可以用git xx --abort中断。
+5.rebase和merge的区别是前者会先隐藏当前分支公共节点之后的commit内容，暂时只能看到对方最新的commit内容，然后去解决冲突，逐渐就能看到当前分支公共节点之后的commit内容，然后git add . 再 git rebase --continue(可以用git rebase --skip跳过冲突的解决)， 而merge是将对方最新push的commit内容和自己本地的最新commit内容合并在一起， 解决完冲突后先执行git add . 再 git merge --continue，其实我感觉merge更好用，因为rebase用时候需要解决多个阶段有点复杂。 它们都可以用git xx --abort中断。
 
-![](/Users/jiangtao/study_own-main/study_own/pic/20171215110156640.png)
+![image-20240302112020209](../pic/image-20240302112020209.png)
 
-![](/Users/jiangtao/study_own-main/study_own/pic/20171215111256619.png)
+rebase操作: 找到公共节点3，然后把5,7嫁接到4,6后边， 但这样之后5',7'虽然内容和之前一样，但是commit号会是一个新的
+
+![image-20240302112149170](../pic/image-20240302112149170.png)
+
+merge操作:找到公共节点3,然后配合两个分支的最新一次提交节点(一共三个节点)组成一次新的提交8， 这样的好处是能保留原有的commit号以及提交顺序，问题就是会显得提交 结构复杂。
+
+
 
 6.两个分支A和B， 如果现在A和B都有一个1.txt 和 2.txt文件，此时在A上增加3.txt，修改1.txt， 而在B上删除2.txt，修改1.txt， 此时在A分支执行git merge B 就会出现A上的3.txt不变，2.txt会被删除，1.txt出现冲突需要解决。（如果A上的2.txt发生改变，合并B过来的时候A就不会删除，而需要手动去处理冲突）
 
