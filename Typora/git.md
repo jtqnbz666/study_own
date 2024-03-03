@@ -44,16 +44,12 @@ git mv --force filename FileName
 rebase操作: 找到公共节点3，然后把5,7嫁接到4,6后边， 但这样之后5',7'虽然内容和之前一样，但是commit号会是一个新的
 
 ~~~shell
-比如B要合并到A上: git checkout A --> git rebase B --> 处理冲突 --> 直接强推
+比如B要合并到A上: git checkout A --> git rebase B --> 处理冲突 --> 直接强推 如果公司不支持强推，就用下边拓展的方法
 
 # 拓展
 配合merge实现rebase的效果
 比如将B合并到A上, git checkout B --> git rebase A --> 处理冲突 --> git checkout A --> git merge B
 ~~~
-
-
-
-
 
 ![image-20240302112149170](../pic/image-20240302112149170.png)
 
