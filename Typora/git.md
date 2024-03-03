@@ -44,7 +44,7 @@ git mv --force filename FileName
 rebase操作: 找到公共节点3，然后把5,7嫁接到4,6后边， 但这样之后5',7'虽然内容和之前一样，但是commit号会是一个新的
 
 ~~~shell
-比如B要合并到A上: git checkout A --> git rebase B --> 处理冲突 --> 直接强推 如果公司不支持强推，就用下边拓展的方法
+比如B要合并到A上: git checkout A --> git rebase B --> 处理冲突 --> 直接强推 如果公司不支持强推，1.那就得git pull 再处理下B分支有而A分支没有的conmmit内容，2.采用下方拓展方法
 
 # 拓展
 配合merge实现rebase的效果
@@ -54,6 +54,22 @@ rebase操作: 找到公共节点3，然后把5,7嫁接到4,6后边， 但这样�
 ![image-20240302112149170](../pic/image-20240302112149170.png)
 
 merge操作:找到公共节点3,然后配合两个分支的最新一次提交节点(一共三个节点)组成一次新的提交8， 这样的好处是能保留原有的commit号以及提交顺序，问题就是会显得提交 结构复杂。
+
+### rebase和merge遇到冲突时的乱码理解
+
+以A，B分支，将B分支内容合并到A上为例
+
+~~~
+merge: git checkout A, git merge B, 如果遇到冲突，冲突内容中HEAD表示A分支的内容，====下边表示B的内容
+
+rebase: git checkoutA, git rebase B, HEAD表示B分支的内容
+~~~
+
+
+
+
+
+
 
 
 
