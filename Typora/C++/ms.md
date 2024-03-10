@@ -1,11 +1,3 @@
-## 不同语言之间的差异
-
-~~~c++
-go对于c++而言：1.简单易学，2.并发处理更简单高效，因为协程和channel的支持， 3.高性能，动态回收内存，有效管理内存， 4.比c++更支持跨平台，虽然也会在不同平台有些许差异，但 5.标准库更加丰富 6.社区资源丰富，流行开源项目框架更丰富，可以加快开发过程
-  
-go的这些优点同样对于c#也存在，但实际采用哪种语言应该根据开发人员技术栈以及项目具体需求。 c#的优点是 1.具有 .net框架 2.强大的集成开发环境, rider,vs,更有助于团队协作
-~~~
-
 
 
 ##  构造函数的细节
@@ -80,7 +72,7 @@ public:
 	A() : ptr(new int(10)) { std::cout << "普通构造" << std::endl; }
 	A(A& tt) { this->b = tt.b; std::cout << "拷贝构造" << std::endl; }
 	A(A&& cop) : ptr(cop.ptr) { this->b = cop.b;   cop.ptr = nullptr;  std::cout << "移动构造 " << std::endl; }
-	A& operator=( A&& tt) noexcept{ std::cout << " 移动赋值" << std::endl; return *this; }
+	A& operator=(A&& tt) noexcept{ std::cout << " 移动赋值" << std::endl; return *this; }
 	A& operator=(const A& tt) { std::cout << " 拷贝赋值" << std::endl; return *this; }
 	~A() { cout << "析构函数" << endl; }
 	int b;

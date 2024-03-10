@@ -1,3 +1,25 @@
+7.foreach 不能遍历一个null值，对象必须new过
+
+6.对象使用之前都得先new一个对象
+
+~~~c#
+// 错误
+List<Uds_GeneralMsg> waitDealMsg ; 
+waitDealMsg.Add(null);
+
+// 正确
+List<Uds_GeneralMsg> waitDealMsg = new List<Uds_GeneralMsg>()
+waitDealMsg.Add(null);
+
+// 错误
+Uds_GeneralMsg test;
+test.Type = Uds_MsgType.UdsNone;
+
+// 正确
+Uds_GeneralMsg test = new Uds_GeneralMsg();
+test.Type = Uds_MsgType.UdsNone;
+~~~
+
 5.垃圾回收(GC)
 
 ~~~
@@ -66,8 +88,6 @@ class ResourceHandler : IDisposable
 }
 ~~~
 
-
-
 4.字典累加数字
 
 ~~~c#
@@ -83,8 +103,6 @@ class ResourceHandler : IDisposable
         dict[res]++;
     }
 ~~~
-
-
 
 3.list对象有时候会用count，但如果是null对象，不能调用count方法
 
@@ -104,8 +122,6 @@ rewards.AddRange(res.ShowRewardData.RewardList);
 
 res.ShowRewardData.RewardList是pbc::RepeatedField<global::Pb.Reward>类型的
 ~~~
-
-
 
 3.有时候可以看到一个类中调用 base.函数名() , base指的就是它的父类。
 
@@ -296,7 +312,35 @@ p.OnBeforeEndGame += (rank, userData, battleRewardInfo, isSpecial) =>{balaba}
 
 18. 值传递和引用传递(ref和out)
 
-19. 把string按照',' 分割为int类型数组
+~~~c#
+string 是值类型传递方式，如果想修改string的内容就要
+public static void test(ref string str)
+{
+    str = "456";
+}
+
+public main()
+{
+	 string str = "123";
+	 test(ref str);
+}
+
+// 如果是把值拿出来就是
+public static void test(out string str)
+{
+    str = "456";
+}
+    
+public main()
+{
+	 test(our var str);
+}
+   
+~~~
+
+
+
+18. 把string按照',' 分割为int类型数组
 
 ~~~c#
 string[] minionIdsStr = minionIds.Split(',');
@@ -323,8 +367,6 @@ var num = int.parse(str)
 ?? 左边如果为null，则取右边的值
 string name = person?.Name ?? "Unknown";
 ~~~
-
-
 
 23.值类型和引用类型的区别
 
@@ -370,8 +412,6 @@ as 关键字只能用于引用类型之间的转换，对于值类型，可以�
                 });
             }
 ~~~
-
-
 
 25.把enum类型转为对应的值
 
@@ -541,7 +581,6 @@ list.Sort((a, b) =>
 
 ~~~c#
 AccountTriggerTimes = test.GuidePrompt.ToDictionary(x => x.Key, x => x.Value);
-        
 ~~~
 
 33. 消息流转为pb对象  &  pb对象， json串与string的转换

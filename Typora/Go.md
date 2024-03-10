@@ -7,6 +7,7 @@
 **小知识**
 
 ~~~go
+11.range是可以遍历空slice或空map的，不会抛异常，平常报错是因为 range *nil了，如果对nil使用解引用是会报错的
 10.strings.Split("", ",") 返回的切片大小是1
 9.strconv.ParseBool(str)，只有字符串为"1"/"true"才能解析为true
 8.json.Unmarshal如果内容为""会出错
@@ -23,7 +24,7 @@ alter table table_name drop index idx_name;
 go get gitlab.hoxigames.com/hoxi-games/hoxi-server@develop  最后的develop表示develop分支
 6.两个切片合并。 append(chan1, chan2...)
 7.%v无法打印出切片内容，而是打印他的地址， 可以用%+v或%#
-8.遍历切片的时候，比如, 'for i, entity := range Entities'不能直接修改entity，因为它是临时变量，Entities 是[]*pb.lb类型(尽管是指针切片)(有问题，待验证)
+8.遍历切片的时候，比如, 'for i, entity := range Entities'如果Entities是指针类型，就可以通过entity进行修改，如果不是指针类型，那么对entity的修改是不会反映到Entities上的
 9.使用ret := RawData{} 和 ret := &RawData{}来调用自己的指针方法，二者都可以，没有区别
 10.更新依赖：go get -u； 清除缓存：go clean -modcache
 11. 目前10位是s， 13为时间戳才是毫秒

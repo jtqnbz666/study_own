@@ -384,6 +384,14 @@ model.UserBagItem{}中，是道具类型(RewardType_Item), item_id为9(*BagItemI
 
 ### 32. 机制
 
+9.战场和shop切换位置的effect:ChangePosFromBattleBoardToShop
+
+8.受伤未死就会触发OnFury事件
+
+7.和6比较接近，加载词条的时候也会判断牌的位置，判断是否加载这个词条，entryBuilder.cs的LoadSkillFromData
+
+6.运营阶段是否触发词条的判断OperationEventManager.cs的GetAllListeningEntries, 会根据牌的位置判断是否触发这张牌的词条
+
 5.根据战斗结果更新数据在UpdatePlayerWithResult
 
 4.添加道具的技能：ActiveEntity
@@ -976,6 +984,8 @@ CommonPopupWindow.Instance.ShowToast(LocaleManager.GetText("报错信息_注册_
 一开始就修改AndriodManifest.xml，把android:authorities改成对应的包名， 再去调用之前unity打包的命令
 
 ### 11.英雄皮肤
+
+不要搞什么只选皮肤， 英雄id和皮肤id一起发
 
 ### 10. 跑马灯
 

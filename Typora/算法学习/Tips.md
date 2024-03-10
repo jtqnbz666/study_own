@@ -1,3 +1,5 @@
+oj刷题平台:https://oj.haizeix.com/ranklist
+
 1.string 中的find， substr函数
 
 ~~~c++
@@ -130,7 +132,7 @@ int main()
    ~~~c
    vector<string>chess(n, string(n, '.'));
    //注意这是一维数组，但因为是string类型，所以可以这样。
-//可以把string类型的内部理解为多个char元素
+   //可以把string类型的内部理解为多个char元素
    vector<vector<int>>chess2(n, vector<int>(n, 0));
    //二维整型地图。
    ~~~
@@ -189,45 +191,37 @@ int startRow = (row / 3) * 3;
 ~~~c
 1.可以用auto来遍历
 map，unordered_map ， vector
-
 2.定义n个小顶堆
 priority_queue<char, vector<int>,  greater<int>) ph[n]
-
 3.对于priority_queue<int, vector<int>, cmp> 
 push入， pop出， top()取顶
-
 4.对于map:
 用count 和 find(键) != end()查找是否存在
-
 map.erase() //可以是iter迭代器，也可也是主键
-
 map.insert(make_pair(A,B));
-
 5.对于queue
 front访问对头， back访问队尾， size 求大小，empty判空， push加入队尾，pop弹出队首
-
 queue是一个适配器， 底层是deque，deque的实现既不是单纯的数组，也不是链表。
-
 6.对于deque
 pop_back(), push_back(), push_front(), pop_front(), front(), back();
-
 7.对于vector
 队尾back()， 队首front(), push_back, pop_back()
-
 8.对于reverse函数需要注意
 reverse(idx1, idx2) ,idx2是没有算的，左闭右开
-
 9.对于unordered_map
 .clear清空， 
 .count()  返回是否包含
 .find() != .end() 判断是否包含
-struct CMP {
+.erase(key) 删除节点
+ struct CMP {
     int operator()(const pair<int, int>&a) {
         return a.first ^ a.second;
     }
 }
 typedef pair<int, int> PII;
 unordered_map<PII, int, CMP> mp;//注意这个cmp是hash方法的仿函数, 介个map,set的greater<>,less<>比较函数来理解。
+10.对于stack
+top, push, pop
 
 ~~~
 
