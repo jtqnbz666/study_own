@@ -1,8 +1,14 @@
+### 55.石灵分解
+
+有点击单个石灵进行分解的操作吗， 一键分解不可选，那个✅还在么， 快捷升级都是一级一级的升， 配表什么时候配
+
 ### 54.装扮系统
 
 头像/框/称号，其实用一个表就行了，不用分别用一个类型
 
-53. 抽奖系统
+奖励的同时领取奖励一定会出现覆盖， 所以要把第二个奖励内容算出来， 在第一个的过程中去领取
+
+### 53.抽奖系统
 
 ### 活动
 
@@ -383,6 +389,10 @@ model.UserBagItem{}中，是道具类型(RewardType_Item), item_id为9(*BagItemI
 #### 
 
 ### 32. 机制
+
+11.主动选择目标的才叫战吼(不加载进词条)，所以triiger的时候要考虑不是主动战吼的词条(会加入词条)
+
+10.光环转buff: OwnPlayer.AuraMgr.ToBuff(targetShopMinion, BuffType.**Permanent**, (aura)=> aura.AuraConfig.ShopToHandConversionBuff);
 
 9.战场和shop切换位置的effect:ChangePosFromBattleBoardToShop
 
@@ -1039,11 +1049,13 @@ CommonPopupWindow.Instance.ShowToast(LocaleManager.GetText("报错信息_注册_
 
 ### 2.赛季需求
 
+有的是停服更新， 有的不停服更新(更新前有6h数据清理期，该期间的对战数据均不记录)
+
 4.现在改为了再用到的时候才会去创建对应的表可以看getByConfId
 
 
 
-3.石灵收藏
+### 3.石灵收藏
 
 搜MinMinionLevel配置石灵最小等级
 

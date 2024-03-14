@@ -7,6 +7,7 @@
 **小知识**
 
 ~~~go
+12.对字符串切片排序, sort.Strings(切片)
 11.range是可以遍历空slice或空map的，不会抛异常，平常报错是因为 range *nil了，如果对nil使用解引用是会报错的
 10.strings.Split("", ",") 返回的切片大小是1
 9.strconv.ParseBool(str)，只有字符串为"1"/"true"才能解析为true
