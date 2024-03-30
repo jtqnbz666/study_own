@@ -8,7 +8,7 @@
 #include   <bits/stdc++.h>
 using namespace std;
 void quick_sort(int *arr, int left, int right) {
-    if(l >= right) reutrn 0;
+    if(left >= right) reutrn 0;
     int l = left, r = right;
     int mid = arr[(l + r) / 2];
     while(l <= r) {

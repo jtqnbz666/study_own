@@ -7,6 +7,19 @@
 **小知识**
 
 ~~~go
+15.切片是引用类型， 当参数传递也是引用类型，但如果使用了append函数会返回一个新的切片地址，不会对原切片产生影响，所以给人一种值类型的错觉
+func test(arr *[]int32) {
+	*arr = append(*arr, 9)
+}
+
+func main() {
+	var mySli = []int32{1, 2, 3, 4}
+	test(&mySli)
+14.redis操作中没有值会返回redis.Nil的有
+Get(key); HGet(key, field); LIndex(key, index); ZScore(key, member); SIsMember(key, member); exists(key) 
+不会返回redis.Nil的有
+Set(key, value, expiration); SetNX(key, value, expiration); HSet(key, field, value); HSetNX(key, field, value); ZAdd(key, score, member)
+13.map遍历是无序的，即时遍历同一个map多次, slice是有序的
 12.对字符串切片排序, sort.Strings(切片)
 11.range是可以遍历空slice或空map的，不会抛异常，平常报错是因为 range *nil了，如果对nil使用解引用是会报错的
 10.strings.Split("", ",") 返回的切片大小是1
@@ -45,6 +58,7 @@ fmt.Printf("=== Stacktrace ===\n%s\n", buf[:n])
 实用技能
 
 ~~~go
+
 9.架构迁移时出现包循环调用问题，新创建一个包比如utilsBridge, 然后在这里面定义函数比如var GetTotalUserData func(userID uint64) *pb.UserData， 在main函数初始化它比如utilsBridge.GetTotalUserData = utils.GetTotalUserData
 8.var test []string, 不给test任何内容也是可以range的，但如果是var test *[]string, 使用 range *test 就会抛异常
 6.选择json.Unmarshal而不是proto.Unmarshal,因为前者支持任意对象
@@ -1781,3 +1795,64 @@ GC算法
 
 **分代GC：**
 按照对象生命周期长短划分不同的代空间， 生命周期长的放入老年代，短的放入新生代，不同代有不同的回收算法和回收频率，优点是回收性能号，缺点是算法复杂，Java就是这种
+
+
+
+### 设计模式
+
+工厂
+
+~~~go
+package main
+import "fmt"
+// Shape 接口定义
+type Shape interface {
+    Draw()
+}
+
+// Circle 结构体实现 Shape 接口
+type Circle struct{}
+
+func (c Circle) Draw() {
+    fmt.Println("Circle Draw")
+}
+
+// Rectangle 结构体实现 Shape 接口
+type Rectangle struct{}
+
+func (r Rectangle) Draw() {
+    fmt.Println("Rectangle Draw")
+}
+
+// ShapeFactory 工厂接口
+type ShapeFactory interface {
+    CreateShape() Shape
+}
+
+// CircleFactory 结构体实现 ShapeFactory 接口
+type CircleFactory struct{}
+
+func (cf CircleFactory) CreateShape() Shape {
+    return Circle{}
+}
+
+// RectangleFactory 结构体实现 ShapeFactory 接口
+type RectangleFactory struct{}
+
+func (rf RectangleFactory) CreateShape() Shape {
+    return Rectangle{}
+}
+
+func main() {
+    // 使用 CircleFactory 创建 Circle 对象并调用 Draw 方法
+    circleFactory := CircleFactory{}
+    circle := circleFactory.CreateShape()
+    circle.Draw()
+
+    // 使用 RectangleFactory 创建 Rectangle 对象并调用 Draw 方法
+    rectangleFactory := RectangleFactory{}
+    rectangle := rectangleFactory.CreateShape()
+    rectangle.Draw()
+}
+~~~
+

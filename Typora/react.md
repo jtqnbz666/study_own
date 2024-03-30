@@ -2,7 +2,22 @@
 
 在src/components/App.jsx中写布局信息(会引用到路由信息，也就是指向一个具体执行函数的地址)， 在src/index.jsx下写路由信息， 
 
+6.发送的时候需要发送数字
 
+~~~react
+ const res = await server.deleteUserCache({
+            userId: Number(userId), # 不管go那边用什么类型的数字都可以
+            displayId: displayId,
+            phone: phone,
+        }); 
+~~~
+
+5.弹窗的日志
+
+~~~react
+window.alert(`成功重置为 ${res.admin.name}`);
+# 注意变量的打印方式, 这是接收到返回的时候， 如果直接是react里面定义的常量就可以直接 window.alert(value);
+~~~
 
 4.useRef
 

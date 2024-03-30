@@ -1,3 +1,15 @@
+### 56.机制开发
+
+1. 跳过攻击
+
+问题：1.如果融合了立即攻击被打了之后是什么效果，2.
+
+~~~
+34271
+~~~
+
+
+
 ### 55.石灵分解
 
 有点击单个石灵进行分解的操作吗， 一键分解不可选，那个✅还在么， 快捷升级都是一级一级的升， 配表什么时候配
@@ -312,17 +324,22 @@ select * from buy_records where user_id = 10001 and type = 3\G;
 
 
 
-### 35.mysql和redis数据处理
+### 35.mysql导入导出
 
 ~~~mysql
 #导出联赛服的mysql,sed '24,25d' 表示删除这两行(SET @@GLOBAL.GTID_PURGED长这样)
 mysqldump -h rm-2ze3rkvpx9768m99v.rwlb.rds.aliyuncs.com -u root -phoxi0328JING project328 | sed 's/utf8mb4_0900_ai_ci/utf8mb4_general_ci/g' | sed '24,25d' > /tmp/project328.sql
 
-taptap服
-mysqldump -h  rm-2zevgb9724yvm7951.rwlb.rds.aliyuncs.com -u root -phoxi0328JING project328 | sed 's/utf8mb4_0900_ai_ci/utf8mb4_general_ci/g' | sed '24,25d' > /tmp/project328.sql
+# 导出dev1的mysql数据
+docker exec -it dev1-mysql mysqldump -u root -p123456 project328> project328.sql
+# 导入.sql到dev1
+docker exec -i dev4-mysql mysql -u root -p123456 project328 < staging.sql
+
+# 导出staging的mysql数据
+mysqldump -h rm-bp1xx0ybar41opwch.rwlb.rds.aliyuncs.com -phoxi0328JING project328 > project328.sql
 
 #本地创建一个docker镜像
-docker run -d --name=mysql-remote -p 3306:3306 -v mysql-data:/var/lib/mysql -e MYSQL_RO    OT_PASSWORD=123456 docker.hoxigames.com/mysql:5.7
+docker run -d --name=mysql-remote -p 3306:3306 -v mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 docker.hoxigames.com/mysql:8.0
 
 # 创建本地数据库
 docker exec -i mysql-remote mysql -u root -p123456 -e "CREATE DATABASE IF NOT EXISTS project328"
@@ -334,7 +351,60 @@ docker exec -i mysql-remote mysql -u root -p123456 project328 < project328.sql
 update hoxi_accounts set password = 'BDC6CF885AA4C40E883D8B69B39072DF', account = 'jtnb' where id = 81;;  #比如此时uid为10080
 ~~~
 
+### 30. Redis导入导出
 
+一开始所有的ai都会把镜像ai置为true，然后分配镜像，没拿到镜像的就把镜像ai置为false，然后设置为生成ai， 
+
+一般镜像level-排名-英雄
+
+把测试服的镜像搞到本地：先找到aof文件的位置：
+
+~~~
+docker exec -it dev4-mirror-redis redis-cli config get dir
+~~~
+
+进入mirror-redis
+
+~~~
+docker exec -it dev5-mirror-redis redis-cli
+~~~
+
+获取某个redis容器的aof：
+
+~~~
+docker cp 488132640bd0:/data/appendonly.aof  .
+~~~
+
+先清空
+
+~~~
+docker exec -i mirror-redis redis-cli flushall
+~~~
+
+再加载
+
+~~~
+拿到aof文件之后，docker exec -i mirror-redis redis-cli --pipe < aof文件位置(注意没有t)
+~~~
+
+如果需要指定选择镜像
+
+~~~
+如果只是同一个服务器上 ，直接改镜像服，获取指定key
+如果不在同一个服务器上，就先把比如9002的aof导到9005上
+~~~
+
+本地将所有镜像的value搞成同一个
+
+~~~
+/Users/a123/project328/db/mirror-redis执行python脚本可以处理成同一个value, 但这种方法不可取， 就算是同一个value，拿到镜像的概率也低，因为有规则， 还是直接拿指定key比较好
+~~~
+
+创建mirror-redis镜像
+
+~~~
+docker run -d --name mirror-redis -p 6379:6379 --memory=4096m -v /Users/a123/.deploy-tool/dev/mirror-redis:/data docker.hoxigames.com/redis:6.2.4-alpine3.13 redis-server --appendonly yes
+~~~
 
 ### 34.指定镜像
 
@@ -390,6 +460,8 @@ model.UserBagItem{}中，是道具类型(RewardType_Item), item_id为9(*BagItemI
 
 ### 32. 机制
 
+12.entry的条件选择在DataLoaderUtils.cs的SelectFuncContent中
+
 11.主动选择目标的才叫战吼(不加载进词条)，所以triiger的时候要考虑不是主动战吼的词条(会加入词条)
 
 10.光环转buff: OwnPlayer.AuraMgr.ToBuff(targetShopMinion, BuffType.**Permanent**, (aura)=> aura.AuraConfig.ShopToHandConversionBuff);
@@ -441,69 +513,6 @@ OwnPlayer.AuraMgr.ToBuff(minion, BuffType.Temporary);
 ### 31.动画
 
 以changeheroskill为例，后端先添加动画ClipType.**ChangeHeroSkill**，前端在script/animation/animclips中找到对应的类的GenAnimation就可以看出来，最终调用RefreshRuneDress
-
-### 30. 镜像
-
-一开始所有的ai都会把镜像ai置为true，然后分配镜像，没拿到镜像的就把镜像ai置为false，然后设置为生成ai， 
-
-一般镜像level-排名-英雄
-
-把测试服的镜像搞到本地：先找到aof文件的位置：
-
-~~~
-docker exec -it dev4-mirror-redis redis-cli config get dir
-~~~
-
-进入mirror-redis
-
-~~~
-docker exec -it dev5-mirror-redis redis-cli
-~~~
-
-
-
-获取某个redis容器的aof：
-
-~~~
-docker cp 488132640bd0:/data/appendonly.aof  .
-~~~
-
-先清空
-
-~~~
-docker exec -i mirror-redis redis-cli flushall
-~~~
-
-再加载
-
-~~~
-拿到aof文件之后，docker exec -i mirror-redis redis-cli --pipe < aof文件位置(注意没有t)
-~~~
-
-如果需要指定选择镜像
-
-~~~
-如果只是同一个服务器上 ，直接改镜像服，获取指定key
-如果不在同一个服务器上，就先把比如9002的aof导到9005上
-~~~
-
-本地将所有镜像的value搞成同一个
-
-~~~
-/Users/a123/project328/db/mirror-redis执行python脚本可以处理成同一个value, 但这种方法不可取， 就算是同一个value，拿到镜像的概率也低，因为有规则， 还是直接拿指定key比较好
-~~~
-
-
-
-
-
-创建mirror-redis镜像
-
-~~~
-docker run -d --name mirror-redis -p 6379:6379 --memory=4096m -v /Users/a123/.deploy-tool/dev/mirror-redis:/data docker.hoxigames.com/redis:6.2.4-alpine3.13 redis-server --appendonly yes
-~~~
-
-
 
 ### 29. pve前端
 
@@ -713,6 +722,8 @@ OnBeforeEndGame的最后一个参数是isSpecial ， 如果是正常失败或投
 
 ### 18.机制bug
 
+3.在SelectDeck.cs的GetMinionList决定发现什么石灵，
+
 2.如果没有词条，就搜索：not found with key:Entry
 
 特性构造器:GetAttributesFromArray
@@ -735,8 +746,6 @@ Todo: 石灵maxlevel 。2。老号pve任务加载有问题。 3.老夫子bug
 case1:皮肤对应的任务，不可能重复，那就不用额外增加skin字段标识
 case2:活动任务可能复用，就得有额外的标志
 ~~~
-
-
 
 任务类型
 
@@ -1048,6 +1057,8 @@ CommonPopupWindow.Instance.ShowToast(LocaleManager.GetText("报错信息_注册_
 
 
 ### 2.赛季需求
+
+1. 删掉前端赛季更新的请求。
 
 有的是停服更新， 有的不停服更新(更新前有6h数据清理期，该期间的对战数据均不记录)
 

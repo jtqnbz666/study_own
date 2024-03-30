@@ -1,5 +1,11 @@
 
 
+### 纯虚函数
+
+~~~
+抽象类，纯虚函数没有具体的实现，因此无法确定对象如何运行,无法实例化对象。
+~~~
+
 ##  构造函数的细节
 
 1：对象以值传递的方式传入函数参数。
@@ -187,9 +193,9 @@ struct test{
 #define min(a,b)  ((a) < (b) ? (a) : (b))
 
 ~~~c
-	int a1=3;
-    int a2=87;
-    int a=min(a1++,a2); 则a1加了两次， 变为5
+int a1=3;
+int a2=87;
+int a=min(a1++,a2); 则a1加了两次， 变为5
 ~~~
 
 如果#define min(a, b)  a < b ? a : b
@@ -207,20 +213,81 @@ do {cout << "test" << endl;}while(0)
 因为如果有是if语句的时候执行一段语句按道理是不能在最后出现; 的
 ~~~
 
-
-
 ## 友元的细节
 
-比如重载<< 或  >> ，必须使用全局重载，而不能是类重载， 但由于重载过程会访问到类的私有成员函数，故使用友元函数重载。
+某种程度破坏了封装性，但以下不得不用
 
+1.比如重载<< 或  >> ，必须使用全局重载，而不能是类重载， 但由于重载过程会访问到类的私有成员函数，故使用友元函数重载。
+
+~~~c++
+friend ostream & operator<<(ostream &out, complex &A){    out << A.m_real <<" + "<< A.m_imag <<" i ";    return out;} 
 ~~~
-    ostream & operator<<(ostream &out, complex &A){    out << A.m_real <<" + "<< A.m_imag <<" i ";    return out;}
-    
-    需要在最前边加上friend
-       
+
+~~~c++
+类重载举例:
+class MyClass {
+private:
+    int num;
+public:
+    MyClass(int n) : num(n) {}
+    MyClass operator<<(int increment) {
+        num += increment;
+        return *this;
+    }
+
+    friend ostream& operator<<(ostream& os, const MyClass& obj) {
+        os << "The value of num is: " << obj.num;
+        return os;
+    }
+};
+int main() {
+  MyClass obj(22);
+  obj << 8;				// 表示给num + 8;
+  cout << obj << endl;
+}
 ~~~
 
 2.模板类的单例模式， 通过父类来构造子类的对象，那么子类必须把父类设置为友元。
+
+~~~c++
+// 如果子类不把父类设置为有元， 父类创建实例的时候访问不了子类的构造函数
+template <typename T>
+class Singleton {
+private:
+    static T* instance;
+protected:
+    Singleton() {}
+public:
+    static T* getInstance() {
+        if (instance == nullptr) {
+            instance = new T();
+        }
+        return instance;
+    }
+};
+
+template <typename T>
+T* Singleton<T>::instance = nullptr;
+
+class Subclass : public Singleton<Subclass> { // 继承自单例模式的父类
+private:
+    Subclass() {}
+    friend class Singleton<Subclass>; // 设置父类为友元以访问父类的私有成员
+public:
+    void subclassMethod() {
+        std::cout << "Subclass method" << std::endl;
+    }
+};
+
+int main() {
+    Subclass* obj = Subclass::getInstance(); // 获取子类的单例对象
+
+    obj->subclassMethod(); // 调用子类方法
+    return 0;
+}
+~~~
+
+
 
 ## decltype 和 auto
 
@@ -243,17 +310,13 @@ decltype(hha()) a = 1;
 cout << a << endl; //1
 ~~~
 
-### 
-
 ## 初始化参数列表问题
 
 如果是const 对象， 两种初始化方式，要么直接赋值，要么必须在初始化参数列表处赋值
 
 如果是一个引用对象，比如 int& a, 必须在初始化参数列表上赋值
 
-**综合以上两个信息，初始化参数列表的方式等效于直接赋值的方式**（比如A aa; 如果这个aa 采用初始化参数列表的方式初始化，那么相当于，直接是 A aa = 传给构造函数的参数， 这种情况就是直接调用拷贝构造函数，而不是普通构造函数。
-
-
+**综合以上两个信息，初始化参数列表的方式等效于直接赋值的方式**（比如A aa; 如果这个aa 采用初始化参数列表的方式初始化，那么相当于，直接是 A aa = 传给构造函数的参数， 这种情况就是调用普通构造函数直接而不是拷贝构造函数，。
 
 我发现了一个问题
 
@@ -298,12 +361,12 @@ A的构造函数
 A的拷贝赋值函数
 
 如果把上边的
-	B(A a) {	//只会有一次构造函数
+	B(A a) {	
 		this->aa = a; // 这样就会调用两次构造函数
 	}
 	换成
 	B(A a) : aa(a){	//只会有一次构造函数
-		//this->aa = a; // 这样就会调用两次构造函数
+		//this->aa = a; 
 	}
 打印结果就是 
 A的构造函数
@@ -315,6 +378,17 @@ A的拷贝构造函数
 
 ## 迭代器失效
 
+**本质: 当容器发生变化时，之前获取的迭代器不再指向有效的元素或不再有意义**
+
+~~~shell
+1.发生场景: resize，insert, erase, sort
+2.erase:
+- 删除最后一个元素，it++就炸了， 
+- 树/链表不影响后续迭代器是因为删除当前，后续元素地址仍不变，而vector的后续会前移
+3.insert/resize:扩容导致内存重新开辟，位置变化
+4.sort:顺序变化
+~~~
+
 问到vector的时候就可以扯迭代器失效问题，primer上写的**vector不会自动缩容(使用swap交换函数)**，所以删除的时候迭代器也是正常的，不会像插入那种情况(扩容地址发生变化)
 
 迭代器失效分三种情况考虑，也是分三种数据结构考虑，分别为数组型，链表型，树型数据结构。
@@ -325,17 +399,13 @@ A的拷贝构造函数
   erase删除pos位置元素之后，pos位置之后的元素会往前挪，并不会导致底层空间的改变，理论上不会造成迭代器失效，但是当删除元素之后，当前迭代器就会指向下一个元素的位置，如果刚好删除的是最后一个位置的元素，那么当前位置迭代器就会指向.end()位置，vs会担心你操作空地址，所以不管你是不是删除的最后一个元素，都会报错， 但gcc没有这个优化，只有当你实际操作到空地址时才会报错。所以vs编译器为erase做了优化，删除元素时，就会认为该位置迭代器失效。用老一点版本的编译器(gcc)有可能不会优化，删除操作可能不会造成迭代器失效。 
 
   理解上边这段文字需要明白, 当iter==.end()时，本不应该进入for循环的，但删除最后一个元素，就会发生这种情况。
-
-解决方法：erase(*iter)的返回值是下一个有效迭代器的值。 iter =cont.erase(iter)
+  
+  解决方法：erase(*iter)的返回值是下一个有效迭代器的值。 iter =cont.erase(iter)
 
 ​	所以其实这种解决方式也只是为了通过vs的安全检测，当然也是一种规范的写法，但尽管使用了返回值的方式，如果删除的是最后一个元素，iter返回的位置就是.end()， 如果自己编码时不注意，对iter进行操作(*iter  或者 iter ++) 还是会报错)；
 
-
-
 - **链表型数据结构**：对于list型的数据结构，使用了不连续分配的内存，删除运算使指向删除位置的迭代器失效，但是不会失效其他迭代器。解决办法两种，erase(*iter)会返回下一个有效迭代器的值( iter =cont.erase(iter))，或者erase(iter++)
-- **树形数据结构**： 使用红黑树来存储数据，插入不会使得任何迭代器失效；删除运算使指向删除位置的迭代器失效，但是不会失效其他迭代器。erase迭代器只是被删元素的迭代器失效，但是返回值为void，所以要采用erase(iter++)的方式删除迭代器。
-
-注意：经过erase(iter)之后的迭代器完全失效，该迭代器iter不能参与任何运算，包括iter++,*iter
+- **树形数据结构**： 使用红黑树来存储数据，插入不会使得任何迭代器失效；删除运算使指向删除位置的迭代器失效，但是不会失效其他迭代器。erase迭代器只是被删元素的迭代器失效，但是返回值为void，所以要采用erase(iter++)的方式删除迭代器。（也可以搞个临时变量先指向当前节点，iter++，再删除临时变量指向的节点
 
 以下代码举例
 
@@ -360,8 +430,6 @@ int main() {	vector<int>tmp = { 3, 1, 2, 5};
 }
 
 ~~~
-
-
 
 **删除情况**
 
@@ -389,7 +457,7 @@ int main() {
 
 ###  子类指针指向父类
 
-抓住一个核心就是：到底调用哪个函数要根据指针的原型来确定，而不是根据指针实际指向的对象类型确定
+核心就是：到底调用哪个函数要根据指针的原型来确定，而不是根据指针实际指向的对象类型确定
 
 父类指针指向子类对象，看的是子类的虚表
 
@@ -424,7 +492,7 @@ public:
 int main() {
 //1.子指父
 Fa *fa = new Fa();
-Son* s = (Son*)fa;	//子转父，必须显式转换，不然报错, 如果上边换成虚继承这里会报错
+Son* s = (Son*)fa;	//子指父，必须显式转换，不然报错, 如果上边换成虚继承这里会报错
 //Son *s = (Son*)new Fa();
 Son* s1 = static_cast<Son*>(fa);
     
@@ -499,8 +567,33 @@ shared_ptr 存在循环引用问题
 构造对象:
 shared_ptr<int>INum(new int(10));
 shared_ptr<int>INum2 = make_shared<B>();
+~~~
 
-比如程序结束后，两个shared_ptr对象发生循环引用，因为shared_ptr是在栈上，会主动释放shared_ptr这个指针变量，那么这个shared_ptr所指向的对象的引用计数就会减一（这里特别注意，shared_ptr的情况下才会有这种减一的说法，如果是int* 指向的对象，你不主动delete，根本不会释放int*指向的内存）， 但因为引用计数还不为0，所以堆上这个被shared_ptr指向的对象不会释放，如果是一个类，意思就是还不会调用析构函数。
+code:
+
+~~~c++
+类 A 拥有指向类 B 的 shared_ptr，而类 B 拥有指向类 A 的 shared_ptr，当这两个对象在主函数结束时超出作用域时，它们的引用计数并没有降为 0，因为它们彼此持有对方的引用，导致引用计数无法归零，无法调用析构函数，最终导致内存泄漏。
+class A;
+class B;
+class A {
+public:
+    std::shared_ptr<B> b_ptr;
+    A() {}
+    ~A() {}
+};
+class B {
+public:
+    std::shared_ptr<A> a_ptr;
+    B() {}
+    ~B() {}
+};
+int main() {
+    std::shared_ptr<A> a = std::make_shared<A>();
+    std::shared_ptr<B> b = std::make_shared<B>();
+    a->b_ptr = b;
+    b->a_ptr = a;
+    return 0;
+}
 ~~~
 
 weak_ptr
@@ -533,7 +626,6 @@ unique_ptr 删除了拷贝构造和拷贝赋值函数
 make_unique<int>里面用了完美转发，相当于给了一个右值出来，也就是跟下边的move一个效果，其实这里用RVO机制也可以。
 
 只能通过 1.move 2.release + reset 来交换对象的所有权。
-
 ~~~
 ### c++类型转换(涉及了explicit和volatile关键字的使用)
 c语言类型转换可视性不好，什么都是直接在变量名前加上（类型），比如float b; int a = (int)b; 再比如 int *a = &x; long c = (long)a; 将指针类型转为long类型的整型。**如果出现因类型转换而导致的错误跟本不好找，而在c++中搜_cast即可大致定位**
@@ -598,12 +690,12 @@ float b = dynamic_cast<float>(a);  //错误的写法，只有static_cast可以
 Fa *fa = new Fa();
 Fa *fb = new Son();
 
-Son* s = (Son*)fa;	//子转父，必须显式转换，不然报错, 如果上边换成 虚继承(不是说虚基类) 这里会报错
+Son* s = (Son*)fa;	//父转子，必须显式转换，不然报错, 如果上边换成 虚继承(不是说虚基类) 这里会报错
 cout << s->ss << endl; // 0  这里可以看出来出问题了，因为父类没有ss空间
 
-Son* s2 = dynamic_cast<Son*>(fa);//返回的s2是一个空指针，对应的上边说的第二点
+Son* s2 = dynamic_cast<Son*>(fa);//返回的s2是一个空指针，对应的上边说的第一点
 
-Son* s3 = dynamic_cast<Son*>(fb); //这里就是安全的转换，所以会返回实际的地址，对应的是上边说的第一点
+Son* s3 = dynamic_cast<Son*>(fb); //这里就是安全的转换，所以会返回实际的地址，对应的是上边说的第二点
 
 如果把上边的操作换成对引用的操作，同样上行转换不会有任何问题，对于下行转换也同样是两种情况，与指针不同的是，如果下行转换失败不会返回空指针，但又没有空引用这个说法，于是会抛出异常，可以通过捕获这个异常进一步处理
 

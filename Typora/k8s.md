@@ -18,6 +18,12 @@ pod中: curl nginx-service:8080 (用一次性pod验证，集群中所有pod都�
 2.删除命名空间会把该命名空间下的所有内容都删了，如果遇到错误，需要先删除错误状态的对象
 ~~~
 
+查看某个pod挂之前的日志
+
+~~~shell
+kubectl logs --tail 100 --previous official-battle-royale-server-1710641478399624860-59848466l7c7v -n official
+~~~
+
 选择器
 
 ~~~yaml
@@ -36,8 +42,6 @@ spec:
       port: 80
       targetPort: 9376
 ~~~
-
-
 
 标签相关
 
@@ -290,8 +294,7 @@ kubectl create configmap fluentd-config -n default --from-file=./fluent.conf
 创建一个service
 
 ~~~shell
-kubectl apply -f fluentd.yaml
-具体的yaml内容
+kubectl apply -f fluentd.yaml	（-f 指定文件路径
 ~~~
 
 删除一个服务
@@ -324,7 +327,7 @@ kubectl apply -f fluentd-config-backup.yaml
 
 ~~~shell
 # -o yaml 可以把配置以yaml的格式打印出来
-# 比如cm的， svc也是一样
+# svc也是一样
 kubectl get cm -n default fluentd-config -o yaml > fluentd-config-backup.yaml
 ~~~
 
@@ -401,6 +404,19 @@ kubectl get pod test-leader-board-service-7dd6bf4556-xv8lp -o jsonpath='{.spec.c
 .name: 表示访问每个容器对象中的 name 字段。
 ~~~
 
+查看具有相同label的所有pod日志
+
+kubectl logs -l app=staging-battle-royale-server --all-containers -n staging --tail 10 -f  
+
+~~~shell
+kubectl logs -l app=staging-project328-server --all-containers -n staging --tail 10 -f  
+
+kubectl logs -l app=official-user-data-service --all-containers -n official --tail 10 -f --max-log-requests=5
+# label可以通过describe查看
+~~~
+
+
+
 查看lbs这个pod中指定容器的日志
 
 ~~~shell
@@ -416,7 +432,7 @@ kubectl logs test-leader-board-service-7dd6bf4556-xv8lp --all-containers
 从日志的最后10行开始看，并且动态的看
 
 ~~~shell
-kubectl logs -f --tail=10 test-leader-board-service-7dd6bf4556-xv8lp --all-containers
+kubectl logs test-leader-board-service-7dd6bf4556-xv8lp --all-containers --tail 10 -f
 ~~~
 
 查看uds的pod的所有容器

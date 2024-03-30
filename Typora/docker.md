@@ -1,6 +1,53 @@
+Docker build常用参数
+
+~~~
+-t: 指定构建镜像的名称和标签
+-f: 指定要使用的Dockerfile的文件名或路径
+--network: 设置构建时的网络
+--build-arg: 传递构建时的参数, 可以在dockerfile中使用
+~~~
+
+查看docker镜像
+
+~~~
+docker image ls
+~~~
+
+上传docker镜像
+
+~~~
+Docker镜像标签包含两部分：镜像名称和标签。常见的标签格式为repository:tag。在repository部分，您可以包含镜像仓库的地址。如果没有显式指定地址，Docker将会默认将镜像推送到Docker Hub。
+可以对镜像进行标记：docker tag image_name docker.hoxigames.com/image_name:tag。然后使用docker push docker.hoxigames.com/image_name:tag来将镜像上传到私有仓库
+~~~
+
+安装私有docker镜像仓库
+
+~~~shell
+# 安装Docker Registry
+docker run -d -p 5001:5000 --restart=always --name registry registry:2 # 因为本地5000端口冲突了才用的5001
+
+# case: 把uds的镜像上传到这个私有镜像仓库
+# 1. 先改下镜像的名字
+docker tag docker.hoxigames.com/project328/user-data-service-image:c3bae30086f9-84eb3eab16ea  localhost:5001/image_name:tag
+# 2. 上传镜像到私有仓库 localhost:5001
+docker push localhost:5001/image_name:tag
+~~~
+
+查看某容器是否在运行中
+
+~~~shell
+docker ps -q -af name=mysql-remote
+# 参数解释
+-a：显示所有容器，包括运行中和停止的
+-q：仅返回容器的ID
+-f name=mysql-remote：过滤条件，只返回容器名称包含mysql-remote的容器的信息
+~~~
+
 动态看容器内存变化
 
-Docker stats 容器id
+~~~
+docker stats 容器id
+~~~
 
 常用参数
 
@@ -52,10 +99,12 @@ docker exec -it -u root 7c498fa1dab8 sh (sh或者/bin/bash情况不同用的不�
 docker inspect fluentd 查看某个容器的详情(比如想看文件挂载相关就搜mounts)
 ~~~
 
-查看所有容器(包括异常停止的 (docker ps看不到停止的))
+查看所有容器(包括异常停止的 ()
 
 ~~~shell
 docker container ls -a | grep dev2
+
+docker ps -a 也能看到停止的
 ~~~
 
 ### zookeeper
@@ -97,7 +146,7 @@ docker start mongodb
 docker run --name mysql -v /Users/a123/.deploy-tool/dev/mysql:/var/lib/mysql -p 3306:3306  -e MYSQL_ROOT_PASSWORD=123456     -e MYSQL_DATABASE=project328   -d docker.hoxigames.com/mysql:8.0 --default-authentication-plugin=mysql_native_password
 
 
-// 自测
+# 自测, 这里的mysql-data可以在docker界面的侧边栏看到volumes选项
 docker run --name=mysql-server -p 3306:3306 -v mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 -d mysql  //运行mysql,  最后这个mysql表示镜像名(比如hoxi的时候是docker.hoxigames.com/mysql:5.7)
 
 docker exec -it mymysql mysql  -u root -p  //连接mysql

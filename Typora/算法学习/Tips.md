@@ -209,6 +209,8 @@ pop_back(), push_back(), push_front(), pop_front(), front(), back();
 8.对于reverse函数需要注意
 reverse(idx1, idx2) ,idx2是没有算的，左闭右开
 9.对于unordered_map
+只要加入过， 就算value变成了0，还是有对应的key-value(0).
+.first为key，.second为value
 .clear清空， 
 .count()  返回是否包含
 .find() != .end() 判断是否包含

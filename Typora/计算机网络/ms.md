@@ -2,9 +2,9 @@ DHCP:八种报文类型，主要掌握四种，discover， offer，request，ack
 
 ICMP(Internet Control Message Protrol：，翻译过来就是互联网控制信息报文协议，因为它提供了多种类型码，对于在网络上传输出现的错误进行了分类，主要是两大类型， 查询报文类型(ping是其中一中)，和 差错报文类型(transroute(linux)是其中一种，但transroute(windows)不是)， 通过返回类型我们就能判断一个包是怎么si的，
 
-对于traceroute(linux)和 trancert(windows)都是刚开始都是把TTL设置成1， 然后通过返回错误，不断增加ttl的值，在这个过程中会记录路由经过的每一个路由的信息(往返时间等)，有一点不同的是tracert是向目标地址发出ICMP请求回显数据包，而transoute是向目的地址的某个端口(>30000) 发送UDP数据包， 它们的返回结果是不同的，tracert是能够接收到对方的回显的，属于查询类型，而traceroute完全只是为了获取到达目的地的途径，属于差错类型
+对于traceroute(linux)和 trancert(windows)都是刚开始都是把TTL设置成1， 然后通过返回错误，不断增加ttl的值，在这个过程中会记录路由经过的每一个路由的信息(往返时间等)，有一点不同的是tracert是向目标地址发出ICMP请求回显数据包，而traceroute是向目的地址的某个端口(>30000) 发送UDP数据包， 它们的返回结果是不同的，tracert是能够接收到对方的回显的，属于查询类型，而traceroute完全只是为了获取到达目的地的途径，属于差错类型
 
-traceroute有三种类型，基于UDP(Linux下默认的)，基于ICMP(windows默认，也就是tracert命令) 和 基于TCP的， 基于UDP和基于ICMP的很像，区别在于发出去的接收的包不同，对于UDP向外发送的是一个UDP数据包，收到的是一个ICMP Destination Unreachable(端口不可达，因为30000以上的端口一般都是不存在的)， 对于ICMP向外发送的是一个发送的是一个ICMP Echo Request， 收到的是一个ICMP Echo Reply， transroute的基于ICMP的这种windows默认方法(即tracert)和ping有有点像，发送和接收的都是同一种类型
+traceroute有三种类型，基于UDP(Linux下默认的)，基于ICMP(windows默认，也就是tracert命令) 和 基于TCP的， 基于UDP和基于ICMP的很像，区别在于发出去的接收的包不同，对于UDP向外发送的是一个UDP数据包，收到的是一个ICMP Destination Unreachable(端口不可达，因为30000以上的端口一般都是不存在的)， 对于ICMP向外发送的是一个ICMP Echo Request， 收到的是一个ICMP Echo Reply， transroute的基于ICMP的这种windows默认方法(即tracert)和ping有有点像，发送和接收的都是同一种类型
 
 ICMP是网络层的，但它依赖于IP协议，ICMP是被封装在IP包里面的， 被ping的对象收到这个包之后也会生成一个ICMP包，对应的ICMP类型字段为0(主动请求的应答)， 序列号设置为发送方发过来的序列号，当我们收到结果的时候用现在的时间减去发送时的时间也就得到了RTT(往返时间)，还能够得到TTL的值(比如ping百度的时候是56，一开始这个值默认是64,说明跳转了8个路由就找到目的地了)，在规定时间内，若没有收到ICMP的应答，则说明目标主机不可达，同时用当前时刻减去发送时刻就是ICMP数据包的延时
 
@@ -17,8 +17,6 @@ traceroute一开始发送ttl是1的udp数据包，即碰到第一个路由器就
 Ping：Ping命令通常会显示每个发送和接收数据包的统计信息，如往返时间（RTT）和丢包率。    #(发送和接收都是icmp)
 Traceroute：Traceroute命令会显示从源主机到目标主机经过的每个中间节点（路由器），以及它们的IP地址和延迟。 # 更细，(linux默认发送是udp，接收都是icmp)
 ~~~
-
-
 
 NAT地址转换：简单说就是公司教室内的主机对外通信，把私有IP转换成共有IP地址， 比如现在公司有两台机器，192.168.1.10 和 192.168.1.11 那么通过NAT路由器是无法做到的， 所以我们需要把IP+port一起进行NAT，比如192.168.1.10:1025 和 192.168.1.11:1025通过NAT路由器分别转化为49.234.61.220:1001 和 49.234.61.220:1002 ，这种转换关系表在NAT路由器上自动生产，但如果NAT路由器崩了，那么所有TCP连接都会重置，所以有两种解决方案， 第一种换成IPv6， 第二种使用NAT穿透技术， 即我们的主机自动获得NAT设置的公有IP，然后自己建立端口映射条目，然后通过这个条目对外通信，这样就不需要NAT设置来进行转换了 
 
@@ -34,9 +32,7 @@ mss是对于tcp层的，mtu是对于ip层的， 如果tcp不分片，假设发�
 
 OSI七层模型、四层模型，其实他们的区分标准在于OSI七层模型是理论上的分层方式，而四层模型是实践过程中的分层模型。
 
-![](C:\Users\ASUS\Pictures\博客图片\QQ图片20230204225337.png)
-
-![](C:\Users\ASUS\Pictures\博客图片\QQ图片20220801220150.png)
+![img](https://img-blog.csdnimg.cn/d4b0cd4bcae3420ab07a4240677275b6.png#pic_center)
 
 ## 哪个函数控制了三次握手的连接
 
@@ -58,9 +54,7 @@ OSI七层模型、四层模型，其实他们的区分标准在于OSI七层模�
 
 为什么两次握手不行，假设Client给Server发送一个连接请求过去(第一次握手)，但由于网络原因，迟迟没有到达Server端，所以Client端迟迟收不到对方的ACK回应(第二次握手)，这时假设Client不想建立本次连接了，但这个由于网络延迟等原因发送的请求建立包(第一次握手)又到达了Server端，对于Client端来说这是一个没用了的请求连接，但Server端会单方面建立这次连接。
 
-
-
-![](C:\Users\ASUS\Pictures\博客图片\QQ图片20220801224102.png)
+![在这里插入图片描述](https://img-blog.csdnimg.cn/e994ed83de1a470d88ac3c4364d50a9a.png#pic_center)
 
 有发送消息的步骤的函数：connect , send, close, shutdown   
 recv看似收到消息后会回复ack确认，但实际这种现象是协议中对收到数据的自我回应，不算在上边。
@@ -207,5 +201,4 @@ grpc 用了protobuf(把IM协议中的message 换成 service)， 功能实现简�
 ![1670589280064](C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\1670589280064.png)
 
 304http缓存设计， 如果客户端缓存时间到期了，去服务器对比后发现，服务器还是原来客户端缓存的数据，这时候服务器就回应304，不带数据，告诉客户端继续使用以前缓存的那份数据
-
 200， 201(表示服务器已经成功处理，并且创建了新的资源，一般出现在post请求的返回上)， 301(永久重定向)， 302(临时重定向)， 401(未认证用户信息)， 403(权限不够) ，500(服务器内部错误无法处理请求，比如连接不上数据库)，502(上游服务返回不正确的值， 比如nginx作为反向代理时，接受到业务服务器的不正确返回时)，503(负载大，维护)， 504(和502类似， 但是返回是正确的，只是超过了指定的时间), 505(不支持的http协议，比如过时的版本)

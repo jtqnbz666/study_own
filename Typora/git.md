@@ -1,3 +1,5 @@
+git http推， 全局代理
+
 12.git pull
 
 ~~~shell
@@ -185,5 +187,4 @@ git log  查看提交情况， 使用 git reset --hard " hash值" 去到某一�
 git reset --hard HEAD^ 
 再git pull
 ~~~
-
 

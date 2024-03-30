@@ -1,10 +1,10 @@
+
+
 查看ubuntu版本
 
 ~~~
 lsb_release -a
 ~~~
-
-
 
 ### 安装telnet服务
 

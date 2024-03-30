@@ -1,21 +1,70 @@
-1.数据处理之后怎么通知玩家， 玩家主动拉还是后端推送
+bp1pzhr6mk4g492g0
 
-2.需要处理的数据， 石灵收藏，战绩数据
+测试计划
 
-3.停服维护的时候需要考虑组队中的玩家吗
+~~~
+1. 6:00 打开禁止匹配
+2. 7:30 打开维护状态， 接着导出一份.sql（排除战绩，mail)
+3. 8:01 执行脚本重启所有服务，服务重启完后，江涛手动点击更新赛季
 
-4.不停服结算的话前端的石灵收藏显示会有问题吗
+
+
+恢复原状态方式: 1. 新开个实例重新拉线上服玩家数据 2. 
+~~~
+
+
+
+上线计划
+
+~~~
+1. 更新前半小时开维护， 我把线上玩家的sql导一份出来作为备份
+2. 更新前半小时重启一次服务器， 八点(新赛季)一定要重启服务器，因为要加载新赛季信息， 然后我执行gm
+3. 我不知道占令的更新逻辑是啥
+
+总之我关心的点是， 导出sql， 新赛季重启服务器， 执行gm工具
+测试点： qa模仿这个流程过一下， 先用online分支
+~~~
+
+
+
+
+
+telnet看端口通不通
+
+线上更新todo
+
+~~~
+1.新增UserSeasonInfo表
+2.删除索引: drop index i_user_minion on user_minion_records;
+3.增加字段: UserHonorRecord表
+CurSeasonCsCompletionCount，CurSeasonCsHighestSingleRoundWin,CurSeasonCsWinCount
+4.未用字段UserHonorRecord表:
+	//CollectionLevel  int32  // 收藏等级(未用
+	//CurMaxCSWinCount int32  // 当前周期锦标赛胜场(未用
+	//CurMaxDamageInfo string // 当前周期最大伤害(未用
+	//Total1StCount    int32  // 总夺冠次数(未用
+	//TotalWinCount    int32  // 总胜利场数(未用
+	//CsTotalCount     int32  // 锦标赛总场数(未用
+	//CsWinCount       int32  // 锦标赛总胜利场数(未用
+	//CurBeastMinion   string // 当前周期最大石灵身材(未用
+~~~
+
+1. 提前5分钟停服
+4. 删除索引drop index i_user_minion on user_minion_records;
+5. 测试点：s2注册的玩家去测s1的石灵升级
+6. 连胜不要了，2. 检查领总奖励的条件判断
+
+Todo: 1.线上数据备份测试，2.过往赛季石灵升级操作， 3. 战绩夸赛季不显示，连胜逻辑从头开始 。
+
+900x日志在/k8s-data/staging-fluentd, 线上在/k8s-data/fluentd
+
+学tcpdump, 扫描攻击的概念
+
+todo:1. 删除之前的联合索引，建立新索引 。2.通知唯羽索引的变化 3. 升级资源检查
+
+访问不了安全组， 就在远端看下我打过去的ip信息是多少， 可能公网之外还走了别的ip
 
 5.如果ttf没变化， 英雄战斗值能不能正常变化
-
-6.得考虑停机更新和不停机更新的情况。
-
-- 停机： 直接遍历所有玩家即可
-- 不停机：需要考虑数据清理阶段，正在进行的数据怎么处理，比如升级石灵
-
-7.战绩需要做什么特殊处理吗，如果要，现在的连胜逻辑是什么
-
-完整计划做法
 
 弱点字符串处理，
 
@@ -64,6 +113,7 @@ b.getMinion 435,BuffID:11681 哥斯拉
 b.getMinion 724,BuffID:11681 老虎
 b.getMinion 429,BuffID:11681 恶霸
 b.getMinion 729,BuffID:11681 豹冰冰
+b.getMinion 727,BuffID:11681 大脚怪
 ```
 
 24:26
@@ -75,10 +125,6 @@ b.getMinion 729,BuffID:11681 豹冰冰
 234（小蜂，239(女王+2391的buff)， 230(任意), 913河马
 
 数据双写, 定时任务的异常捕获
-
-
-
-
 
 设置200个连续玩家的榜单分数
 
