@@ -1,3 +1,12 @@
+8.位运算
+
+~~~shell
+1. 异或(^=): 
+相同为0，不同为1
+2. 针对某一位设置为0: 
+ReversalAttribute = (ReversalAttribute & ~gameAttribute);
+~~~
+
 7.foreach 不能遍历一个null值，对象必须new过
 
 6.对象使用之前都得先new一个对象

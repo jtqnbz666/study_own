@@ -73,10 +73,12 @@ INSERT INTO mystudent(name,age,sex) SELECT * FROM student WHERE sex='女';
 
 ~~~mysql
 # 删除索引
-alter table tableNmae drop index 索引名;
+alter table tableName drop index 索引名;
 DROP INDEX 索引名 ON tableNmae;
 # 增加索引
-alter table tableNmae add index 索引名(字段名);
+alter table tableName add index 索引名(字段名);
+# 增加联合唯一索引
+alter table tableName add unique index i_user_name(filed1,filed2)
 #修改表名
 alter table new_table rename to old_table;
 #修改字段名

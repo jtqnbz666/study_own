@@ -16,6 +16,8 @@ pod中: curl nginx-service:8080 (用一次性pod验证，集群中所有pod都�
 ~~~shell
 1.把副本集删了不会影响deploy, 但把deploy删了，pod也会被删
 2.删除命名空间会把该命名空间下的所有内容都删了，如果遇到错误，需要先删除错误状态的对象
+3.删除具有相同标签的所有pod（配置了deploy会自动恢复，不过不是之前那个pod了）
+kubectl delete pods -l app=staging-user-data-service -n staging
 ~~~
 
 查看某个pod挂之前的日志
@@ -228,6 +230,12 @@ kubectl delete pod 删除任意一个，他会自愈(会重新创建一个，保
 ~~~shell
 kubectl get replicaSet #replicaSet可缩写为rs
 比如结果是nginx-deploy-85bc6c755并且有两个副本集， 使用kubectl get pod 就看到的是nginx-deploy-85bc6c755-A和nginx-deploy-85bc6c755-B
+~~~
+
+重启pod
+
+~~~
+实际上如果配置了deploy对象，那么直接删除这个pod就会自动重启
 ~~~
 
 第一个测试的mysql的pod

@@ -34,8 +34,6 @@ str.substr(idx, cnt);表示从idx开始，截取后边的cnt个
 arr.erase(unique(arr.begin(),arr.end()),arr.end());
 ~~~
 
-
-
 3实现int和string类型的转换
 
 ```C++
@@ -192,8 +190,14 @@ int startRow = (row / 3) * 3;
 1.可以用auto来遍历
 map，unordered_map ， vector
 2.定义n个小顶堆
-priority_queue<char, vector<int>,  greater<int>) ph[n]
+priority_queue<int, vector<int>,  greater<int>) ph[n]
 3.对于priority_queue<int, vector<int>, cmp> 
+class cmp {
+      public:
+      bool operator()(ListNode* A, ListNode* B) {
+          return A->val > B->val;
+      }
+  };
 push入， pop出， top()取顶
 4.对于map:
 用count 和 find(键) != end()查找是否存在
