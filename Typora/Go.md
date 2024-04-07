@@ -7,6 +7,11 @@
 **小知识**
 
 ~~~go
+19.空struct{}的用途：空struct节省内存一般作为占位符使用，表示这里并不需要一个值1.比如用map来表示集合的时候，value可以用struct{}类型，2.chanel控制并发时，只需要一个信号并不需要传递值，也可以用struct代替，3.声明只包含方法的结构体
+18.go中使用const来表示枚举值
+17.判断两个slice是相等的可以通过反射reflect.DeepEqual
+(a, b)但比较影响性能，一般直接遍历slice的每个元素
+16.同一函数多个defer遵循后写先出(栈)， 如果在defer中修改变量值， 如果是无名返回值则不会修改成功，因为go的机制是在返回的时候会创建一个临时变量保存返回值，defer修改了局部变量并没有修改返回值，但如果是有名返回值就不会创建临时变量，defer中对该变量值修改就能对返回值产生影响
 15.切片是引用类型， 当参数传递也是引用类型，但如果使用了append函数会返回一个新的切片地址，不会对原切片产生影响，所以给人一种值类型的错觉
 func test(arr *[]int32) {
 	*arr = append(*arr, 9)
@@ -37,7 +42,7 @@ alter table table_name drop index idx_name;
 5.如果改了某个框架的东西，go mod tidy
 go get gitlab.hoxigames.com/hoxi-games/hoxi-server@develop  最后的develop表示develop分支
 6.两个切片合并。 append(chan1, chan2...)
-7.%v无法打印出切片内容，而是打印他的地址， 可以用%+v或%#
+7.%v无法打印出切片内容，而是打印他的地址， 可以用%+v或%#，+v打印struct可以同时打印字段名和值，而普通的%V只打印值
 8.遍历切片的时候，比如, 'for i, entity := range Entities'如果Entities是指针类型，就可以通过entity进行修改，如果不是指针类型，那么对entity的修改是不会反映到Entities上的
 9.使用ret := RawData{} 和 ret := &RawData{}来调用自己的指针方法，二者都可以，没有区别
 10.更新依赖：go get -u； 清除缓存：go clean -modcache
