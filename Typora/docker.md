@@ -1,3 +1,11 @@
+清理docker空间
+
+~~~
+docker system prune
+~~~
+
+
+
 Docker build常用参数
 
 ~~~
