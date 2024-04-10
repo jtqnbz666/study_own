@@ -20,6 +20,15 @@ pod中: curl nginx-service:8080 (用一次性pod验证，集群中所有pod都�
 kubectl delete pods -l app=staging-user-data-service -n staging
 ~~~
 
+查看pod的内存使用情况
+
+~~~shell
+# 比如有多个pod，不知道哪个pod正在执行大量任务的时候就可以用来定位
+kubectl top pods -n official
+~~~
+
+
+
 查看某个pod挂之前的日志
 
 ~~~shell

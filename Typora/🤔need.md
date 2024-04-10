@@ -260,11 +260,11 @@ select * from buy_records where user_id = 10001 and type = 3\G;
 4. 道具比如手选卡和钥匙记录在user_bag_items中
 4. 随机石灵碎片，第四个参数是决定分多少组的
 
-**礼包系统：**
+**礼包系统(奖励系统)：**
 
 增加一些有时间限制的礼包：addTimeShopGiftBag
 
-**目前可以这样理解：LotterMain.xslx就是宝箱， 里面的具体奖励在LotteryAward.xslx看**
+**目前可以这样理解：LotteryMain.xslx就是宝箱， 里面的具体奖励在LotteryAward.xslx看**
 
 相关表：ShopGift、ShopGoods, GiftBag、LotteryMain、LotteryAward、LotteryNew
 
@@ -846,12 +846,13 @@ Project328:在CheckRefreshTask检查生成所有的任务， addNewBPTask添加�
 
 ~~~
 1.活动名，2.活动类型，3.活动id，2.是否禁止活动， 3. 活动开始时间， 4.活动截止时间
-
 ~~~
 
 
 
-AI模拟战斗：
+**AI模拟战斗：**
+
+战斗次数和晋级名次都填1，分档数乱填
 
 ~~~
 核心思路，不管一回合打了多少人以及多少回合， 都先只做记录（记录到下边三个数据结构中）， 并没有区分是因为打谁造成或受到的伤害。
@@ -860,10 +861,6 @@ AI模拟战斗：
 1.先InitMirrors中初始化，用镜像得到player对象(核心是MirrorId字段)，并且会检查一下这些镜像是否正常(使用loadsnapshot)，如果正常会放到AiHeroMirrorPlayers对象中.
 2.三个重要结构：AiPoolBattleWinRecords(每回合的总战斗次数和赢的次数)，AiPoolBattleDamageRecords(每回合造成的总伤害)，AiPoolBattleBeDamageRecords(每回合受的总伤)
 ~~~
-
-
-
-
 
 最小二乘拟合直线: 就是给一些坐标点，求一条坐标上的直线，使得这条直线到这些点的总和最小
 
