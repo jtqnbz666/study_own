@@ -1,6 +1,7 @@
 ### 基础操作
 
 ~~~
+5.密码认证 auth 密码
 4.bgsave生成rdb文件
 3.修改key名: RENAMENX
 2.redis-cli info memory查看内存信息

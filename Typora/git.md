@@ -1,5 +1,12 @@
 git http推， 全局代理
 
+13.添加远程仓库到本地仓库
+
+~~~shell
+git remote add origin <远程git仓库地址>
+# 注意: 没有git信息之前就需要执行这个指定远程仓库，git信息可以在.git/config中看到
+~~~
+
 12.git pull
 
 ~~~shell

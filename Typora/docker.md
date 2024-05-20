@@ -4,15 +4,13 @@
 docker system prune
 ~~~
 
-
-
 Docker build常用参数
 
 ~~~
 -t: 指定构建镜像的名称和标签
 -f: 指定要使用的Dockerfile的文件名或路径
 --network: 设置构建时的网络
---build-arg: 传递构建时的参数, 可以在dockerfile中使用
+--build-arg: 传递构建时的参数, 
 ~~~
 
 查看docker镜像
@@ -65,6 +63,7 @@ docker stats 容器id
 -v:挂载
 -p:端口映射
 -it: i表示交互式，t表示terminal终端
+--detach: 后台运行
 ~~~
 
 如果因为修改容器内配置导致容器无法启动
