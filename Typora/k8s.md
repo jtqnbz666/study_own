@@ -152,10 +152,6 @@ k8s中参数用 -- 和 - 的区别
 "--"作为前缀，通常用于更详细、更复杂的参数，需要明确指定参数的名称以及对应的值。
 ~~~
 
-不同场景下访问pod的方法
-
-![](/Users/a123/study/study_own/pic/20240129-004855.jpeg)
-
 NodePort类型（集群外主机访问访问集群的服务
 
 ~~~shell
@@ -167,8 +163,6 @@ nginx-service   ClusterIP   10.106.82.96    <none>        8080/TCP         16m
 nginx-outside   NodePort    10.110.131.94   <none>        8081:30358/TCP   14sw
 # 这个30358是随机生成的外部访问端口, 在浏览器上输入114.55.88.127:30358(8081是集群内用的端口)就可以访问到集群内的nginx服务了
 ~~~
-
-
 
 验证nginx多节点负载均衡的效果（本质是k8s的负载均衡而不是nginx服务负载均衡
 
@@ -205,8 +199,6 @@ kubectl rollout history deploy/mytest-deployment --revision=1 # 看详情
 kubectl rollout undo deploy/mytest-deployment --to-revision=1 # 回滚
 
 # 回滚本质上是通过副本集(rs)去回滚，就继续用之前的副本集来构建deployment和pod了
-
-
 ~~~
 
 滚动更新(更新镜像)
