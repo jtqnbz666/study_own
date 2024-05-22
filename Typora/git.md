@@ -66,9 +66,13 @@ git config pull.rebase false  // 这是默认的，也就是merge方式
 git config pull.rebase true  //这表明当前使用rebase方式
 
 # 设置提交用户信息
-git config --global user.name "jt"
+git config --global user.name "jiangtao"
 git config --global user.email "454193896@qq.com"
 使用 git confil -l 查看是否设置成功
+
+# 清除信息user.email 和 user.name
+git config --global --unset user.email
+git config --global --unset user.name
 ~~~
 
 5.rebase技巧

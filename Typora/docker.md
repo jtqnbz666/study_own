@@ -1,3 +1,19 @@
+用docker运行一个go程序
+
+~~~shell
+# sh脚本内容如下
+#!/bin/bash
+
+set -xe
+
+cd "$(dirname "$(readlink -f "$0")")" || exit 1
+
+docker run -d --restart always --name aliyun-security-group-server -p 59999:3000 -w /app -v "$(pwd)":/app -v "$(readlink -f ~/go)":/go -e 'GOPROXY=https://goproxy.cn,direct' golang:1.21 go run .
+# 把需要运行的go代码和脚本放在同一目录下，运行脚本即可。
+~~~
+
+
+
 清理docker空间
 
 ~~~
