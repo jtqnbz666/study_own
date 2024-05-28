@@ -1,3 +1,74 @@
+网络相关(bridge, host, none)
+
+默认bridge网络docker0
+
+~~~shell
+下载好docker之后默认会创建一个docker0的网络接口(通过docker network ls可以看到名为bridge的那个就是这个docker0)，之后创建的所有容器(不单独指定网络的情况下)都是通过docker0作为桥与宿主机进行通信再进一步与外网通信，容器信息到达宿主机的过程涉及到NAT转换，默认的docker0网络有个缺点是在docker0网络下的所有容器间不能通过名字进行通信，只能用对方ip，使用ping命令可以测试，而自定义的bridge类型网关则可以直接用容器名字通信。
+# 测试命令 docker run -d --name test --hostname test praqma/network-multitool
+~~~
+
+![1716909078134](../pic/1716909078134.png)
+
+自定义bridge类型的docker网络
+
+~~~shell
+docker network create jt -d bridge # -d表示驱动类型， 创建好之后使用ip address可以看到多了一个网口，网口的名字和使用docker network ls是有一部分相同的，
+~~~
+
+使用docker网络，分析ip address命令下的主要信息
+
+~~~shell
+# 举例：创建docker网络，并且在该网络下创建两个容器，在宿主机中使用ip address查看网卡信息
+8: br-0d9ad017cc2c: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 
+10: vethe9c443c@if9: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 
+12: veth4cb8861@if11: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 
+
+# 序号8这里代表新创建的bridge类型的docker网络, 可以使用docker network ls看到名为0d9ad017cc2c的网络。10和12这里的veth是虚拟以太网的缩写，它们后边分别写着@if9和@if11表示它们与创建的两个容器网卡的关联，可以分别进入容器使用ip address看到两个容器分别对应的序号是9和11
+~~~
+
+bridge网络类型特点
+
+~~~shell
+可直接通信情况: 容器<-->容器、 容器<-->宿主、 容器-->互联网、 互联网到容器的话需要配合暴露端口。 # 特别注意，使用ip的情况下是没问题的，但默认的bridge(docker0网络)是不支持直接用容器名的，自定义的bridge含有自动DNS解析功能，所以可以直接用容器名，宿主到容器的时候也不能用容器名，需要用容器的ip。
+
+# 不同bridge网络中的容器是不互通的，用ip也不行。
+~~~
+
+host网络类型特点(目前只有linux下是这样，mac和windows有区别)
+
+~~~shell
+# 创建容器并指定host网络，docker自动生成了一个名叫host的host类型网络，并且不允许用户创建第二个host类型的网络，创建容器命令如下
+docker run -d --name egg5 --hostname egg5 --network host praqma/network-multitool 
+这个容器自带nginx服务， 直接在宿主机上使用命令curl localhost就可以访问到容器内的nginx服务了，不再需要端口暴露，在bridge模式下创建的容器如果外网需要访问容器则需要端口暴露，可以通过修改容器中的/usr/share/nginx/html/index.html文件进行验证。
+# 在容器中使用ip address和在宿主机上使用ip address内容是一样的，host网络下创建的容器不会生成多余的网口。
+~~~
+
+none网络类型
+
+~~~
+使用ip address查看，除了有本地回环地址其他都没有，是一个隔离的环境，不与任何容器进行通讯。
+~~~
+
+![1716913712121](../pic/1716913712121.png)
+
+挂载目录
+
+~~~shell
+# 两种方式都能持久化
+1.宿主机目录挂载(Bind Mounts)
+提供了更高的灵活性和直观性，但可能需要注意数据同步和安全性问题。
+2.Docker挂载卷(Volumes)
+容器间共享的场景。它提供了更好的安全性、易用性和管理性，是Docker推荐的数据存储方式。
+# 以下说明挂载卷(第二种)数据的备份和迁移
+1. docker run -p 27017:27017 --name mongo -v mongo-data:/data -d mongo:4.4 # 运行起来后使用mongo造点数据
+2. docker run --rm --volumes-from mongo -v d:/backup:/backup ubuntu tar cvf /backup/backup.tar /data/ # --rm表示如果存在相同容器则先删除， --volumes-from 表示挂载mongo容器的所有volume，现在可以拿这个backup.tar文件去其他地方导入了
+3. 删除mongo容器，删除名为mongo-data的挂载卷(前两步表示数据的备份，这一步表示失去这个容器的数据，后两步表示利用备份数据进行恢复)
+4. 重新跑一个mongo容器，执行第一步的命令(这次没有任何数据)
+5. docker run --rm --volumes-from mongo -v d:/backup:/backup ubuntu bash -c "cd /data/ && tar xvf /backup/backup.tar --strip 1" # volumes-from指定的是容器名字, strip 1表示解压时去掉前面1层目录，因为压缩时包含了绝对路径
+~~~
+
+
+
 用docker运行一个go程序
 
 ~~~shell
