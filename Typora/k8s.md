@@ -150,7 +150,16 @@ k8s中参数用 -- 和 - 的区别
 "--"作为前缀，通常用于更详细、更复杂的参数，需要明确指定参数的名称以及对应的值。
 ~~~
 
+docker和k8s在访问服务时的对比
+~~~shell
+k8s没有集群的概念 所以k8s比docker多了一个访问方式，集群内的主机使用cluster-ip:端口访问服务，其他两种方式的思想是一样的，第一种是集群外访问服务，对于docker是用的端口映射或者把网络模式设置为host，对于k8s是把svc设置为NodePort类型，使用本机ip:NodePort进行访问，LoadBalancer也是一样，第二种就是容器之间的互相访问，对于docker如果是默认bridge网络也就是docker0网卡，直接用容器的ip:port,如果是自定义bridge类型可以直接用容器的名字:port,对于k8s集群中的所有pod可以直接用svc的名字:port进行访问，可以结合328项目中大厅服初始化uds连接就是用的这种方式。
+
+对于k8s有三个port类型需要理解，一个是targetPort也就是容器的端口，一个是port也就是svc提供给集群用的端口，还有一个是NodePort也就是集群外访问服务时需要用到的端口，简单说就是targetPort是容器中的，port和NodePort是svc的，只是port是集群中用的，NodePort是集群外访问需要用的。
+~~~
 访问服务的方法
+~~~shell
+三种分别是1.集群里面的任意pod访问服务，直接用svc的名字加端口 2.集群外访问服务用NodePoet类型使用节点IP加端口（节点是指比如k8s服务部署在三台机器上，每台机器都是一个节点，节点IP就是任意一台上的主机IP）3.集群中的任意主机可以通过cluster-ip加端口访问服务（svc的类型不能是LoadBalancer）
+~~~
 
 ![1717034175485](../pic/1717034175485.png)
 
@@ -174,7 +183,7 @@ NodePort：通过每个节点的主机IP和静态端口（NodePort）暴露服�
 ExternalName：将集群外部的网络引入集群内部
 LoadBalancer：使用云提供商的负载均衡器向外部暴露服务。
 
-# 以328举例，redis和mysql用的是ExternalName类型，大厅服和战斗服用的是LoadBalancer(因为外部需要能直接访问)
+# 以328举例，redis和mysql用的是ExternalName类型，大厅服和战斗服用的是LoadBalancer(因为外部需要能直接访问，LoadBalancer和Nodeport类型感觉很像，LoadBalancer更高级)，uds用的是ClusterIP，大厅服初始化连接uds的时候就是用的uds的svc的名字
 ```
 
 验证nginx多节点负载均衡的效果（是k8s的负载均衡而不是nginx服务负载均衡
@@ -185,7 +194,7 @@ LoadBalancer：使用云提供商的负载均衡器向外部暴露服务。
 cd /usr/share/nginx/html/
 echo hello > index.html
 # 以下操作在宿主机上进行，若pod中可直接用svc名字:8080
-然后用 curl 10.106.82.96:8080，有概率看到hello
+然后用 curl 10.106.82.96:8080，有概率看到hello #这个ip是cluster-ip不是本机ip
 ~~~
 
 一次性使用pod， 用完自动删除
