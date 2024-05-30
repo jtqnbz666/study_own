@@ -1,10 +1,10 @@
 通用技巧
 
 ~~~shell
-5.集群中可以通过svc暴露的地址访问服务， 如果是在pod中，可以直接用svc的名字
+5.集群中可以通过svc暴露的CLUSTER_IP访问服务，如果是在集群的任意pod中，可以直接用svc的名字访问服务，EXTERNAL_IP是提供给外界访问的。
 nginx的例子:
 集群中: curl 10.106.82.96:8080 (集群中所有主机都可以用这个clusterIP访问)
-pod中: curl nginx-service:8080 (用一次性pod验证，集群中所有pod都可以访问)
+pod中: curl nginx-service:8080 (用一次性pod验证，集群中所有pod都可以访问，328项目中大厅服初始化uds连接也是用的这种方式，相当于是大厅服的一个pod使用uds的svc的名字访问了uds服务。)
 4.pod理解为一个虚拟机，也就是说一个pod中的两个容器不可能是同一个端口
 3.-A获取所有命名空间的资源
 2.--watch 动态看资源的变化
@@ -23,7 +23,7 @@ kubectl delete pods -l app=staging-user-data-service -n staging
 拷贝pod的文件到本地
 
 ~~~SHELL
- kubectl cp staging-ai-mirror-server-66d8b4f5c4-spfmv:/root/divideLevel.json ./divideLevel.json -n staging
+kubectl cp staging-ai-mirror-server-66d8b4f5c4-spfmv:/root/divideLevel.json ./divideLevel.json -n staging
 ~~~
 
 查看pod的内存使用情况
@@ -94,8 +94,6 @@ kubectl get pod -l "app=nginx"
 kubectl get pod -l "app=nginx,environment=production"
 ~~~
 
-
-
 使用yaml文件创建和删除
 
 ~~~yaml
@@ -152,6 +150,10 @@ k8s中参数用 -- 和 - 的区别
 "--"作为前缀，通常用于更详细、更复杂的参数，需要明确指定参数的名称以及对应的值。
 ~~~
 
+访问服务的方法
+
+![1717034175485](../pic/1717034175485.png)
+
 NodePort类型（集群外主机访问访问集群的服务
 
 ~~~shell
@@ -160,15 +162,29 @@ kubectl expose deploy/nginx-deploy --type=NodePort --name=nginx-outside --port=8
 kubectl get svc -n default
 NAME            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
 nginx-service   ClusterIP   10.106.82.96    <none>        8080/TCP         16m
-nginx-outside   NodePort    10.110.131.94   <none>        8081:30358/TCP   14sw
-# 这个30358是随机生成的外部访问端口, 在浏览器上输入114.55.88.127:30358(8081是集群内用的端口)就可以访问到集群内的nginx服务了
+nginx-outside   NodePort    10.110.131.94   <none>        8081:30358/TCP   14s
+# 这个30358是随机生成的外部访问端口, 在浏览器上输入localhost:30358(8081是集群内用的端口)就可以访问到集群内的nginx服务了
 ~~~
 
-验证nginx多节点负载均衡的效果（本质是k8s的负载均衡而不是nginx服务负载均衡
+svc的Service Type 取值
+
+```shell
+ClusterIP(默认类型)：将服务公开在集群内部，k8s会给服务分配一个集群内部的IP，集群内的所有主机都可以通过这个Cluster-IP访问服务，集群内部的pod可以通过svc的名字访问服务。
+NodePort：通过每个节点的主机IP和静态端口（NodePort）暴露服务，集群外的主机可以使用节点IP和NodePort访问服务。# 节点指集群中任意主机
+ExternalName：将集群外部的网络引入集群内部
+LoadBalancer：使用云提供商的负载均衡器向外部暴露服务。
+
+# 以328举例，redis和mysql用的是ExternalName类型，大厅服和战斗服用的是LoadBalancer(因为外部需要能直接访问)
+```
+
+验证nginx多节点负载均衡的效果（是k8s的负载均衡而不是nginx服务负载均衡
 
 ~~~shell
+# 以下是svc的type为ClusterIP的情况
+# 对任意一个pod进行以下修改
 cd /usr/share/nginx/html/
 echo hello > index.html
+# 以下操作在宿主机上进行，若pod中可直接用svc名字:8080
 然后用 curl 10.106.82.96:8080，有概率看到hello
 ~~~
 
@@ -419,16 +435,10 @@ kubectl get pod test-leader-board-service-7dd6bf4556-xv8lp -o jsonpath='{.spec.c
 
 查看具有相同label的所有pod日志
 
-kubectl logs -l app=staging-battle-royale-server --all-containers -n staging --tail 10 -f  
-
 ~~~shell
-kubectl logs -l app=staging-project328-server --all-containers -n staging --tail 10 -f  
-
 kubectl logs -l app=official-user-data-service --all-containers -n official --tail 10 -f --max-log-requests=5
-# label可以通过describe查看
+# label可以通过describe查看, --max-log-requests决定最大pod数
 ~~~
-
-
 
 查看lbs这个pod中指定容器的日志
 
@@ -476,5 +486,7 @@ curl -o check.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.
 chmod +x check.sh
 # 执行安装命令
 sudo ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh
+
+# 如果失败了使用wget https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh下载这个脚本再执行
 ~~~
 
