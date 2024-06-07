@@ -1,9 +1,12 @@
 通用技巧
 
 ~~~shell
+8.金丝雀发布(灰度发布)，就是两个deployment对象，第二个一开始只放少量pod，如果没问题就用kubectl scale调整pod数量。
+7.svc和pod不在意谁先谁后创建，只要有对应label的pod，svc就能查到
+6.get svc -o yaml得到的内容并不是原始的.yaml文件内容，但可以从输出的 kubectl.kubernetes.io/last-applied-configuration看到原始.yaml文件的大致信息
 5.集群中可以通过svc暴露的CLUSTER_IP访问服务，如果是在集群的任意pod中，可以直接用svc的名字访问服务，EXTERNAL_IP是提供给外界访问的。
 nginx的例子:
-集群中: curl 10.106.82.96:8080 (集群中所有主机都可以用这个clusterIP访问)
+集群中: curl 10.106.82.96:8080 (集群中所有主机都可以用这个clusterIP访问,pod也可以)
 pod中: curl nginx-service:8080 (用一次性pod验证，集群中所有pod都可以访问，328项目中大厅服初始化uds连接也是用的这种方式，相当于是大厅服的一个pod使用uds的svc的名字访问了uds服务。)
 4.pod理解为一个虚拟机，也就是说一个pod中的两个容器不可能是同一个端口
 3.-A获取所有命名空间的资源
@@ -14,10 +17,75 @@ pod中: curl nginx-service:8080 (用一次性pod验证，集群中所有pod都�
 删除操作
 
 ~~~shell
-1.把副本集删了不会影响deploy, 但把deploy删了，pod也会被删
-2.删除命名空间会把该命名空间下的所有内容都删了，如果遇到错误，需要先删除错误状态的对象
+4.如果kubectl apply -f mypod.yaml生成了一个pod, 可以用kubectl delete -f mypod.yaml删除这个pod，估计不仅是pod，其他资源也是。
 3.删除具有相同标签的所有pod（配置了deploy会自动恢复，不过不是之前那个pod了）
 kubectl delete pods -l app=staging-user-data-service -n staging
+2.删除命名空间会把该命名空间下的所有内容都删了，如果遇到错误，需要先删除错误状态的对象
+1.把副本集删了不会影响deploy, 但把deploy删了，pod也会被删
+~~~
+
+有状态应用mysql
+
+```yaml
+# 数据挂载用hostPath类型(绑定挂载)
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mysql-pod
+spec:
+  containers:
+    - name: mysql
+      image: mysql:5.7
+      env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "123456"
+      volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: data-volume
+        - mountPath: /etc/mysql/conf.d
+          name: conf-volume
+          readOnly: true
+  volumes:
+    - name: conf-volume
+      configMap:
+        name: mysql-config
+    - name: data-volume
+      hostPath:
+        path: /home/mysql/data
+        type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config
+data:
+  mysql.cnf:
+    [mysqld]
+    character-set-server=utf8mb4
+    collation-server=utf8mb4_general_ci
+    init-connect='SET NAMES utf8mb4'
+    
+    [client]
+    default-character-set=utf8mb4
+    
+    [mysql]
+    default-character-set=utf8mb4
+#注意：hostPath 仅用于在单节点集群上进行开发和测试，不适用于多节点集群；例如，当Pod被重新创建时，可能会被调度到与原先不同的节点上，导致新的Pod没有数据。在多节点集群使用本地存储，可以使用local卷。
+```
+
+ConfigMap
+
+~~~shell
+1.用来在键值对数据库(etcd)中保存非加密数据，一般用来保存配置文件
+2.可以用作环境变量、命令行参数或者存储卷
+3.将环境配置信息与容器镜像解耦，便于配置的修改
+4.在设计上不是用来保存大量数据的，不可超过1M，如果超过需要考虑挂载存储卷或者访问文件存储服务
+
+# 为什么需要configmap？
+对于docker一般采用绑定挂载的方式将配置文件挂载到容器里，在k8s集群中，容器可能被调度到任意节点，配置文件需要能在集群任意节点上能访问、分发和更新。
+
+# 修改configMap，配置文件会被自动更新
+kubectl edit cm mysql-config
 ~~~
 
 拷贝pod的文件到本地
@@ -44,6 +112,7 @@ kubectl logs --tail 100 --previous official-battle-royale-server-171064147839962
 ~~~yaml
 标签选择器可以识别一组对象，标签不支持唯一性
 标签选择器最常见的用法是为service选择一组pod作为后端
+两个主要子字段为matchLabels和matchExpressions，默认为前者
 # my-service.yaml
 apiVersion: v1
 kind: Service
@@ -76,8 +145,6 @@ spec:
     image: nginx:1.14.2
     ports:
     - containerPort: 80
-#
-
 ~~~
 
 查看pod的标签
@@ -152,13 +219,18 @@ k8s中参数用 -- 和 - 的区别
 
 docker和k8s在访问服务时的对比
 ~~~shell
-k8s没有集群的概念 所以k8s比docker多了一个访问方式，集群内的主机使用cluster-ip:端口访问服务，其他两种方式的思想是一样的，第一种是集群外访问服务，对于docker是用的端口映射或者把网络模式设置为host，对于k8s是把svc设置为NodePort类型，使用本机ip:NodePort进行访问，LoadBalancer也是一样，第二种就是容器之间的互相访问，对于docker如果是默认bridge网络也就是docker0网卡，直接用容器的ip:port,如果是自定义bridge类型可以直接用容器的名字:port,对于k8s集群中的所有pod可以直接用svc的名字:port进行访问，可以结合328项目中大厅服初始化uds连接就是用的这种方式。
+docker没有集群的概念 所以k8s比docker多了一个访问方式，集群内的主机使用cluster-ip:port访问服务，其他两种方式的思想是一样的，第一种是外界(k8s称为集群外)访问服务，对于docker是用的端口映射或者把网络模式设置为host，对于k8s是把svc设置为NodePort类型，使用本机ip:NodePort进行访问，LoadBalancer也是一样，第二种就是容器之间的互相访问，对于docker如果是默认bridge网络也就是docker0网卡，直接用容器的ip:port,如果是自定义bridge类型可以直接用容器的名字:port,对于k8s集群中的所有pod可以直接用svc的名字:port进行访问，可以结合328项目中大厅服初始化uds连接就是用的这种方式。
 
-对于k8s有三个port类型需要理解，一个是targetPort也就是容器的端口，一个是port也就是svc提供给集群用的端口，还有一个是NodePort也就是集群外访问服务时需要用到的端口，简单说就是targetPort是容器中的，port和NodePort是svc的，只是port是集群中用的，NodePort是集群外访问需要用的。
+对于k8s有三个port类型需要理解，一个是targetPort也就是容器的端口，一个是port也就是svc提供给集群用的端口，还有一个是NodePort也就是集群外访问服务时需要用到的端口，简单来说就是targetPort是容器中的，port和NodePort是svc的，只是port是集群中用的，NodePort是集群外访问时用的。
 ~~~
-访问服务的方法
+访问服务(svc)的方法
 ~~~shell
-三种分别是1.集群里面的任意pod访问服务，直接用svc的名字加端口 2.集群外访问服务用NodePoet类型使用节点IP加端口（节点是指比如k8s服务部署在三台机器上，每台机器都是一个节点，节点IP就是任意一台上的主机IP）3.集群中的任意主机可以通过cluster-ip加端口访问服务（svc的类型不能是LoadBalancer）
+三种方式
+1.集群里面的任意pod访问服务，直接用svc的名字加端口(如果有cluster-ip，也可以用这个ip加端口)
+2.集群外访问服务用NodePoet类型使用节点IP加端口（节点是指比如k8s服务部署在三台机器上，每台机器都是一个节点，节点IP就是任意一台上的主机IP）
+3.集群中的任意主机(包含集群中的pod)可以通过cluster-ip加端口访问服务（如果用的是阿里云的k8s服务，那自己的云服务器不算集群中的主机，集群中的主机指的是部署了k8s服务的主机，自己的云服务器只是提供了访问集群的方法。）
+
+# 上边是访问svc，再通过svc的负载均衡进一步访问pod，也可以直接访问pod，集群中的pod会分配一个ip，集群内可以通过这个ip直接访问pod，集群外应该就得在svc的层面上进行访问了。
 ~~~
 
 ![1717034175485](../pic/1717034175485.png)
@@ -181,7 +253,7 @@ svc的Service Type 取值
 ClusterIP(默认类型)：将服务公开在集群内部，k8s会给服务分配一个集群内部的IP，集群内的所有主机都可以通过这个Cluster-IP访问服务，集群内部的pod可以通过svc的名字访问服务。
 NodePort：通过每个节点的主机IP和静态端口（NodePort）暴露服务，集群外的主机可以使用节点IP和NodePort访问服务。# 节点指集群中任意主机
 ExternalName：将集群外部的网络引入集群内部
-LoadBalancer：使用云提供商的负载均衡器向外部暴露服务。
+LoadBalancer：使用云提供商的负载均衡器向外部暴露服务，对于NodePort类型，需要指定NodeIP:NodePort, 而如果使用LoadBalancer就可以直接用阿里云给的ip:port，然后他会进一步负载均衡到NodeIP:NodePort, 这样就无需知道NodeIP了，更加灵活， 注意LB用的port相当于svc的port，不是NodePort。
 
 # 以328举例，redis和mysql用的是ExternalName类型，大厅服和战斗服用的是LoadBalancer(因为外部需要能直接访问，LoadBalancer和Nodeport类型感觉很像，LoadBalancer更高级)，uds用的是ClusterIP，大厅服初始化连接uds的时候就是用的uds的svc的名字
 ```
@@ -268,32 +340,6 @@ kubectl get replicaSet #replicaSet可缩写为rs
 实际上如果配置了deploy对象，那么直接删除这个pod就会自动重启
 ~~~
 
-第一个测试的mysql的pod
-
-~~~yaml
-比如简单的nginx可以直接用命令:
-kubectl run myNginx --image=nginx
-但因为mysql涉及到密码的设置，kubectl不支持直接-e, 所以需要写个yaml
-
-部署
-kubectl apply -f mysql-pod.yaml
-进入
-kubectl exec -it mytest -- mysql -u root -p # -- 不可少
-
-yaml内容如下
-apiVersion: v1
-kind: Pod
-metadata:
-  name: mytest
-spec:
-  containers:
-    - name: mysql
-      image: mysql
-      env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: "123456"
-~~~
-
 进入pod中
 
 ~~~
@@ -309,8 +355,10 @@ kubectl get pod -o wide  #类比-o yaml,-o是输出格式
 
 Service,deployment,pod的关系
 
-~~~
-Deployment 负责管理 Pod 的创建和副本数量，而 Service 则提供了稳定的网络访问方式，使得可以通过 Service 访问到由 Deployment 管理的一组 Pod。
+~~~shell
+1.Deployment 负责管理 Pod 的创建和副本数量，而 Service 则提供了稳定的网络访问方式，使得可以通过 Service 访问到由 Deployment 管理的一组 Pod。
+
+2.pod虽然可以有多个容器，但svc只需要知道一个容器的端口，并且只会把请求转到这个容器的端口， 也就是常说的targetport。
 ~~~
 
 修改cm里面的fluentd-config配置
@@ -484,7 +532,99 @@ Containers:
 
 
 
-学习地址：课件地址：https://www.yuque.com/wukong-zorrm/qdoy5p
+328项目k8s服务部署
+
+~~~shell
+# 注意：环境名是动态的，采用的是go的模板方式，配置环境的yaml在tools/build-server/src/config/tmpl/env.yaml
+# 以下说明重要点
+1. mysql、redis等环境的部署方式，采用的svcType为ExternalName
+比如mysql的yaml内容为
+### mysql
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{.ENV_NAME}}-mysql
+  namespace: {{.ENV_NAME}}
+spec:
+  type: ExternalName
+  externalName: rm-bp1c4m1w22oq77q82.rwlb.rds.aliyuncs.co
+### redis
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{.ENV_NAME}}-conn-redis
+  namespace: {{.ENV_NAME}}
+spec:
+  type: ExternalName
+  externalName: r-bp1als4m3b0x1fzzbb.redis.rds.aliyuncs.com
+# 大厅服和gm-tool因为外界需要访问所以用的是LoadBalance
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{.ENV_NAME}}-project328-server
+  namespace: {{.ENV_NAME}}
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8999
+  selector:
+    app: {{.ENV_NAME}}-project328-server
+# 其他服务比如uds用的就是默认的ClusterIP， 直接通过svc的名字就能访问对应的服务
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{.ENV_NAME}}-user-data-service
+  namespace: {{.ENV_NAME}}
+spec:
+  ports:
+    - port: 12000
+  selector:
+    app: {{.ENV_NAME}}-user-data-service
+  clusterIP: None
+~~~
+
+常用资源快捷创建方式
+
+```shell
+1. 一次性pod
+kubectl run test -it --image=nginx:1.22 --rm -- bash
+2. 创建deploy从而生成pod
+ kubectl create deployment my-nginx --image=nginx:1.22 --replicas=3 
+3. 把deploy暴露为服务
+kubectl expose deploy/my-nginx --type=NodePort --name=nginx-outside --port=8081 --target-port=80
+4. 创建svc，但无法指定label
+ kubectl create svc clusterip my-nginx --tcp=80:80 # 可通过kubectl edit svc 进一步编辑信息
+
+
+# yaml方法
+# svc
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app.kubernetes.io/name: MyApp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9376
+# pod 
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.14.2
+    ports:
+    - containerPort: 80
+```
+
+课件地址：https://www.yuque.com/wukong-zorrm/qdoy5p
+
+中文官网：http://kubernetes.p2hp.com/docs/concepts/workloads/pods.html
 
 ~~~shell
 安装k8s
@@ -497,5 +637,9 @@ chmod +x check.sh
 sudo ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh
 
 # 如果失败了使用wget https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh下载这个脚本再执行
+
+# 第二种方法安装k3s，wsl不行
+git clone https://github.com/k3s-io/k3s.git #执行里面的./install.sh
+
 ~~~
 
