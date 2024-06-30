@@ -1,4 +1,35 @@
+让人物弯腰（使用Animation Rigging）
 
+~~~shell
+跟下边这个类似，不过这次使用的组件是Multi Rotation Constraint,constrained object就是人物的腰(spine), source object就是旋转的对象，旋转这个source object,腰就会跟着旋转，有一个问题是如果source object作为objectA的子物体，旋转objectA人物不会跟着动，需要给objectA加上RigTransform组件
+~~~
+
+让人物的头盯着某一个物体看（使用Animation Rigging）
+
+~~~shell
+在人物身上创建一个rig builder组件，人物上创建一个RigHead空对象并给空对象加一个rig组件，把rig组件移动到rig builder中， 在RigHead下创建一个RigTest空对象并添加Multi-Aim Constraint组件， 这个组件中的constrained object就是人物的head，source object就是被看的目标。 #层级关系是rig builder > rig > constraint
+~~~
+
+在scene中按w拖动物体的技巧
+
+~~~shell
+按住w会出现一个欧拉角的模型，共有三个面(红蓝绿)，点的是哪个平面， 物体就能在所选择的那个平面上移动， 如果点的不是面而是箭头，就只会往这个箭头的方向移动
+# 当要调整物体到某个对象上时拿不准位置，可以先点一下物体，然后点右上角的坐标系，分别在yxz都调节一下就一定能移动到你想去的位置。
+~~~
+
+在scene中按e键旋转物体技巧
+
+~~~
+有三个颜色的圈，鼠标左键按住某个圈拖动，物体就会跟着这个圈进行旋转
+~~~
+
+### 
+
+欧拉角通常用三个角度表示：
+
+- **Pitch（X轴旋转）**：围绕X轴旋转，即上下抬头/低头。
+- **Yaw（Y轴旋转）**：围绕Y轴旋转，即左右转头。
+- **Roll（Z轴旋转）**：围绕Z轴旋转，即左右倾斜。
 
 **unity和mfc有一个区别就是mfc中的一个画面的控件都在同一个类中操作， 而unity可以把控件绑到别的画面中**，可以这样想， mfc都是以类为单位， 而unity中以场景为单位，并且场景里面可以嵌套(就像mainscenemanager里面包含了所有的场景)
 
@@ -19,8 +50,6 @@
 //这样一来，_fakePlayers链表与panel就关联上了，对_fakePlayers设置就能对panel产生影响。
 
 ~~~
-
-
 
 游戏对象和组件是一对多的关系
 
