@@ -11,3 +11,5 @@ control+command + f 应用全屏
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" 下载brew
 
 有时候brew intsall 无法安装一些东西， 去 /opt/homebrew/var/homebrew/linked看是否已经有符号链接，如果有就删了再重新安装
+
+https://macwk.com.cn/soft/typora可以下载不少需要付费的软件

@@ -1,4 +1,14 @@
-git http推， 全局代理
+14.添加.gitignore文件
+
+~~~shell
+方式1:先添加.DS_Store到.gitignore中，执行git rm --cached .DS_Store 再 git commit即可生效
+方式2:在fork中对着文件点击右键可以ignore，相当于方式1的快捷方式
+
+
+文件内容
+.DS_Store
+*.plist  # 
+~~~
 
 13.添加远程仓库到本地仓库
 
@@ -34,7 +44,7 @@ git pull --recurse-submodules //把子模块一起拉下来
 如果子模块中有改动，拉的时候失败了，先去子模块git stash 再 git stash drop 再重新拉
 ~~~
 
-8.在服务器上创建一个git仓库
+9.在服务器上创建一个git仓库
 
 ~~~
 mkdir github.git
@@ -42,7 +52,7 @@ cd github.git
 git init --bare  创建一个裸仓库，不加bare 就是非裸
 ~~~
 
-7.小知识点
+8.小知识点
 
 ~~~shell
 2.有时候发现git reset --hard 无法删除本地工作区新增的文件， 两种方法，采用git clean --df 或者 先git add . 添加到暂存区，再 git reset --hard 一次，因为git reset 删除的是已跟踪的文件，将已commit的回退。 git clean 删除的是未跟踪的文件

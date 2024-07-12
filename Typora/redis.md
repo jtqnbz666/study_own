@@ -1,6 +1,7 @@
 ### 基础操作
 
 ~~~
+6.登陆制定地址，port，密码， -h -p -a
 5.密码认证 auth 密码
 4.bgsave生成rdb文件
 3.修改key名: RENAMENX
@@ -70,7 +71,11 @@ db.SubScribe(global.ConnRedis, global.ServerMaintainChannel, OnChangeServerMaint
 1. 对某个函数加用户锁
 ~~~
 
+list操作
 
+~~~
+使用rpush配合blpop实现消息消息队列， blpop如果list中没有消息就会一直阻塞
+~~~
 
 ### hash操作
 
