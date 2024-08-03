@@ -1,6 +1,38 @@
 
 
-在src/components/App.jsx中写布局信息(会引用到路由信息，也就是指向一个具体执行函数的地址)， 在src/index.jsx下写路由信息， 
+8.常用路由设计方法
+
+~~~react
+1.创建上下文
+const serverContext = createContext();
+2.自定义一个组件ProvideServer，并设置上下文提供一个全局的server对象，该组件的子组件可以通过上下文访问到这个server对象
+export function ProvideServer({children}) {
+    const server = useProvideServer();
+    return <serverContext.Provider value={server}>{children}</serverContext.Provider>;
+}
+3.给该自定义组件设置一个子组件router，router也就是第二点中的children
+<ProvideServer>
+    <RouterProvider router={router}/>
+</ProvideServer>
+4.第三点的router子组件可以通过此方法访问到server对象
+export const useServer = () => {
+    return useContext(serverContext);
+};
+
+总结：ProvideServer 组件是一个上下文提供者，它使用 serverContext.Provider 将 server 对象传递给其子组件。
+useProvideServer 是一个自定义钩子，用于获取或创建 server 对象。
+通过上下文机制，子组件可以方便地访问和使用 server 对象。
+~~~
+
+7.提示框
+
+~~~react
+Modal.error({
+                title: '请求用户列表失败',
+                content: res.err,
+                hasCancel: false,
+            });
+~~~
 
 6.发送的时候需要发送数字
 
@@ -159,7 +191,7 @@ const pagination = {
 4.常用元素: <Form> 和 <div>是 HTML 中的两种不同的元素，<Form> 用于创建表单，而<div> 用于创建内容分隔符；
 Modal（弹窗）、Switch（开关按钮）和Table（表格）
 span是一个行内元素，通常用于对文本的一部分进行修饰、高亮或添加特定的样式，p是一个块级元素
-2.jsx意思是javascript 和 html的结合的一种模版语法
+2.jsx(JavaScript XML)意思是javascript 和 html的结合的一种模版语法
 function App(){
   // 里面嵌入html的语法
 }

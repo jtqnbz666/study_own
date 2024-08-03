@@ -1172,7 +1172,7 @@ ctrl + shift + p 输入setting， 找到Docs Tool 改成guru
 
 ### 包管理方式
 
-像fmt等包都在GOROOT/src里面找， 若设置了GO111MODULE = auto，当使用go mod 时， 就不会去GOPATH目录(但会搜索GOROOT)， 如果不使用go mod，就会同时去GOPATH  和 GOROOT 下寻找， 这种情况下，使用go get 下载的资源放在GOPATH/src目录下
+像fmt等包都在GOROOT/src里面找， 若设置了GO111MODULE=auto，当使用go mod 时， 就不会去GOPATH目录(但会搜索GOROOT)， 如果不使用go mod，就会同时去GOPATH  和 GOROOT 下寻找， 这种情况下，使用go get 下载的资源放在GOPATH/src目录下
 
 **当找不到问题的时候，去看看GOROOT和GOPATH是否配置错误，把GOROOT改成当前使用的go版本对应的路径**
 

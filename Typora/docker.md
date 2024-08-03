@@ -1,3 +1,16 @@
+镜像tag相同推送
+
+~~~shell
+docker build --no-cache -t 8.130.49.219:5000/conn_image:latest . # 关键是build的时候加上 --no-cache 则能覆盖上一次的latest镜像。（使用docker push 8.130.49.219:5000/conn_image:latest推送）
+~~~
+
+docker run时进入终端
+
+~~~shell
+docker run --name 容器名 -it 镜像名 /bin/bash 
+# 核心是-it 和 /bin/bash ，有些可能不支持bash就用sh
+~~~
+
 网络相关(bridge, host, none)
 
 - 默认bridge网络docker0
@@ -67,8 +80,6 @@ docker run -d --name egg5 --hostname egg5 --network host praqma/network-multitoo
 5. docker run --rm --volumes-from mongo -v d:/backup:/backup ubuntu bash -c "cd /data/ && tar xvf /backup/backup.tar --strip 1" # volumes-from指定的是容器名字, strip 1表示解压时去掉前面1层目录，因为压缩时包含了绝对路径
 ~~~
 
-
-
 用docker运行一个go程序
 
 ~~~shell
@@ -117,7 +128,7 @@ Docker镜像标签包含两部分：镜像名称和标签。常见的标签格�
 
 ~~~shell
 # 安装Docker Registry
-docker run -d -p 5001:5000 --restart=always --name registry registry:2 # 因为本地5000端口冲突了才用的5001
+docker run -d -p 5000:5000 --restart=always --name registry registry:2 # 因为本地5000端口冲突了才用的5001
 
 # case: 把uds的镜像上传到这个私有镜像仓库
 # 1. 先改下镜像的名字
@@ -151,6 +162,7 @@ docker stats 容器id
 -p:端口映射
 -it: i表示交互式，t表示terminal终端
 --detach: 后台运行
+/bin/bash 表示直接进入容器中(前提是要有-it)
 ~~~
 
 如果因为修改容器内配置导致容器无法启动
@@ -325,5 +337,30 @@ docker官网镜像：https://hub.docker.com/
 
 下载好docker后去设置中配置引擎加上一行
  "registry-mirrors":["https://mirror.ccs.tencentyun.com"],
+~~~
+
+无法拉镜像，镜像源
+
+~~~shell
+1.sudo vi /etc/docker/daemon.json
+
+{
+  "registry-mirrors":
+   [
+     "https://docker.mirrors.sjtug.sjtu.edu.cn",
+      "https://docker.m.daocloud.io",
+      "https://docker.itelyou.cf",
+      "https://noohub.ru",
+      "https://docker.fxxk.dedyn.io",
+      "https://huecker.io",
+      "https://dockerhub.timeweb.cloud",  
+      "https://registry.cn-hangzhou.aliyuncs.com"
+   ]
+}
+
+2.sudo systemctl daemon-reload
+3.sudo systemctl restart docker
+
+
 ~~~
 

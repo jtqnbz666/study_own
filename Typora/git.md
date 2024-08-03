@@ -1,3 +1,9 @@
+15.获取最新节点的commit值
+
+~~~
+  git rev-parse HEAD
+~~~
+
 14.添加.gitignore文件
 
 ~~~shell
