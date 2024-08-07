@@ -38,8 +38,6 @@ var request NotificationRequest //自定义结构
 json.Unmarshal(jsonData, &request); err != 
 ~~~
 
-
-
 6.curl操作
 
 ~~~
