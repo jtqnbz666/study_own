@@ -1,6 +1,6 @@
 DHCP:八种报文类型，主要掌握四种，discover， offer，request，ack， 其中discover和request一定是广播， offer和ack可以选择设置，request也是广播是因为要通知其他DHCP服务器自己选择的谁， 不可能每个子网都有DHCP服务器，所以需要一个dhcp中继代理， 子网与dhcp中继代理以广播的方式，中继代理与具体dhcp服务器以单播的方式，dhcp是基于udp的
 
-ICMP(Internet Control Message Protrol：，翻译过来就是互联网控制信息报文协议，因为它提供了多种类型码，对于在网络上传输出现的错误进行了分类，主要是两大类型， 查询报文类型(ping是其中一中)，和 差错报文类型(transroute(linux)是其中一种，但transroute(windows)不是)， 通过返回类型我们就能判断一个包是怎么si的，
+ICMP(Internet Control Message Protrol：，翻译过来就是互联网控制信息报文协议，因为它提供了多种类型码，对于在网络上传输出现的错误进行了分类，主要是两大类型， 查询报文类型(ping是其中一中)，和 差错报文类型(transroute(linux)是其中一种，但transroute(windows)不是)， 通过返回类型我们就能判断一个包是怎么si的
 
 对于traceroute(linux)和 trancert(windows)都是刚开始都是把TTL设置成1， 然后通过返回错误，不断增加ttl的值，在这个过程中会记录路由经过的每一个路由的信息(往返时间等)，有一点不同的是tracert是向目标地址发出ICMP请求回显数据包，而traceroute是向目的地址的某个端口(>30000) 发送UDP数据包， 它们的返回结果是不同的，tracert是能够接收到对方的回显的，属于查询类型，而traceroute完全只是为了获取到达目的地的途径，属于差错类型
 
@@ -200,5 +200,3 @@ grpc 用了protobuf(把IM协议中的message 换成 service)， 功能实现简�
 
 ![1670589280064](C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\1670589280064.png)
 
-304http缓存设计， 如果客户端缓存时间到期了，去服务器对比后发现，服务器还是原来客户端缓存的数据，这时候服务器就回应304，不带数据，告诉客户端继续使用以前缓存的那份数据
-200， 201(表示服务器已经成功处理，并且创建了新的资源，一般出现在post请求的返回上)， 301(永久重定向)， 302(临时重定向)， 401(未认证用户信息)， 403(权限不够) ，500(服务器内部错误无法处理请求，比如连接不上数据库)，502(上游服务返回不正确的值， 比如nginx作为反向代理时，接受到业务服务器的不正确返回时)，503(负载大，维护)， 504(和502类似， 但是返回是正确的，只是超过了指定的时间), 505(不支持的http协议，比如过时的版本)

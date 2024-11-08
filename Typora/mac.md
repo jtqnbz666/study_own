@@ -1,11 +1,15 @@
+右上角的栏目显示不完全
+
+~~~
+下载一个Bartender可以收纳起来
+~~~
+
 mac的termius乱码
 
 ~~~
 ~/.zshrc加上， 然后source ~/.zshrc
 export LANG=en_US.UTF-8
 ~~~
-
-
 
 光标移动， w下一个单词， b上一个单词
 

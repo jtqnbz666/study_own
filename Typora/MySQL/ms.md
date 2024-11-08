@@ -6,15 +6,13 @@
 system: 表只有一行。这是最好的类型。const: 表有一个匹配行，常用于通过主键或唯一索引查找。eq_ref: 通过唯一索引查找。ref: 通过非唯一索引查找。range: 用于范围查找。index: 全索引扫描，但比 ALL 快，因为索引的大小通常小于数据行的大小。
 ALL: 全表扫描，最差的情况。
 2.key: 实际被使用的索引
-3.Extra: 额外信息，比如Using where 表示存储引擎将使用hwere子句来过滤结果集， Using index 表示mysql将使用覆盖索引来检索信息，无需回表， Using filesort 表示包含group by操作并且无法利用索引完成排序，不得不采用相应排序算法(比如文件排序)
+3.Extra: 额外信息，比如Using where 表示存储引擎将使用where子句来过滤结果集， Using index 表示mysql将使用覆盖索引来检索信息，无需回表， Using filesort 表示包含group by操作并且无法利用索引完成排序，不得不采用相应排序算法(比如文件排序)
 了解下的字段
 1.key: 实际使用的索引
 2.key_len: 使用索引的长度, 比如bigint为8，如果该字段允许为NULL，则需要+1为9
 3.ref: 哪些列或常量被用作索引查找的参考
 4.rows: 表示扫描的数据行数
 ~~~
-
-
 
 ### mysql数据存储量(2000w条数据限制)
 

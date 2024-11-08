@@ -230,9 +230,12 @@ var restoredData map[string]int32
 
 
 
-### c++,go,lua,shell 遍历方式区别
+### c++, go, lua, shell, python不同语言遍历区别
 
 ~~~go
+//python中
+for i in range(10):
+	print(i)
 //c++ 中
 for(int i = 0; i < 10; i ++) 
 

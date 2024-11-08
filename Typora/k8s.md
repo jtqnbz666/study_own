@@ -1,6 +1,8 @@
 通用技巧
 
 ~~~shell
+
+9.在~/.kube/config配置阿里云k8s的服务就可以直接访问
 8.金丝雀发布(灰度发布)，就是两个deployment对象，第二个一开始只放少量pod，如果没问题就用kubectl scale调整pod数量。
 7.svc和pod不在意谁先谁后创建，只要有对应label的pod，svc就能查到
 6.get svc -o yaml得到的内容并不是原始的.yaml文件内容，但可以从输出的 kubectl.kubernetes.io/last-applied-configuration看到原始.yaml文件的大致信息
@@ -251,9 +253,9 @@ svc的Service Type 取值
 
 ```shell
 ClusterIP(默认类型)：将服务公开在集群内部，k8s会给服务分配一个集群内部的IP，集群内的所有主机都可以通过这个Cluster-IP访问服务，集群内部的pod可以通过svc的名字访问服务。
-NodePort：通过每个节点的主机IP和静态端口（NodePort）暴露服务，集群外的主机可以使用节点IP和NodePort访问服务。# 节点指集群中任意主机
+NodePort：通过每个节点的主机IP和静态端口（NodePort）暴露服务，集群外的主机可以使用节点IP和NodePort访问服务。# 节点可以是集群中任意主机，无论svc本身在哪个节点上，NodePort都会在每个节点上开放一个相同的端口，所以访问集群任意节点都可以。
 ExternalName：将集群外部的网络引入集群内部
-LoadBalancer：使用云提供商的负载均衡器向外部暴露服务，对于NodePort类型，需要指定NodeIP:NodePort, 而如果使用LoadBalancer就可以直接用阿里云给的ip:port，然后他会进一步负载均衡到NodeIP:NodePort, 这样就无需知道NodeIP了，更加灵活， 注意LB用的port相当于svc的port，不是NodePort。
+LoadBalancer：使用云提供商的负载均衡器向外部暴露服务，对于NodePort类型，需要指定NodeIP:NodePort, 而如果使用LoadBalancer就可以把流量打到负载均衡器的ip:port，然后进一步分发流量， 这样就无需关注机器本身的NodeIP了，并且负载均衡还能监控节点活性，更加灵活， 注意LB用的port相当于svc的port，不是NodePort。
 
 # 以328举例，redis和mysql用的是ExternalName类型，大厅服和战斗服用的是LoadBalancer(因为外部需要能直接访问，LoadBalancer和Nodeport类型感觉很像，LoadBalancer更高级)，uds用的是ClusterIP，大厅服初始化连接uds的时候就是用的uds的svc的名字
 ```

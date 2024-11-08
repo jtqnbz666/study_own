@@ -1,3 +1,35 @@
+http小知识
+
+~~~shell
+2.如果url访问失败，可能是两个问题，url编码方式有问题，或者url被截断了，把域名换成自己的服务器，请求过来看看发送的数据具体是什么，比如;被编码为%3B，有些平台会认为%是特殊字符会把%编码为%25，也就变成了%253B，解决方法是：提供给前端的就是未进行编码的初始格式
+1.head中的Host字段记录了请求的域名信息，如sandbox-shengji.duole.com，会带端口号，除非默认用80端口则只有域名，总之就是输入的url中//之后，路径之前的那一截
+~~~
+
+http返回码
+
+~~~
+304http缓存设计， 如果客户端缓存时间到期了，去服务器对比后发现，服务器还是原来客户端缓存的数据，这时候服务器就回应304，不带数据，告诉客户端继续使用以前缓存的那份数据
+200， 201(表示服务器已经成功处理，并且创建了新的资源，一般出现在post请求的返回上)， 301(永久重定向)， 302(临时重定向)， 401(未认证用户信息)， 403(权限不够) ，500(服务器内部未知错误，可能配置不对，或者资源不足等未知情况)，501（不支持的请求方法）502(比如nginx作为反向代理时(或clb)，接受到业务服务器的不正确返回时，通常是业务服务器挂了)，503(负载大，维护，服务器自己的问题，可以理解为clb自己出问题了)， 504(超过了指定的时间,比如阿里云http负载均衡器等待后端服务返回超时，1.一般是指clb后边的服务器响应慢而不是clb本身的问题, 2.clb后边的服务器安全组未放通，比如没挂vpn就访问数数平台，会先走clb再去数数服务器), 505(不支持的http协议，比如过时的版本)
+~~~
+
+快速搭建一个http服务器接收请求，查看头字段
+
+~~~js
+apt install npm
+编写test.js文件
+const http = require('http');
+const server = http.createServer((req, res) => {
+  console.log(req.headers);
+  // 设置 Cookie
+  res.setHeader('Set-Cookie', 'shengji_session=e9d9fc1d2bcf7893901c15ac8979fb1765ea4e11; HttpOnly; Path=/');
+  res.end('Hello World');
+});
+server.listen(8881, () => {
+  console.log('Server is listening on port 8881');
+});
+// 执行 node test.js运行服务
+~~~
+
 ## go
 
 8.Content-Type区别
@@ -40,8 +72,10 @@ json.Unmarshal(jsonData, &request); err !=
 
 6.curl操作
 
-~~~
-get方法：curl -X GET <URL>
+~~~shell
+# url要用引号包起来
+# -X 是 --request的缩写
+get方法：curl <URL>  
 post方法：curl -X POST -d "key1=value1&key2=value2" <URL>
 请求头：curl -H "Content-Type: application/json" <URL>
 下载文件：curl -O <file_url>

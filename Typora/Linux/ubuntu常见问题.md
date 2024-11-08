@@ -1,5 +1,12 @@
 
 
+终端无法输入中文
+
+~~~
+echo $LANG
+export LANG=en_US.UTF-8
+~~~
+
 查看ubuntu版本
 
 ~~~

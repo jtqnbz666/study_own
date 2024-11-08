@@ -1,7 +1,9 @@
-15.获取最新节点的commit值
+小知识点
 
-~~~
-  git rev-parse HEAD
+~~~shell
+3.观察某个分支的修改，切到master再merge到master，然后reset到远端的master
+2.git rev-parse HEAD #获取最新节点的commit值
+1.ssh拉下来的仓库，git操作走ssh，https拉下来的仓库，git操作走https, git remote -v 查看克隆仓库方式，可以通过git remote set-url进行修改
 ~~~
 
 14.添加.gitignore文件
@@ -9,7 +11,6 @@
 ~~~shell
 方式1:先添加.DS_Store到.gitignore中，执行git rm --cached .DS_Store 再 git commit即可生效
 方式2:在fork中对着文件点击右键可以ignore，相当于方式1的快捷方式
-
 
 文件内容
 .DS_Store
@@ -58,12 +59,11 @@ cd github.git
 git init --bare  创建一个裸仓库，不加bare 就是非裸
 ~~~
 
-8.小知识点
+8.强推强拉、删除文件
 
 ~~~shell
 2.有时候发现git reset --hard 无法删除本地工作区新增的文件， 两种方法，采用git clean --df 或者 先git add . 添加到暂存区，再 git reset --hard 一次，因为git reset 删除的是已跟踪的文件，将已commit的回退。 git clean 删除的是未跟踪的文件
 1.强推(git push origin develop --force)和强拉(git reset --hard origin/develop)
-
 ~~~
 
 7.rebase和merge遇到冲突时的乱码理解 (以A，B分支，将B分支内容合并到A上为例)

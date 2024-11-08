@@ -1,3 +1,18 @@
+知识点
+
+~~~shell
+3.((count++))  等效于 count=$count+1
+2.current_ms=$(echo "$current_ms" | sed 's/^0*//')去除所有前导0，并且这用括号包起来就会执行里面的命令
+1.判断shell脚本中嵌套的脚本是否按预期执行
+./kill.sh  # kill.sh 内部可通过exit 1 来返回非0值如1
+if [ $? -ne 0 ]; then
+    echo "如果./kill.sh返回的是非0值，就不再继续执行后续代码"
+    exit 1
+fi
+~~~
+
+
+
 ## 写shell脚本
 
  cat  config.ini.new | awk '!/^#F/' | egrep -n "FIELD" | tail -n
@@ -77,8 +92,6 @@ readlink -f /usr/bin/awk
 
 readlink -f /home/jt/log
 结果依然是 /home/jt/log ，因为没有软连接
-
-
 
 ```
 
