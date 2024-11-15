@@ -1,6 +1,9 @@
 小知识
 
 ~~~python
+46.python本身对数字长度没有限制，只要内存允许，但有些协议指定了int32则另谈
+45.python没有switch
+44.print打印有缓冲问题，print("test", flush=True)避免缓冲
 43.print(b''.decode('utf-8'))没问题
 42.if、for、while不会创建新作用域，所以if里面第一次出现的变量也能在if外直接用，python作用域规则只有在函数内或者类中会创建新作用域
 41.字典的key可以是数字也可以是字符串，'12'和12是不同的key
@@ -55,6 +58,12 @@ print(time.time()# 1726041712.1244211
 print(int(time.time()))# 1726041712
 print(datetime.datetime.now())# 2024-09-11 16:01:52.126141
 print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))# 2024-09-11 16:01:52
+      
+# 计算时间差
+starttime = time.perf_counter()
+endtime = time.perf_counter()
+timedifference = endtime - starttime
+print(f"修改后执行时间差: {timedifference:.6f} 秒")
 ~~~
 
 34.模块包

@@ -1,4 +1,118 @@
+小知识
 
+~~~jsx
+7.div和p都是块级元素，但div是容器，div可以包含p但不能反过来，块级元素可以包含内联元素如span，span只占据内容需要的宽度而非整行，反过来则不行
+6.return只能有一个根元素，当有多个元素时，用<></>或<div></div>包裹所有元素保证只有一个根，后者可以定义一些额外的属性如<div class='container'></div>
+5.函数就是组件，使用的时候包含三部分，组件名、组件属性(也就是传入的参数)、子元素
+4.字符串和变量名字一起用时，如{`手机号${props.children}`}，用``而不是''
+3.函数组件参数中用{}和函数内部用{}含义是不同的，前者表示从props中解构赋值，后者表示要插入一段js的代码。后者的{}可以理解为js代码块的占位符，一般插入一个变量用{}比较多，而${变量名}这种是js的用法，外层还需要有一个{}表示要用js代码了，如第四点。
+2.标签分为自闭合(<p/>)和包含子元素的标签(<p>hello</p>)
+1.子元素名称为children，比如函数组件的参数名为props，通过props.children访问子元素
+~~~
+
+14.CSS（Cascading Style Sheets）
+
+~~~jsx
+CSS样式用于控制网页元素的外观和布局，通过它来设置颜色、字体、间距、布局等属性。
+一个CSS块会用两个{}包含起来，比如 style={{width: 200}}，最外层的{}表示要在jsx文件中插入js的写法了，内层就是js的写法可以理解为一个字典对象。
+~~~
+
+13.组件参数传递(注意看变量的使用方法，直接用一个{}包起来)
+
+~~~jsx
+// 方法一：只有一个同一个的参数名字
+function Container(props) {
+    return (
+        <div>
+            <p>Name: {props.name}</p>  
+            <p>Age: {props.age}</p>
+        </div>
+    );
+}
+// 使用
+<Container name="Alice" age={30} />
+
+// 方法二：直接解析出来，名字就不用带上props了
+function Container({ name, age }) {
+    return (
+        <div>
+            <p>Name: {name}</p>
+            <p>Age: {age}</p>
+        </div>
+    );
+}
+// 使用
+<Container name="Alice" age={30} />
+~~~
+
+12.子元素（名字统一叫children，如下的props.children）
+
+~~~jsx
+// 函数其实就是组件
+function Container(props) {
+  return (
+    <div className="container">
+      <h1>Hello, {props.name}!</h1>
+      {props.children}
+    </div>
+  );
+}
+// 调用组件方式如下，其中<p>和<button>属于子元素，Container组件中通过.children获取它们
+root.render(
+  <Container name="World">
+    <p>This is a child paragraph.</p>
+    <button>Click me</button>
+  </Container>
+);
+~~~
+
+11.默认导出和命名导出
+
+~~~jsx
+//比如有test.js文件
+// 默认导出(一个js文件只有一个默认导出的函数)
+export default function mainFunction() {
+    // ...
+}
+// 命名导出
+export const useState = () => {
+    // ...
+};
+export function add(a, b) {
+  return a + b;
+}
+//只导出默认导出(不需要名字一样)和useState，不导出add
+import React, {useState} from 'test';
+// 导出所有
+import * as util from 'test';
+// console.log(utils.add(2, 3));        // 输出: 5
+
+
+// 可以看到React引入了却没有显式的使用，比如有函数组件Welcome
+function Welcome(props) {
+  return <h1>Hello, {props.name}!</h1>;
+}
+// 以上的代码最终会被翻译为React.createElement('h1', null, `Hello, ${props.name}!`)， null的位置是放h1的属性的，但没有属性。如果要渲染这个组件，root.render(<Welcome name="World" />);
+~~~
+
+
+
+10.[]和{}的区别（数组解构：[]，对象解构：{}）
+
+~~~js
+
+// useState返回了一个数组，第一个元素是状态值，第二个元素是更新状态的函数。
+const [total, setTotal] = useState(20);
+
+// 表示从useServer中提取出getDubbingList和updateDubbingStatus属性
+const {getDubbingList, updateDubbingStatus} = useServer();
+~~~
+
+9..js、.jsx、node.js、node、npm和react的关系
+
+~~~
+react是JavaScript编写的库，一般说的.js就是JavaScript的文件，jsx(JavaScript XML)是JavaScript的语法拓展，可以在文件中编写类似HTML的标记，最终会被编译为JavaScript，最开始.js文件只能在浏览器中运行，比如用一个HTML文件引用.js文件，双击打开HTML文件会从浏览器中打开，但浏览器会受限无法监听端口(但可以作为客户端收发消息)，因此JavaScript无法作为服务器，node.js是为.js文件产生的一种运行环境，允许在控制台直接执行node test.js从而让JavaScript语言能够编写服务器，npm是包管理工具，比如JavaScript需要用哪个模块时，可以用npm来安装(如npm install ws安装websocket模块)，运行react工程时，就要用npm
+~~~
 
 8.常用路由设计方法
 
@@ -118,7 +232,7 @@ function Example() {
   const [data, setData] = useState(null);
   useEffect(() => {
     fetchData();
-  }, []); //第二个参数是数组，空数组表示只在组件挂载时执行，用于指定哪些状态或属性变化时需要重新执行 useEffect 中的函数 
+  }, []); //第二个参数是数组，空数组表示只在组件挂载时执行，用于指定哪些状态或属性变化时需要重新执行 useEffect 中的函数，如果啥都不写，那每次发生渲染(比如任意一个点击事件)都会执行。
   
   const fetchData = () => {
     // 模拟异步获取数据
@@ -200,7 +314,7 @@ function App(){
 
 长篇基础
 
-~~~react
+~~~jsx
 div：div是HTML中的一个元素，也是React中最常用的一个元素。它本质上是一个没有样式和默认行为的块级容器，用于在页面中创建和组织布局。
 
 form：form也是HTML中的一个元素，用于创建一个包含输入字段、按钮以及其他交互控件的表单。在React中，form组件通常用于处理表单数据的提交和验证，以及处理用户输入的逻辑。
