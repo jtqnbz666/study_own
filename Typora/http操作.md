@@ -1,15 +1,61 @@
+
+
 http小知识
 
 ~~~shell
+4.get用于读，post一般是涉及到修改服务器资源或者上报，跟有无请求参数无关。
+3.URL(统一资源定位符)是URI(统一资源标识符)的子集，后者更广泛。
 2.如果url访问失败，可能是两个问题，url编码方式有问题，或者url被截断了，把域名换成自己的服务器，请求过来看看发送的数据具体是什么，比如;被编码为%3B，有些平台会认为%是特殊字符会把%编码为%25，也就变成了%253B，解决方法是：提供给前端的就是未进行编码的初始格式
 1.head中的Host字段记录了请求的域名信息，如sandbox-shengji.duole.com，会带端口号，除非默认用80端口则只有域名，总之就是输入的url中//之后，路径之前的那一截
+~~~
+
+url传输二进制数据
+
+~~~shell
+两种方式：
+1.用base64处理二进制为字符 
+2.直接对二进制数据进行url编码
+from  urllib.parse import quote, unquote, urlparse, parse_qs
+binary_data = b'\x89\x50\x4E\x47'
+encoded_data = quote(binary_data.decode('latin1'))
+url = f'https://example.com/data?binary={encoded_data}'
+print(url) # https://example.com/data?binary=%89PNG
+# 解析URL取出二进制数据
+parsed_url = urlparse(url)
+query_params = parse_qs(parsed_url.query)
+# 提取并解码数据
+encoded_data = query_params['binary'][0]
+decoded_data = unquote(encoded_data).encode('latin1')
+print(decoded_data)  # 输出原始二进制数据
+# 注意以上操作都是对url实际数据的操作，并且没有涉及到url传输的过程，https://example.com/data?binary=%89PNG在发送出去的时候会再次进行整体的url编码，刚才的操作只是把二进制数据放到url中。
+
+# 发送这个url
+url = 'https://example.com/data?binary=%89PNG' # 后边是处理后的二进制数据
+print(quote(url5, safe=':/?&=')) # 结果为：https://example.com/data?binary=%2589PNG   这是部分编码的结果。
+~~~
+
+url编码
+
+~~~shell
+7.url这部分都会进行url编码，跟方法没关系，如果是post方法，把body指定格式为x-www-form-urlencoded，那么body部分也会进行url编码(如果是application/json，那就是json格式)，如果用的是参数形式，那么post方法需要的参数会全部拼到url中，此时类似于get的形式了，并且body里面没有任何数据，所以有时候post方法不一定是从body中取数据，可能都拼在了url中。
+6.对于汉字内容，不像&必须在业务层进行url编码，浏览器进行url统一编码的时候会对她进行url编码，对方收到后解析出来的就还是汉字内容，如果在业务层就进行了一次url编码，对方收到之后需要进行一次url解码才能拿到汉字内容。
+5.参数中?p、?p=、?p=""是等价的，都表示空值，但有字段。
+4.编码规则：比如&的ASCII码为38，对应的16进制为&26，所以被编码为%26，汉字如"设"的 UTF-8 编码是 E8 AD BE，会被编码为"%E8%AD%BE"。
+3.url只能包含ASCII字符，但如&在url有独特了含义，还有空格等，仍需要编码
+2.如果参数的值包含&(或者其他在url有有特殊含义的字符)，必须在业务层就对它进行url编码，因为&在url中有特殊含义表示分割参数，比如在postman中输入参数值为v1&v2时，url会自动转为v1%26v2，当放到url中依然还是v1&v2时，会被认为是v1和v2两个参数，只是没有值。
+1.完全编码和非完全编码解析结果都是一样的。
+url1='https://test?p_userid=123&p_&p_%E8%AE%BE%E5%A4%87%E5%8F%B7=EF27'
+url2='https%3A%2F%2Ftest%3Fp_userid%3D123%26p_%26p_%E8%AE%BE%E5%A4%87%E5%8F%B7%3DEF27'
+print(unquote(url3)) # https://test?p_userid=123&p_&p_设备号=EF27
+print(unquote(url4)) # https://test?p_userid=123&p_&p_设备号=EF27
+url1在编码时忽略了对':/?&='的编码，算部分编码，比如python中的quote(url, safe=':/?&=')，这样保留了一定的可读性，但可以观察到这个url中有一个多余的&p_，它其实也被作为一个参数了，只是没有对应的值，用postman就可以试出来，只输入key。
 ~~~
 
 http返回码
 
 ~~~
 304http缓存设计， 如果客户端缓存时间到期了，去服务器对比后发现，服务器还是原来客户端缓存的数据，这时候服务器就回应304，不带数据，告诉客户端继续使用以前缓存的那份数据
-200， 201(表示服务器已经成功处理，并且创建了新的资源，一般出现在post请求的返回上)， 301(永久重定向)， 302(临时重定向)， 401(未认证用户信息)， 403(权限不够) ，500(服务器内部未知错误，可能配置不对，或者资源不足等未知情况)，501（不支持的请求方法）502(比如nginx作为反向代理时(或clb)，接受到业务服务器的不正确返回时，通常是业务服务器挂了)，503(负载大，维护，服务器自己的问题，可以理解为clb自己出问题了)， 504(超过了指定的时间,比如阿里云http负载均衡器等待后端服务返回超时，1.一般是指clb后边的服务器响应慢而不是clb本身的问题, 2.clb后边的服务器安全组未放通，比如没挂vpn就访问数数平台，会先走clb再去数数服务器), 505(不支持的http协议，比如过时的版本)
+200， 201(表示服务器已经成功处理，并且创建了新的资源，一般出现在post请求的返回上)， 301(永久重定向)， 302(临时重定向)， 401(未认证用户信息)， 403(权限不够) ，500(服务器内部未知错误，可能配置不对，或者资源不足等未知情况)，501（不支持的请求方法）502(比如nginx作为反向代理时(或clb)，接受到业务服务器的不正确返回时，通常是业务服务器挂了)，503(负载大，维护，服务器自己的问题，可以理解为clb自己出问题了)， 504(超过了指定的时间,比如阿里云http负载均衡器等待后端服务返回超时(http的clb等价于一个nginx，所以nginx后边嵌套一个nginx也是一样的场景)，1.一般是指clb后边的服务器响应慢而不是clb本身的问题, 2.clb不限制，但后边的服务器安全组未放通，没挂vpn就访问数数平台，clb不拦，但后边的数数服务器拦住了，简单说就是访问不到后端服务器，不存在或者被限制了), 505(不支持的http协议，比如过时的版本)
 ~~~
 
 快速搭建一个http服务器接收请求，查看头字段

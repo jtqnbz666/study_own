@@ -1,6 +1,9 @@
 小知识
 
 ~~~python
+49.__init__在__new__之后调用
+48.参数分为位置参数和关键字参数，'/'之前的只能用位置参数(之后的随意)，'*'之后的只能用关键字参数(之前的随意)，位置参数就是一个*(元组形式)，关键字参数就是两个*(字典形式)，比如def test(*args, **dicargs): 并且*和**只能各自出现一次 ，位置参数必须在关键字参数之前写，但位置参数不是必须写的，也可以直接只写关键字参数。
+47.python的redis库底层用了连接池，不用担心redis闪断问题(普通redis操作或是管道)，只要保证根redis服务器交互时是存活的就行(对于管道是提交时)，会在此时尝试重新连接redis，而发布订阅中的pubsub.listen()与redis保持着连接，只要redis连接断开就会抛异常。
 46.python本身对数字长度没有限制，只要内存允许，但有些协议指定了int32则另谈
 45.python没有switch
 44.print打印有缓冲问题，print("test", flush=True)避免缓冲
@@ -28,7 +31,7 @@
 22.赋值语句中用and，会返回第一个为假的值，如果所有值都为真，就返回最后一个值，这就是短路求值，比如a = 4,b = 5,print(a and b) 打印结果为5， 如果是用or就是找第一个为真的值，如果都为假酒返回最后一个值，int(2 or 0 and 1)返回2，or运算第一个值为真值就直接返回了，不会看or 0和and 1了，除非把(2 or 0)括起来
 21.可以自定义简单的proto协议通过ParseFromString解析别的复杂proto协议拿到感兴趣字段内容
 20.格式化字符串中的:用于指定格式化方式如f'{b:02x} 而函数参数的中的:只是提示作用
-19.下载包用pip比如pip install kafka-python，python3用pip3
+19.下载包用pip比如pip install kafka-python，python3用pip3，pip list看当前有哪些包。
 18.json对象也是可迭代对象，跟字典一样的用法，items()返回一个元组(key,value)
 17.json字符串只能是'{"test": 1}'，不能是'test'，因为json要求双引号包裹字段
 16.getattr可以获取任何对象的属性，支持默认值，HasField用于protobuf中
@@ -47,6 +50,33 @@
 3.深拷贝用copy.deepcopy(对象)，copy.copy(对象)是浅拷贝
 2.python支持多返回值，本质上是通过元组实现的
 1.del 变量名 # 删除变量
+~~~
+
+37.虚拟环境
+
+~~~python
+# 创建虚拟环境
+python3 -m venv myenv
+#激活虚拟环境(fish下好像不行，要去bash或sh)
+source myenv/bin/activate
+
+which python #可以看到自己当前在哪个环境中，不同的环境安装的包不会互相影响。
+~~~
+
+36.发布订阅
+
+~~~python
+
+# 连接
+grsc = redis.StrictRedis(host='127.0.0.1', port=6379, password='', socket_timeout=20, socket_connect_timeout=10)
+# 发布
+grsc.publish('test', '1213')
+# 订阅
+pubsub = grsc.pubsub()
+pubsub.subscribe('test')
+for message in pubsub.listen():
+    if message['type'] == 'message':
+        print(f"Received message: {message['data'].decode('utf-8')}")
 ~~~
 
 35.时间相关
@@ -209,7 +239,7 @@ print(gen.__next__()) # 抛异常
 2.Python 的这种行为可以类比于 C++ 中传递一个 const 变量。尽管传递的是引用，但由于对象本身是不可变的，所以不能在函数内部修改它。
 3.这种机制是其语言的特殊性，通过严格区分可变对象和不可变对象，确保了不可变对象在函数内部的修改不会影响到外部变量
 
-case:核心是要理解lst和my_list是两个变量
+case:核心是要理解lst和my_list是两个变量，和c++一样
 def modify_list(lst):
     lst.append(4)  # 修改了原来的列表对象
     lst = [5, 6, 7]  # lst 现在引用一个新的列表对象
@@ -218,6 +248,13 @@ def modify_list(lst):
 my_list = [1, 2, 3]
 modify_list(my_list)
 print("Outside function:", my_list) # [1, 2, 3, 4]
+
+case2:
+d1 = {'test': {'son': 1}}
+d2 = d1['test']	# 引用了子字典。
+d2['son'] = 2
+print(d1, d2)
+# {'test': {'son': 2}} {'son': 2}
 ~~~
 
 26.获取redis数据
@@ -234,7 +271,8 @@ print(json.dumps(str))
 25.装饰器
 
 ~~~python
-1. 装饰器可以带来更好的封装、数据验证、只读属性、延迟计算和灵活性，C#中也有这种机制，在get和set中添加逻辑。
+2. 装饰器分为有参和无参，前者会接收一个函数作为参数并返回一个函数，后者在外层函数中接受参数，返回一个装饰器(可能是一个函数也可能是一个实现了__call__方法的类)，这个返回的装饰器用于接收函数作为第一个参数
+1. 装饰器的核心思想是通过在函数或类定义时进行额外的包装，来增强其行为，可以带来更好的封装、数据验证、只读属性、延迟计算和灵活性，C#中也有这种机制，在get和set中添加逻辑。
 2. 不使用装饰器可以随意修改类中的属性，没有任何验证或逻辑控制
 3. property装饰器：用于将类的方法转换为属性，允许定义 getter、setter 和 deleter 方法。它是一个描述符，本质上是生成一个property类对象赋值给类成员比如val，让val拥有这个类的方法如果没有对应的方法比如val.setter，那这个val的值就不能改变了
 4.wrapper装饰器(函数)：接收一个函数对象，并返回一个新的函数对象
@@ -250,6 +288,18 @@ class Person:
 p = Person("Alice", 30)
 print(repr(p))  # 输出: Person({'name': 'Alice', 'age': 30})
 
+
+
+case1:
+def try_decorate(func):
+  @wraps(func)
+  def wrapper(self, *args, **kwargs):
+       return func(self, *args, **kwargs)
+  return wrapper
+@try_decorate
+def from_json(self, data):
+    return json.loads(data)
+# 当调用from_json时会进try_decorate，try_decorate只接受一个函数作为参数，算无参装饰器，然后里面的wrapper又被wraps装饰了，显式的给wraps写上了参数，wraps是有参装饰器，wraps的作用是把from_json的属性(函数名什么的，让wrapper更像from_json)赋值给wrapper。wraps返回的是一个类，但这个类实现了__call__方法，可以使这个类像函数一样被调用，__call__的具体实现是执行update_wrapper方法，wrapper会作为第一个参数传递给__call__，update_wrapper完成了把from_json的属性赋值给wrapper后又把wrapper返回来，所以最后执行的函数还是wrapper本身，本质上装饰器就是加工。
 ~~~
 
 24.初始化对象
@@ -402,7 +452,7 @@ squared_numbers = map(lambda x: x ** 2, numbers)
 print(list(squared_numbers))  # 输出: [1, 4, 9, 16]
 ~~~
 
-15.元组(tuple)
+15.元组操作(tuple)
 
 ~~~python
 对于python的集合(set)不支持放入可变元素如dict和list， 但set本身是可以增加或者移除元素的，而元组刚好相反，它可以放入可变元素，但在初始化的时候就决定好了元素的个数，后续不能再增加或减少。
@@ -467,7 +517,7 @@ def function():
   # 如果playback对象是字符串，需要先执行
   # entity=PlayBackPackage()
   # entity.ParseFromString(result['playback'] )
-  # SerializeToString表示序列化为string，然后用上边这个反解
+  # SerializeToString表示序列化，然后用上边这个反解
   
    entity = result['playback'] 
   # 判断内容是否是某个proto类型对象
@@ -549,7 +599,7 @@ print(repr(str)) # 'who\'s jiangtao""'  # 可以看到原字符串是用""包着
 str = '"123\"' # 是否加\打印出来都是"123"
 ~~~
 
-7.字典(只能判断相等，无法比较大小, 不要求key是同类型)
+7.字典操作(只能判断相等，无法比较大小, 不要求key是同类型)
 
 ~~~python
 # key的值可以是字符串或者数字，'3'和3是不同的key
@@ -560,15 +610,11 @@ d = {3:3,'3':3,'a':3}
 d = dict(a=3, b=4) 生成字典 {'a':3, 'b':4}, 也可以配合zip比如dict(zip(['a','b'],[3,4]))实现同等效果
 
 dict中不能用数字或者带引号的值(如3, '3', 'a')作为key，但zip可以，比如d = dict(3='a', a=3, '3'='3')是错误的(我理解是dict中对于key是没加引号的，比如字符a直接写的就是a，数字3和字符3就会有歧义, key不能加引号比如'a')，d = dict(zip(['a',3,'3'],[3,'a','3']))是正确的
-
 # .fromkeys()方法
 比如dict.fromkeys(['3',3],6)生成字典{'3':6,3:6}，如果不要6就是{'3':None,3:None}
-
-
 # 生成字典
 {k:v for k,v in zip(['a','b','c'],[1,2,3])}，
 {k:v for k,v in [('a',1),('b',2),('c',3)]}
-
 2. 索引
 d[key]
 3. 判断是否存在
@@ -589,6 +635,14 @@ for key in d:  # 默认只返回key
     print(d[key]) # print(key,'==>',d[key])
 for key, value in d.items():
     print(key, value) 
+9.长度len
+dic = {"test": 1, "123": 1}
+print(len(dic))  # 结果为2，就是键值对个数
+10.后出现的重名key的value会覆盖之前的value
+d1 = {"test": 1}
+d2 = {"test": 2, "test": 3}
+d3 = {**d1, **d2} 
+print(d3) # {"test": 3}
 ~~~
 
 6.set (唯一、不可变无序、可迭代、不支持索引、不要求各个元素都是相同类型)

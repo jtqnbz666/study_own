@@ -24,7 +24,7 @@ git restore --staged .
 18.git reset 
 
 ~~~shell
-# 应用场景一般是git add. 或者 git commit 或者 git push后想回退操作
+# 应用场景一般是git add 或 git commit 或 git push后想回退操作
 2.比如执行了git add . 可以用git reset来取消追踪，如果已经执行了git commit，使用git reset --soft HEAD~1，如果已经git push了，还是一样的命令，只是提交时需要强推一下。
 1.--hard、--soft、--mixed是针对整个节点操作时的参数，对指定文件操作时是无效语法。
 

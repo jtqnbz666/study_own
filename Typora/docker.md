@@ -50,6 +50,7 @@ docker network create jt -d bridge # -d表示驱动类型， 创建好之后使�
 - host网络类型特点(目前只有linux下是这样，mac和windows有区别)
 
 ~~~shell
+# 已验证，MAC不支持这种，容器中的eth0的ip和外边的不一样
 # 创建容器并指定host网络，docker自动生成了一个名叫host的host类型网络，并且不允许用户创建第二个host类型的网络，创建容器命令如下
 docker run -d --name egg5 --hostname egg5 --network host praqma/network-multitool 
 这个容器自带nginx服务， 直接在宿主机上使用命令curl localhost就可以访问到容器内的nginx服务了，不再需要端口暴露，在bridge模式下创建的容器如果外网需要访问容器则需要端口暴露，可以通过修改容器中的/usr/share/nginx/html/index.html文件进行验证。
@@ -78,6 +79,18 @@ docker run -d --name egg5 --hostname egg5 --network host praqma/network-multitoo
 3. 删除mongo容器，删除名为mongo-data的挂载卷(前两步表示数据的备份，这一步表示失去这个容器的数据，后两步表示利用备份数据进行恢复)
 4. 重新跑一个mongo容器，执行第一步的命令(这次没有任何数据)
 5. docker run --rm --volumes-from mongo -v d:/backup:/backup ubuntu bash -c "cd /data/ && tar xvf /backup/backup.tar --strip 1" # volumes-from指定的是容器名字, strip 1表示解压时去掉前面1层目录，因为压缩时包含了绝对路径
+
+case（Nginx需要依赖nginx.conf）：
+如果挂载本地，但本地不存在配置文件，可以先搞个临时的copy过来
+# 先保证本地目录存在并且有足够权限
+mkdir -p /etc/nginx
+mkdir -p /var/log/nginx
+chmod 777 /etc/nginx
+chmod 777 /var/log/nginx
+docker run --name temp-container praqma/network-multitool
+docker cp temp-container:/etc/nginx /path/to/local/nginx
+docker rm temp-container
+ docker run -d --name egg7 --hostname egg7 -p 80:80 -v /etc/nginx:/etc/nginx -v /var/log/nginx/:/var/log/nginx/ praqma/network-multitool (linux下不需要端口映射用host模式，但mac只能这样)
 ~~~
 
 用docker运行一个go程序
