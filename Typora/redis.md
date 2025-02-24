@@ -1,18 +1,19 @@
-### 基础操作
+实操经验
 
-~~~
-6.发布:PUBLISH mychannel "hello"，订阅:SUBSCRIBE mychannel
-5.密码认证： auth 密码， 登陆指定地址，port，密码， -h -p -a
-4.bgsave生成rdb文件
-3.修改key名: RENAMENX
-2.redis-cli info memory查看内存信息
-1.hash没办法针对某个filed做定时，都是针对key来定时，比如验证码可以加上相同的前缀
+~~~shell
+1.scan100w花费1.几秒
+2.集合set的ismember，一万个号，耗费1ms
 ~~~
 
 ### 小tips
 
 ~~~shell
-14.scan100w花费1.几秒
+19.发布:PUBLISH mychannel "hello"，订阅:SUBSCRIBE mychannel
+18.密码认证： auth 密码， 登陆指定地址，port，密码， -h -p -a
+17.bgsave生成rdb文件
+16.修改key名: RENAMENX
+15.redis-cli info memory查看内存信息
+14.hash没办法针对某个filed做定时，都是针对key来定时，比如验证码可以加上相同的前缀
 13.管道和事务不是一回事，管道只是发了一批命令过来，但不是事务的形式执行，python支持参数将管道的命令作为一个事务，管道完全是客户端的东西，redis服务器完全不知道管道的存在，所以不用担心管道处理过程中redis发生闪断，只要最后exec提交命令的时候redis是正常的就行。
 12.ttl返回-2表示不存在这个key，-1为永久key
 11.发布订阅不会给这个key设置任何类型
@@ -26,8 +27,9 @@
 3.线上一般用的unlink(异步)比用del多
 2.info命令可以看到redis的一些信息，常用info keyspace看key数量
 1.redis命令删除全部内容: flushdb
-2. redis-cli FLUSHALL
-3.删除相同前缀的key EVAL "local keys=redis.call('keys', ARGV[1]) for i=1,#keys do redis.call('del', keys[i]) end return keys" 0 "UDS_USER_*"
+2.redis-cli FLUSHALL
+3.删除相同前缀的key
+redis keys SJ_USERLABEL_* | awk '{print "unlink " $1}' | redis
 ~~~
 
 redis存储方式
@@ -142,13 +144,14 @@ count：指定要移除的元素数量，有以下三种设置方法
 2. hlen获取长度
 3. hset key field value
 4. hincrby(strKey , 'version' , 1)  # 给某个字段增加值
+5. hexist key field # 判断是否存在某个字段
 ~~~
 
 
 
 ### zset操作
 
-~~~redis
+~~~shell
 1. 添加或更新member的score：使用ZADD命令来添加或更新一个或多个member及其对应的score。
 ADD key score member [score member ...]
 例如，要将member1的score设置为10，可以执行以下命令：
@@ -170,10 +173,14 @@ ZREM key member [member ...]
 ZREM myzset member1
 如果member1不存在于有序集合中，那么该命令不执行任何操作。
 5.从高到低看分数
-zrevrange BeastBoard 0 -1 withscores (0 -1分别表示开始和结束下标， -1表示所有，0 2 表示看123名)
+zrevrange BeastBoard 0 -1 withscores (0 -1分别表示开始和结束下标， -1表示最后一人，0 2 表示看123名)
 6.查看指定玩家排名(下标从0开始，zrevrank是降序)
-zrank BeastBoard 10000,
+zrank BeastBoard member
 7.zcard 获取容量
+8.查看元素
+zrange key 0 -1   # 通过起始和结束下标索引
+zrangebyscore key scoremin scoremax  # 通过最小最大分数
+
 ~~~
 
 ### zset知识
@@ -928,9 +935,10 @@ min-slaves-max-lag 10
 
 ![1669383040386](../pic/1669383040386.png)
 
-零散知识点
+知识点
 
 ~~~shell
+5.云服务的Redis集群一般都是只提供一个入口点(虚拟IP或代理层)，她负责将请求路由到正确的节点。
 4.所有写操作的必须发送到主节点，由主节点处理写请求并将数据同步到其他从节点，对于读操作默认发送主节点，但可以通过配置实现将读操作分发到从节点
 3.请求重定向：客户端可以直接连接到任意节点，客户端会首先向该节点发送命令，如果该节点不是负责该键的节点，它会返回一个MOVED响应，指示客户端重新向负责该哈希槽的节点发送命令。（重定向的情况一般都是槽的映射关系变了）
 2.高可用性：每个主节点都有一个或多个从节点，当主节点发送故障，从节点自动提升为主节点
@@ -946,6 +954,8 @@ CLUSTER SLOTS
 CLUSTER KEYSLOT mykey
 # 查看集群节点信息
 CLUSTER NODES
+# 使用哈希标签让不同的key在同一个槽中
+比如将key的名字更改为{user}:key1和为{user}:key2，因为他们有相同的哈希标签{user}所以会落在同一个槽内就能避免这个报错，能避免lua不能操作不同槽的问题。
 ~~~
 
 **槽数据迁移过程发生读写操作**

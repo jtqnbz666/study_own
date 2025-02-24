@@ -1,19 +1,34 @@
 小知识
 
 ~~~python
-50.
+61.python字典的key支持整数，但比如http返回时key会被转为字符串，因为在json的语法中是不支持数字作为key的
+60.除法返回的是浮点数(6 / 2)，除非使用//，乘法不会自动转为浮点数除非带有浮点数(2 * 3.0)
+59.传递参数时，参数前边带一个*号表示解包元组或列表，两个*表示解包字典，**{'test':1}解包出来值为test = 2。
+def test(*args, **argdic):
+    print('arg--', args)	# arg-- (1, 2, 3, 4, 5, 6) 全部被打包成了一个元组
+    print('argdic--', argdic) # argdic-- {'test': 1}
+test(*(1, 2, 3), *[4, 5, 6], **{'test':1})
+58.找到某个库文件的位置,which python找到对应路径把bin目录换成lib，再进一步查找，也可以直接用print(db.__file__)打印出来。
+57.python2中写入文件使用'w'模式既支持二进制也支持文本，python3写二进制必须用'wb'
+56.python用的库无法直接看到函数定义，可以找到对应的库文件或者直接打印出它的实现，比如help(gdb.query)。
+55.禁用打印缓冲区，python -u test.py，增加-u参数
+54.web.database存入的数据为json串(json.dumps存)，拿出来的时候也是json串(支持json.loads)。
+53.web.database执行sql查询后的result结果集是单次消费的，即必须用row=result[0]，把结果存起来，不能两次访问result[0]，访问对象时候可以用字典形式row['userid']，也可以用属性方式如row.userid
+52.[item for item in list1 if item in list2]先for item in list1遍历list1的每个元素，并检查是否在list2中，如果成立则将item添加到结果列表中。
+51.eval和json.loads都不能直接解析空内容，如""，而'""'是可以的
+50.比如有def sadd(*values)，list=[1, 2, 3]，sadd(list)结果为([1, 2, 3],)，*list结果为(1, 2, 3)
 49.__init__在__new__之后调用
 48.参数分为位置参数和关键字参数，'/'之前的只能用位置参数(之后的随意)，'*'之后的只能用关键字参数(之前的随意)，位置参数就是一个*(元组形式)，关键字参数就是两个*(字典形式)，比如def test(*args, **dicargs): 并且*和**只能各自出现一次 ，位置参数必须在关键字参数之前写，但位置参数不是必须写的，也可以直接只写关键字参数。
 47.python的redis库底层用了连接池，不用担心redis闪断问题(普通redis操作或是管道)，只要保证根redis服务器交互时是存活的就行(对于管道是提交时)，会在此时尝试重新连接redis，而发布订阅中的pubsub.listen()与redis保持着连接，只要redis连接断开就会抛异常。
 46.python本身对数字长度没有限制，只要内存允许，但有些协议指定了int32则另谈
 45.python没有switch
 44.print打印有缓冲问题，print("test", flush=True)避免缓冲
-43.print(b''.decode('utf-8'))没问题
+43.print(b''.decode('utf-8'))没问题，反之用encode也没问题
 42.if、for、while不会创建新作用域，所以if里面第一次出现的变量也能在if外直接用，python作用域规则只有在函数内或者类中会创建新作用域
 41.字典的key可以是数字也可以是字符串，'12'和12是不同的key
 40.对于pb数据rpush的时候必须用SerializeToString转为字节序，rpush只接受string或者数字传参，再用ParseFromString进行解析
 39.rpush字符串或者字节序等价，存入的是字符串，取时会转为字节序， 如.rpush('jt', '你')等价.rpush('jt', '你'.encode('utf-8')), lpop时候得到的是 b'\xe4\xbd\xa0'
-38.'""','true','123','null'这些都是json字符串，不是必须'{}'或者'[]'，但空字符串、"test"、"汉字"不行
+38.'""','"test"','true','123','null'这些都是json字符串，不是必须'{}'或者'[]'，但空字符串、"test"、"汉字"不行
 37.对象必须定义才能用，比如b不行必须是b = 0才能print(b)
 36.比如某函数参数为(*args, param = false), 那么传参时就传(param = true)来指定param这个变量的值
 35.dir(对象/类)可以看到这个对象/类的所有的方法(内置或自定义)
@@ -53,15 +68,38 @@
 1.del 变量名 # 删除变量
 ~~~
 
+38.web框架mysql操作
+
+~~~mysql
+gdb = web.database(dbn='mysql', host=VConfig.DB_HOST, port=VConfig.DB_PORT, user=VConfig.DB_USER, pw=VConfig.DB_PASS,db=VConfig.DB_DATABASE)
+# select
+result = gdb.select("propertyinfo", myvar, where = "userid = $userid", what = "popularity, wealth")
+# insert（webpy的insert本身就没有sql注入问题，原生的insert有sql注入风险）
+gdb.insert(tablename = "propertyinfo", userid = userid, popularity = 0, wealth = 0)
+# query
+sqlstr = "select popularity, wealth from propertyinfo where userid = $userid" 
+rows = gdb.query(sqlstr, vars = dict(userid = userid))
+# update 
+g_business_gdb.update("team_info", vars = dict(userid = 390892, opid = 123), friend_type = 5, where = "userid = $userid and op_id = $opid")
+# sql注入演示
+userid = 1
+week = 34
+gift = "'); DROP TABLE treasure_info;--"
+sql = "INSERT INTO treasure_info (userid, week, remain, total, gift) VALUES (%d, %d, %d, %d, '%s')" % (userid, week, 0, 0, gift)
+print(sql)
+~~~
+
 37.虚拟环境
 
 ~~~python
 # 创建虚拟环境
 python3 -m venv myenv
-#激活虚拟环境(fish下好像不行，要去bash或sh)
+# 激活虚拟环境(fish下好像不行，要去bash或sh)
 source myenv/bin/activate
 
 which python #可以看到自己当前在哪个环境中，不同的环境安装的包不会互相影响。
+# 退出虚拟环境
+deactivate
 ~~~
 
 36.发布订阅
@@ -95,6 +133,9 @@ starttime = time.perf_counter()
 endtime = time.perf_counter()
 timedifference = endtime - starttime
 print(f"修改后执行时间差: {timedifference:.6f} 秒")
+      
+# 当前日期是星期几(从0(周一)开始)
+datetime.datetime.now().weekday()
 ~~~
 
 34.模块包
@@ -601,7 +642,7 @@ print(repr(str)) # 'who\'s jiangtao""'  # 可以看到原字符串是用""包着
 str = '"123\"' # 是否加\打印出来都是"123"
 ~~~
 
-7.字典操作(只能判断相等，无法比较大小, 不要求key是同类型)
+7.dict操作(只能判断相等，无法比较大小, 不要求key是同类型)
 
 ~~~python
 # key的值可以是字符串或者数字，'3'和3是不同的key
@@ -609,7 +650,7 @@ str = '"123\"' # 是否加\打印出来都是"123"
 # 直接定义
 d = {3:3,'3':3,'a':3}
 # dict方法
-d = dict(a=3, b=4) 生成字典 {'a':3, 'b':4}, 也可以配合zip比如dict(zip(['a','b'],[3,4]))实现同等效果
+d = dict(a=3, b=4) 生成字典 {'a':3, 'b':4}, 也可以配合zip比如dict(zip(['a','b'],[3,4]))实现同等效果，dic = dict({'a': 3}, **{"b": 4})也可以实现同样效果，**{"b": 4}等价于b = 4。
 
 dict中不能用数字或者带引号的值(如3, '3', 'a')作为key，但zip可以，比如d = dict(3='a', a=3, '3'='3')是错误的(我理解是dict中对于key是没加引号的，比如字符a直接写的就是a，数字3和字符3就会有歧义, key不能加引号比如'a')，d = dict(zip(['a',3,'3'],[3,'a','3']))是正确的
 # .fromkeys()方法
@@ -645,9 +686,11 @@ d1 = {"test": 1}
 d2 = {"test": 2, "test": 3}
 d3 = {**d1, **d2} 
 print(d3) # {"test": 3}
+11.setdefault方法
+dd.setdefault("test1", 2)，如果之前没有test1这个key，则会把值设为2，之前有值则不动。
 ~~~
 
-6.set (唯一、不可变无序、可迭代、不支持索引、不要求各个元素都是相同类型)
+6.set操作 (唯一、不可变无序、可迭代、不支持索引、不要求各个元素都是相同类型)
 
 ~~~python
 1. 创建 (x=set(iter)) # iter为任何序列或可迭代对象
@@ -697,11 +740,14 @@ from __future__ import 特性名
 
 2.None是特殊的python对象，总是False，None是所有函数和方法的默认返回值
 
-1.两种格式化方式
+1.格式化方式
 
-~~~
-print("%d,%d"%(1,2))
-print("{},{}".format(1,2))
+~~~python
+1. print("%d,%d"%(1,2))
+2. print("{},{}".format(1,2))
+3. name = "Alice"  # 推荐
+formatted_string = f"Name: {name}"
+# 拓展：对内容格式化，f"{endtime-start:.6f}"
 ~~~
 
 2.
@@ -915,5 +961,45 @@ for key in keys:
     for index in range(list_len):
         # 将元素替换为新字符串
         redis_client.lset(key, index, new_dict)
+~~~
+
+### mysql异步连接池
+
+~~~python
+import asyncio
+import aiomysql
+async def create_pool():
+    return await aiomysql.create_pool(
+        host=VConfig.LOG_DB_HOST,
+        port=VConfig.LOG_DB_PORT,
+        user=VConfig.LOG_DB_USER,
+        password=VConfig.LOG_DB_PASS,
+        db=VConfig.LOG_DB_DATABASE,
+        autocommit=True
+    )
+
+# 异步执行 SQL 的函数
+async def async_storage_process(pool, sql, params):
+    async with pool.acquire() as conn:
+        async with conn.cursor() as cur:
+            print('async_storage_process start----', flush=True)
+            await cur.execute(sql, params)
+            # 模拟延迟
+            await asyncio.sleep(2)
+            print('async_storage_process end----', flush=True)
+
+# 处理数据库操作的函数，通过线程池执行
+def execute_sql_in_background(pool, sql, params):
+    loop = asyncio.get_event_loop()
+    loop.run_in_executor(None, lambda: loop.run_until_complete(async_storage_process(pool, sql, params)))
+
+# 在程序启动时初始化连接池
+loop = asyncio.get_event_loop()
+pool = loop.run_until_complete(create_pool())
+
+# 实际调用（支持同步方法中调用）
+sql = "CALL InsertDebtLog(%s, %s, %s, %s, @result)"
+            vars = (userid, debttype, moneychg, moneynew)
+            execute_sql_in_background(pool, sql, vars)
 ~~~
 

@@ -373,7 +373,39 @@ docker官网镜像：https://hub.docker.com/
 
 2.sudo systemctl daemon-reload
 3.sudo systemctl restart docker
-
-
 ~~~
 
+#### **打包程序运行所需的所有动态库**
+
+```shell
+# 需要两个参数，第一个是可执行文件，第二个是提取出来的库放到的位置
+deps=$(ldd $1 | awk 'BEGIN{ORS=" "}$1\
+~/^\//{print $1}$3~/^\//{print $3}'\
+ | sed 's/,$/\n/')
+for dep in $deps
+do
+    echo "Copying $dep to $2"
+    cp "$dep" "$2"
+done
+echo "Done!"
+```
+
+### 用docker起一个go的服务
+
+~~~shell
+docker run -d --restart always --name aliyun-security-group-server -p 59999:3000 -w /app -v "$(pwd)":/app -v "$(readlink -f ~/go)":/go -e 'GOPROXY=https://goproxy.cn,direct' golang:1.21 go run .
+~~~
+
+#### **服务容器化**
+
+```dockerfile
+# 前提：在/home/Connserver中放入所有./wzqconn依赖的库文件
+FROM centos:8 
+RUN mkdir -p /home/ConnServer
+COPY ./ConnServer /home/ConnServer
+RUN echo "/home/ConnServer" >> /etc/ld.so.conf && ldconfig
+WORKDIR /home/ConnServer
+RUN chmod +x wzqconn
+CMD ["./wzqconn"]
+# RUN echo "/home/ConnServer" >> /etc/ld.so.conf && ldconfig这个比较重要，目的是让运行./wzqconn的时候在/home/ConnServer目录找库文件，export LD_LIBRARY_PATH=/home/ConnServer:$LD_LIBRARY_PATH会遇到别的问题。
+```

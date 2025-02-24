@@ -1,3 +1,15 @@
+支付流程
+
+~~~
+前端请求下单->uds创建游戏订单返回给前端->前端调用第三方完成支付->第三方会回调支付中心告知支付结果->前端支付完成后会主动请求发货->uds请求支付中心，支付中心用订单信息向第三方查询订单结果，如果已支付则更新订单状态并且告诉uds可以发货了。
+
+1.订单信息有两份，支付中心和uds各自一份，订单号是一样的，升级的订单号和多乐的支付中心订单号不一样，可以理解为有多个游戏产品时，支付中心可以通用，但uds只是石灵的服务器，uds只负责石灵这款游戏的订单，这个业务层面的订单号和订单信息会在前端下单时发送给第三方，第三方支付完成回调业务服务器时做数据校验。
+2.升级是在服务器通知前端后，前端才请求发货的（升级保证了一定支付成功了才会通知前端），而石灵付完款直接就请求发货了，为了保证订单已支付还需要向第三方确认订单支付结果。
+3.支付完成后收到第三方的回调后最好鉴定订单信息，避免订单被篡改，需要支付的金额和实际金额不符合。
+~~~
+
+
+
 unity版本是3.47
 
 线上机器的公钥和私钥，用这个就能拉到328的代码
@@ -474,8 +486,6 @@ debug代码：/Users/jiangtao/data/project328-client/Assets/Scripts/DebugCmd/Cus
 ### token登录
 
 ~~~~
-
-
 // 生成token
 token := fmt.Sprintf("%v_%v_%v_%v", global.TapTapLoginType, account.ID, msg.ObjectID, time.Now().Add(global.TokenLoginTimeout).Unix())
 token = encrypt.EncryptString(token, global.TokenEncryptKey)

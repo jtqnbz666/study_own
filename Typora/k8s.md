@@ -629,19 +629,10 @@ spec:
 中文官网：http://kubernetes.p2hp.com/docs/concepts/workloads/pods.html
 
 ~~~shell
-安装k8s
-curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
-# 授权
-chmod +x k8s.sh
-curl -o check.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/check.sh
-chmod +x check.sh
-# 执行安装命令
-sudo ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh
-
-# 如果失败了使用wget https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh下载这个脚本再执行
-
-# 第二种方法安装k3s，wsl不行
+#安装k3s，wsl不行
 git clone https://github.com/k3s-io/k3s.git #执行里面的./install.sh
+curl -sfL https://get.k3s.io
 
+# 直接下载docker desktop
 ~~~
 

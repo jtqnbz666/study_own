@@ -88,9 +88,16 @@ alter table oldtable  modify stu_id tinyint auto_increment;
 #添加字段
 alter table old_table add age tinyint;
 alter table old_table add(aa int,bb int,cc int);#添加多个
+#添加字段配合备注
+ALTER TABLE productid_desc 
+ADD COLUMN debt INT DEFAULT 0 COMMENT '豆相关';
 #删除字段
 alter table old_table drop bb;#删除单个
 alter table old_table drop aa,drop cc,drop stu_id;#删除多个
+
+#修改字段描述
+ALTER TABLE productid_desc 
+MODIFY COLUMN debt INT DEFAULT 0 COMMENT '豆相关';
 #表名和字段名尽量避免修改。
 ~~~
 
