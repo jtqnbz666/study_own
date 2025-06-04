@@ -6,8 +6,20 @@
 5.有时候文件名前边会看到--，其实只是为了区分命令和文件，--后表明一定是文件路径
 3.观察某个分支的修改，切到master再merge到master，然后reset到远端的master
 2.git rev-parse HEAD #获取最新节点的commit值
-1.ssh拉下来的仓库，git操作走ssh，https拉下来的仓库，git操作走https, git remote -v 查看克隆仓库方式，可以通过git remote set-url进行修改
+1.ssh拉下来的仓库，git操作走ssh，https拉下来的仓库，git操作走https, git remote -v 查看克隆仓库方式，可以通过git remote set-url更新仓库地址
 ~~~
+
+### 遇到的问题
+
+``` shell
+1. 有个test1分支有两个功能，但只需要上线其中一个功能，merge到test2(dev衍生的)时发生冲突删除了其中不上的功能，再把test2合并到dev，后来想把test1的另一个功能合并到dev发现无法检测到test1在merge到test2过程删掉的功能了。
+解决方案：1.dev强制reset到错误的merge之前，2.dev变基到错误的merge之前。
+说明：尝试过revert把test2合并到dev的操作回滚，然后重新test1，其实是不行的，revert相当于逆操作，之前的merge记录还是会存在。
+```
+
+
+
+
 
 19.git restore
 

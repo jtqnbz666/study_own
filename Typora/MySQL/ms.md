@@ -28,8 +28,6 @@ show table status like '%tablename%'
 
 ### count(*)不同引擎的区别
 
-实操下来不管count的那列是否值为null都会计算进去
-
 对于MyISAM,它会在磁盘上记录一张表的总行数，所以可以直接获取到总行数，但是如果加上where限定就不是这样了，而对于InoDB它需要将数据一行一行的读，然后进行统计，那么它为什么不想MyISAM那样记录总行数就行呢？因为InoDB中有MVCC机制，不同事务看到的总行数记录是不一样的。
 
 count(字段)会忽略字段值为null的行，对非null行累计， 但这个列名最好是有索引的，否则就会全表扫描速度慢。count(1)和count(*)不会忽略null，会累加每一行

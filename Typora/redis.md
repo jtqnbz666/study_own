@@ -8,6 +8,9 @@
 ### 小tips
 
 ~~~shell
+22.info server 看redis信息，版本啥的
+21.key的类型变化时，不能先删再设，如果删除的那一瞬间，别人没读到值就可能有未定义的行为
+20.lpush的内容在redis上是以字节序存储的，连接redis客户端时用redis-cli --raw，此时lrange得到的数据就是原始字符串形式。
 19.发布:PUBLISH mychannel "hello"，订阅:SUBSCRIBE mychannel
 18.密码认证： auth 密码， 登陆指定地址，port，密码， -h -p -a
 17.bgsave生成rdb文件
@@ -32,7 +35,51 @@
 redis keys SJ_USERLABEL_* | awk '{print "unlink " $1}' | redis
 ~~~
 
-redis存储方式
+### Redis集群scan所有key
+
+~~~python
+# 控制台使用scan只能扫描单节点，可以通过脚本的方式扫描整个集群
+g_msg_list = redis.StrictRedis(host=MSG_LIST_REDIS_HOST, port=MSG_LIST_REDIS_PORT, password=MSG_LIST_REDIS_PWD, socket_timeout=REDIS_TIMEOUT, socket_connect_timeout=REDIS_CONN_TIMEOUT)
+
+# 需要注意的是scan返回的key和type方法返回的是字节序对象
+while True:
+    cur, keys = g_msg_list.scan(cur, match="www_*", count=10000)
+    for key in keys:
+        print(k, g_msg_list.type(k)) #输出 b'www_jt' b'list'
+        if g_msg_list.type(key) == b'list':
+            print('yes')
+        if key == b'www_jt':
+            print('jtfind')
+    if cur == 0:
+        break
+# 第二种方式
+for k in g_msg_list.scan_iter("www_*", 10000000):
+    print(k, g_msg_list.type(k))
+    if g_msg_list.type(k) == b'list':
+         print('yes')
+    if k == b'www_jt':
+        print('jtfind', queuelen)
+# 第三种，直接扫描所有
+for k in g_msg_list.scan_iter("*"):
+    if g_msg_list.type(k) != b'list':
+        continue
+    queuelen = g_msg_list.llen(k)
+    threshold = 1024
+    if k == b'SJ_LOG_PACKAGE_LIST' :
+        threshold = 10240
+    if queuelen > threshold:
+        wx.sendmsg('升级消息队列：' + k + " 有%d 条积压"%(queuelen), True)
+~~~
+
+
+
+#### **Redis微秒级别验证**
+
+~~~shell
+MONITOR监控每一条执行的命令，会打印出时间戳，配合redis-benchmark观察命令耗时，他有个问题是如果redis是集群的，monitor只能监控到单节点。redis-cli MONITOR # 可以配合grep过滤感兴趣的命令# -t 表示get类型， -n 表示请求次数， 还有很多功能，感兴趣可以研究这个命令redis-benchmark -t get -n 10# 对比redis-benchmark 和 MONITORredis-benchmark 的结果更接近实际使用中的性能，它考虑了包括网络延迟在内的整体延迟。MONITOR 主要展示了 Redis 服务器处理命令的时间，但不包含网络延迟。因此，它适用于监控和调试，但不适合用于全面的性能基准测试， 可以开启MONITOR，然后使用redis-benchmark发送大量数据，通过观察两条命令的时间差就能知道处理耗时。
+~~~
+
+### redis存储方式
 
 ~~~shell
 redis用户视角，存储和取出的值始终是字符串形式，用object encoding看实际存储方式，用type看key的类型，
@@ -143,11 +190,10 @@ count：指定要移除的元素数量，有以下三种设置方法
 1. hgetall 获取所有字段
 2. hlen获取长度
 3. hset key field value
-4. hincrby(strKey , 'version' , 1)  # 给某个字段增加值
+4. hincrby(strKey , 'version' , 1)  # 给某个字段增加值，不是数字无法增加
 5. hexist key field # 判断是否存在某个字段
+6. hkeys key # 获取所有字段名
 ~~~
-
-
 
 ### zset操作
 

@@ -57,7 +57,7 @@ done
 ~~~shell
 # 背景:11万用户量， 去掉较大的战绩表，执行耗时1分钟左右，导出的.sql有2.5G，导入到本地花了大于10分钟时间
 
-# --single-transaction 不会对数据库全局锁定，减少mysql的影响
+# --single-transaction 不会对数据库全局锁定，期间新插入的数据不会导出，数据是从开始导出那一刻计算的快照。
 # staging
 mysqldump -h rm-bp1xx0ybar41opwch.rwlb.rds.aliyuncs.com -u root -phoxi0328JING --single-transaction project328 > project328.sql
 

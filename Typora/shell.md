@@ -1,6 +1,7 @@
 知识点
 
 ~~~shell
+4.bash -c可以执行复杂命令，就像执行临时shell脚本，比如bash -c 'for i in {1..5}; do echo "Number $i"; done'
 3.((count++))  等效于 count=$count+1
 2.current_ms=$(echo "$current_ms" | sed 's/^0*//')去除所有前导0，并且这用括号包起来就会执行里面的命令，如果是算数预算就还需要一层括号如echo $((86400 / 3600))
 1.判断shell脚本中嵌套的脚本是否按预期执行
@@ -10,8 +11,6 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 ~~~
-
-
 
 ## 写shell脚本
 

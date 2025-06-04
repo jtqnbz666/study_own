@@ -42,7 +42,7 @@ docker network create jt -d bridge # -d表示驱动类型， 创建好之后使�
 - bridge网络类型特点
 
 ~~~shell
-可直接通信情况: 容器<-->容器、 容器<-->宿主、 容器-->互联网、 互联网到容器的话需要配合暴露端口。 # 特别注意，使用ip的情况下是没问题的，但默认的bridge(docker0网络)是不支持直接用容器名的，自定义的bridge含有自动DNS解析功能，所以可以直接用容器名，宿主到容器的时候也不能用容器名，需要用容器的ip。
+可直接通信情况: 容器<-->容器、 容器<-->宿主、 容器-->互联网、 互联网到容器的话需要配合暴露端口。 # 特别注意，使用ip的情况下是没问题的，但默认的bridge(docker0网络)是不支持直接用容器名的，宿主到容器的时候也不能用容器名，需要用容器的ip，自定义的bridge含有自动DNS解析功能，所以可以直接用容器名，
 
 # 不同bridge网络中的容器是不互通的，用ip也不行, 可以理解为不同的两个局域网，不互通是很正常的，比如学校和家里都能访问百度，但学校的局域网不能直接ping家里的局域网。
 ~~~
@@ -88,7 +88,7 @@ mkdir -p /var/log/nginx
 chmod 777 /etc/nginx
 chmod 777 /var/log/nginx
 docker run --name temp-container praqma/network-multitool
-docker cp temp-container:/etc/nginx /path/to/local/nginx
+docker cp temp-container:/etc/nginx /path/to/local/nginx（需要处理多个目录
 docker rm temp-container
  docker run -d --name egg7 --hostname egg7 -p 80:80 -v /etc/nginx:/etc/nginx -v /var/log/nginx/:/var/log/nginx/ praqma/network-multitool (linux下不需要端口映射用host模式，但mac只能这样)
 ~~~
@@ -408,4 +408,7 @@ WORKDIR /home/ConnServer
 RUN chmod +x wzqconn
 CMD ["./wzqconn"]
 # RUN echo "/home/ConnServer" >> /etc/ld.so.conf && ldconfig这个比较重要，目的是让运行./wzqconn的时候在/home/ConnServer目录找库文件，export LD_LIBRARY_PATH=/home/ConnServer:$LD_LIBRARY_PATH会遇到别的问题。
+
+# 构建
+docker build -t sjconn .
 ```

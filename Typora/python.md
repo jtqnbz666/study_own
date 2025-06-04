@@ -1,6 +1,12 @@
 小知识
 
 ~~~python
+67.函数参数如果是时间，不能像这样写，def test(curtime=datetime.datetime.now())， 这个curtime永远不会变，一直用第一次加载的值
+66.用对象的__dict__可以打印出所有成员
+65.ord打印ascii码的值，可以是可打印字符，比如ord('A')得65，或转义字符，如ord('\b')得10
+64.%转义需要用%%而不是\%
+63.字符串转为指定进制的数组，int(numstr, 16)，numstr可以是16进制字符串，比如'b'打印出来是11
+62.os.path.split(os.path.realpath(__file__))[0]获取当前文件的绝对路径而不是调用者的。
 61.python字典的key支持整数，但比如http返回时key会被转为字符串，因为在json的语法中是不支持数字作为key的
 60.除法返回的是浮点数(6 / 2)，除非使用//，乘法不会自动转为浮点数除非带有浮点数(2 * 3.0)
 59.传递参数时，参数前边带一个*号表示解包元组或列表，两个*表示解包字典，**{'test':1}解包出来值为test = 2。
@@ -68,6 +74,74 @@ test(*(1, 2, 3), *[4, 5, 6], **{'test':1})
 1.del 变量名 # 删除变量
 ~~~
 
+43.静态代码检测
+
+``` python
+# pip install pylint
+
+pylint --errors-only --prefer-stubs y webservice/ | grep -v 'gsdebtlog_pb2\|sjProtocol_pb2\|gsweb_pb2' #  --prefer-stubs y 会优先检查.pyi文件，前提是用protoc --python_out=. --pyi_out=. *.proto生成.pyi文件。
+
+# 特别说明：
+from gsdebtlog_pb2 import REQDivisionChgLog # 这种方式定义的变量如果写错了能被检测出来
+import gsdebtlog_pb2 as logpb # 如果用别名的形式，使用时写成了logpb.REQDivisionChgLogTTT，则不会被检测出来
+```
+
+42.strip操作（移除空白字符（包括空格、换行符、制表符等）
+
+~~~python
+str.strip(); 删除字符串前后的空格或特殊字符
+lstrip 左边， rstrip 右边
+~~~
+
+41.split操作（分割
+
+~~~python
+# 默认，空格、换行符
+text = "Hello world"
+result = text.split() # result: ['Hello', 'world']
+# 指定分隔符
+text = "apple,banana,cherry"
+result = text.split(',') # result: ['apple', 'banana', 'cherry']
+# 指定最大分割次数
+text = "one two three four"
+result = text.split(' ', 2) # result: ['one', 'two', 'three four']
+~~~
+
+40.支持生成图表
+
+~~~python
+# pip install matplotlib
+import matplotlib.pyplot as plt
+# 数据
+x = [1, 2, 3, 4, 5]
+y = [2, 3, 5, 7, 11]
+# 创建图表
+plt.plot(x, y, marker='o')
+# 添加标题和标签
+plt.title('Simple Line Plot')
+plt.xlabel('X-axis')
+plt.ylabel('Y-axis')
+# 显示图表
+plt.show()
+~~~
+
+39.循环引用
+
+~~~python
+python的循环引用问题核心是不能循环引用对方的包，但可以调用对方的方法。
+# test.py中
+import test1
+def testprint():
+    print('test')
+test1.testprint()
+# test1.py中
+import test
+def testprint():
+    print('test1')
+    test.testprint()
+#test.testprint() 		# 如果把这个打开才会循环引用报错。
+~~~
+
 38.web框架mysql操作
 
 ~~~mysql
@@ -116,6 +190,10 @@ pubsub.subscribe('test')
 for message in pubsub.listen():
     if message['type'] == 'message':
         print(f"Received message: {message['data'].decode('utf-8')}")
+        
+# 设置过期key
+grsc.set('ttt', 100, ex=1000) # 100是值，1000是过期时间
+grsc.setex('jjjj', 1000, 100) # 1000是过期时间，100是值
 ~~~
 
 35.时间相关
@@ -127,15 +205,27 @@ print(time.time()# 1726041712.1244211
 print(int(time.time()))# 1726041712
 print(datetime.datetime.now())# 2024-09-11 16:01:52.126141
 print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))# 2024-09-11 16:01:52
-      
+# date对象加减时间
+nextdate = curdate + datetime.timedelta(days=1)
 # 计算时间差
 starttime = time.perf_counter()
 endtime = time.perf_counter()
 timedifference = endtime - starttime
 print(f"修改后执行时间差: {timedifference:.6f} 秒")
-      
 # 当前日期是星期几(从0(周一)开始)
 datetime.datetime.now().weekday()
+# 当前是今年第几周(从0开始，比如2025-01-01是第0周)
+print(datetime.datetime.now().strftime('%W'))或者
+datestr = '2025-01-01'
+print(datetime.datetime.strptime(datestr, '%Y-%m-%d').strftime('%W'))
+# 字符串转为date对象（strptime）
+from datetime import datetime
+date_string = "2025-03-11"
+date_object = datetime.strptime(date_string, "%Y-%m-%d")
+# date对象转为字符串（strftime）
+from datetime import datetime
+date_object = datetime.now()
+date_string = date_object.strftime("%Y-%m-%d")
 ~~~
 
 34.模块包
@@ -446,10 +536,26 @@ filehandle = open(filename, 'r/w/a')
 .readlines() # 读取整个文件，一行一个字符串，可以用for迭代
 
 # 写入
-with open('result.txt', 'ab') as f:
+with open('result.txt', 'a') as f:
   for message in messages:
-    f.write((message + '\n').encode('utf-8'))
+    f.write((message + '\n'))
 
+# 每行几个数据（如 390892 66 77
+userinfolist = []
+with open('result.txt', 'r') as file:
+    for line in file: # 如果是file.readlines()会一次性加载到内存，而这样就一行一行读
+        result = line.strip() #这行是重点，因为每行后边都有一个换行符
+        if result:
+            userinfolist.append(tuple(result.split())) # tuple不要就是list对象，效果一样
+for entity in userinfolist:
+    uid = int(entity[0])
+    propid = int(entity[1])
+    sendnum = int(entity[2])
+# 文档中是python对象(用eval转换)
+{4329714: {1009: 1, 1013: 1}}
+with open('result.py', 'r') as file:
+    for line in file:
+        dic = eval(line) # 就能得到一个字典
 ~~~
 
 17.基本数据结构总结
@@ -764,12 +870,6 @@ python中的 () 和 [] 所以可以通过下标0开始
 但对于字典{}, 索引必须要有键值，不能从0开始
 
 ### 脚本
-
-str.strip(); 删除字符串前后的空格或特殊字符
-lstrip 左边， rstrip 右边
-
-splice = line.split("\t", 1)  以"\t"进行分割， 仅分割一次
-line = splice[2]
 
 json和字符串转换
 
