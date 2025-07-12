@@ -1,7 +1,7 @@
 通用技巧
 
 ~~~shell
-
+10.pod是可以访问外网的，比如mysql地址，可以直接用外网地址
 9.在~/.kube/config配置阿里云k8s的服务就可以直接访问
 8.金丝雀发布(灰度发布)，就是两个deployment对象，第二个一开始只放少量pod，如果没问题就用kubectl scale调整pod数量。
 7.svc和pod不在意谁先谁后创建，只要有对应label的pod，svc就能查到
@@ -12,9 +12,29 @@ nginx的例子:
 pod中: curl nginx-service:8080 (用一次性pod验证，集群中所有pod都可以访问，328项目中大厅服初始化uds连接也是用的这种方式，相当于是大厅服的一个pod使用uds的svc的名字访问了uds服务。)
 4.pod理解为一个虚拟机，也就是说一个pod中的两个容器不可能是同一个端口
 3.-A获取所有命名空间的资源
-2.--watch 动态看资源的变化
+2.--watch 动态看资源的变化， 比如 kubectl g
+et pods --watch
 1.进入pod比如exec -it 后边必须接上--，比如 kubectl exec -it mytest -- mysql -u root -p
 ~~~
+
+gm-ui和gm-agent项目
+
+``` shell
+# 框架说明：
+使用Ingress Controller作为大门，gm-ui容器内部嵌入了nginx，为什么需要nginx呢，因为gm-ui是前端，不能直接用gm-agent的svc名字，前端发送的请求为gm-agent:80/test/url是无法解析的，只能发到容器内的80端口也就是nginx，nginx就能用gm-agent名字和gm-agent服务进行通信，在gm-ui中放nginx还有个好处就是把gm-ui这个前端界面提供给使用者，之前的gm-ui默认用的是3000端口，但其实这是一种调试模式，任何的代码修改都会直接反映到界面中，并且不支持大量用户同时访问，标准做法就是npm build后通过nginx服务来返回对应的.html资源，这才是线上的标准做法。
+# 搭建流程
+```
+
+Ingress资源
+
+``` shell
+配置Ingress资源，一般会同时配置对应的svc和pod，Ingress Controller是对应的svc，也是整个流量链路的第一站，可以理解为k8s集群的大门，所有请求先经过它，再由它进行路由转发到对应的pod(ingress nginx controller)，主要是处理HTTP/HTTPS请求，也可以通过拓展配置实现TCP长连接即直接转发流量。
+
+# 好处
+比如有多个服务都需要支持对外开放，但每个服务独立配置Type为Loadbalancer就需要多个负载均衡并且入口比较乱，可以直接通过Ingress Controller来作为大门负责路由到不同服务上。
+# 官方示例Ingress的yaml
+https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
+```
 
 删除操作
 
@@ -327,6 +347,9 @@ kubectl delete hpa nginx-deployment
 ~~~shell
 kubectl create deployment nginx-deploy --image=nginx:1.22 --replicas=3
 kubectl delete pod 删除任意一个，他会自愈(会重新创建一个，保证有副本集数量为3)， 跟下边这个查看副本集是关联的
+
+# 注意
+image名字前边需要是仓库地址，不然会默认去dockerhub拉取，是否拉取取决于imagePullPolicy的值，Always表示每次都拉取，IfNotPresent则表示本地不存在才拉取，Nerver表示永远不拉取，如果不要imagePullPolicy字段，镜像后边的标签为:latest则相当于配置了Always，其他标签默认为IfNotPresent。
 ~~~
 
 查看副本集
@@ -431,7 +454,7 @@ kubectl describe cm -n default fluentd-config
 kubectl get cm -n default （cm:configmap
 ~~~
 
-查看某个pod的详细信息
+查看某个pod的详细信息(定位问题也可以用describe)
 
 ~~~shell
 kubectl describe pod -n taptap  taptap-project328-server-7ccbf6fc5b-4mxgh

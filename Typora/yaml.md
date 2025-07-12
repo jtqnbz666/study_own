@@ -8,8 +8,6 @@ containers:
     image: mysql:latest
 ~~~
 
-
-
 **锚点和引用**
 
 ~~~yaml

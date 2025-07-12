@@ -1,6 +1,9 @@
 小知识
 
 ~~~python
+70.迭代的时候不要删除，否则迭代器后后移，比如删除某一个元素，下次循环时会跳过一个元素。
+69.单引号里面的"和\"含义一样，所以在有多层引号的json串中要注意这个问题，也是就是说\"需要写成\\\"。
+68.python2的中文字符需要加.decode('utf-8')
 67.函数参数如果是时间，不能像这样写，def test(curtime=datetime.datetime.now())， 这个curtime永远不会变，一直用第一次加载的值
 66.用对象的__dict__可以打印出所有成员
 65.ord打印ascii码的值，可以是可打印字符，比如ord('A')得65，或转义字符，如ord('\b')得10
@@ -73,6 +76,64 @@ test(*(1, 2, 3), *[4, 5, 6], **{'test':1})
 2.python支持多返回值，本质上是通过元组实现的
 1.del 变量名 # 删除变量
 ~~~
+
+46.json操作
+
+``` python
+1.{"showtag":"{\"name\":\"\"}"}这个虽然是json对象，但是无法json.loads('{"showtag":"{\"name\":\"\"}"}')，说明：''里面如果是""则可以不要转义字符\，但是里面的showtag还有一层\"，则不能'里面包裹"，简单说就是外层如果是'，则里面写成"和\"是一个含义。正确的json格式为'{"showtag":"{\\\"name\\\":\\\"\\\"}"}'或者"{\"showtag\":\"{\\\"name\\\":\\\"\\\"}\"}"
+```
+
+
+
+45.yield操作
+
+``` python
+类似于return，但不同的是，它会暂停函数的执行状态，记住当前位置，等待下一次调用继续执行。
+def scan_iter(
+   while cursor != 0:
+        cursor, data = self.scan(
+            cursor=cursor, match=match, count=count, _type=_type, **kwargs
+        )
+        yield from data
+  # 每次yield就把当前的data集合给外层的for语句使用，for完后继续scan第二次
+for entity in redisobj.scan_iter("*"):
+    print('test1', entity, redisobj.type(entity))
+ 
+
+# 说明：
+节省内存：按需生成数据，不用一次性加载全部内容。
+实现惰性计算：只有在需要时才计算/产生值。
+```
+
+44.web框架
+
+``` shell
+1. web.data()获取的是body中(x-wwww-form-urlencoded)的数据，web.input()获取的是params参数也就是拼接到url上的。
+2.打印http信息
+import json
+import web
+print("="*50)
+print(f"--- Debugging Request for: {web.ctx.path} ---")
+# 1. 打印所有请求头
+print("\n[Request Headers]")
+headers = {k: v for k, v in web.ctx.env.items() if k.startswith('HTTP_')}
+print(json.dumps(headers, indent=2))
+# 2. 打印原始Body
+print("\n[Raw Request Body]")
+try:
+    # 尝试以UTF-8解码，如果请求体是JSON或文本，这样显示更友好
+    print(web.data().decode('utf-8'))
+except Exception as e:
+    # 如果解码失败（比如是二进制数据），就打印原始的bytes表示
+    print(f"(Could not decode as utf-8: {e})")
+    print(web.data())
+# 3. 打印其他关键信息
+print("\n[Other Context Info]")
+print(f"  - Method: {web.ctx.method}")
+print(f"  - origin IP Address: {web.ctx.ip}")
+print(f"  - des Host: {web.ctx.host}")
+print("="*50)
+```
 
 43.静态代码检测
 
@@ -155,12 +216,6 @@ sqlstr = "select popularity, wealth from propertyinfo where userid = $userid"
 rows = gdb.query(sqlstr, vars = dict(userid = userid))
 # update 
 g_business_gdb.update("team_info", vars = dict(userid = 390892, opid = 123), friend_type = 5, where = "userid = $userid and op_id = $opid")
-# sql注入演示
-userid = 1
-week = 34
-gift = "'); DROP TABLE treasure_info;--"
-sql = "INSERT INTO treasure_info (userid, week, remain, total, gift) VALUES (%d, %d, %d, %d, '%s')" % (userid, week, 0, 0, gift)
-print(sql)
 ~~~
 
 37.虚拟环境
@@ -634,14 +689,14 @@ tup.index([1, 2, 3])
 tup.count([1, 2, 3])
 ~~~
 
-14.列表操作（不限制对象类型）
+14.list操作（不限制对象类型）
 
 ~~~python
 1. 和字符串功能接近，支持相加，支持与整数想乘，支持索引, 支持分片
 2. 迭代
 list1 = [1, 2, 3, 4]
 for item in list1
-3. count(val)是否包含，reverse翻转，sort排序，append追加，extend(参数为可迭代对象)插入多个元素，pop末尾弹出，pop(idx)弹出指定位置元素，del list[idx]删除置顶位置， pop和del区别在于，del不会返回被删的元素
+3. count(val)是否包含，reverse翻转，sort排序，append追加，extend(参数为可迭代对象比如[1,2])插入多个元素，pop末尾弹出，pop(idx)弹出指定位置元素，del list[idx]删除置顶位置， pop和del区别在于，del不会返回被删的元素
 # 通过值删除(处理找到的第一个)
 .remove(val)
 list1 = [1, 2, 3, 2, 4, 2, 5]

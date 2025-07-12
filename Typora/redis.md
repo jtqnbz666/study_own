@@ -1,15 +1,21 @@
 实操经验
 
 ~~~shell
-1.scan100w花费1.几秒
+1.scan100w花费1.几秒（一般循环scan，一次1w是最佳值）
 2.集合set的ismember，一万个号，耗费1ms
 ~~~
 
 ### 小tips
 
 ~~~shell
+28.可以使用rdr工具分析rdb内存使用情况。
+27.redis的scan的count值建议在10000效率最大化。
+26.redis --csv 会在输出数据包上一层引号，移除比如"10)"这样的干扰，方便导入csv文件中。
+25.redis是可以不进入终端直接在后边接上命令的，所以可以配合grep过滤数据，或者说通过管道把数据灌给redis(比如配合awk提取数据给redis)。
+24.集群的redis部分需要区分节点的命令比如memory usage 需要在最后加上节点的唯一标识。
+23.如果是hash对象，修改某个字段，过期时间会正常继续，如果是string，set后过期时间会被清除变为永久key。
 22.info server 看redis信息，版本啥的
-21.key的类型变化时，不能先删再设，如果删除的那一瞬间，别人没读到值就可能有未定义的行为
+21.key的类型变化时，不能先删再设，如果删除的那一瞬间，别人没读到值就可能有未定义的行为。
 20.lpush的内容在redis上是以字节序存储的，连接redis客户端时用redis-cli --raw，此时lrange得到的数据就是原始字符串形式。
 19.发布:PUBLISH mychannel "hello"，订阅:SUBSCRIBE mychannel
 18.密码认证： auth 密码， 登陆指定地址，port，密码， -h -p -a
@@ -20,10 +26,10 @@
 13.管道和事务不是一回事，管道只是发了一批命令过来，但不是事务的形式执行，python支持参数将管道的命令作为一个事务，管道完全是客户端的东西，redis服务器完全不知道管道的存在，所以不用担心管道处理过程中redis发生闪断，只要最后exec提交命令的时候redis是正常的就行。
 12.ttl返回-2表示不存在这个key，-1为永久key
 11.发布订阅不会给这个key设置任何类型
-10.集群中,scan和monitor只能拿到单节点信息，keys可以拿到整个集群的key
+10.集群中,keys *可以拿到整个集群的key,scan和monitor只能拿到当前节点信息，scan通过脚本能扫描整个集群。
 9.setnx一个key后，在它释放之前别的进程setnx就会失败，如果是set就会成功，就脱离使用初心了
 8.不能对单用户使用永久key
-7.memory usage key 求rediskey的大小 以字节为单位
+7.memory usage key 求rediskey的大小 以字节为单位，云服务集群看不到，可以用单节点docker测试。
 6.redis单机能轻松破10wQPS，mysql单机很难破1wQPS
 5.如果已经expire了key，不管对这个key增删改，expire的时间都正常流逝
 4.redis的主要瓶颈在于网络io，所以多次查询的时候都用pipeline
@@ -34,6 +40,63 @@
 3.删除相同前缀的key
 redis keys SJ_USERLABEL_* | awk '{print "unlink " $1}' | redis
 ~~~
+
+**rdb操作**
+
+``` shell
+# 数据迁移场景
+redis-cli -h source_redis --rdb migrate.rdb # 导出
+redis-cli -h target_redis --pipe < migrate.rdb # 导入
+# 说明：
+rdb原理：触发bgsave，把生成的rdb文件下载到本地，不会在redis服务器上留下文件
+```
+
+**Redis集群操作**
+
+``` shell
+# 说明：只要不能在后边加上节点的，一般都是默认的单个分片，不是所有分片，除了keys 
+4.单个分片内存信息，redis info memory 2786ac9c5e46848fcbd397afc34d241a5e57e7aa
+3.monitor无法指定节点(无法固定)，并且用着体验感极差，尽管操作的不是痛一个节点的key也能monitor到，但有些key又无法monitor到，使用时可以多次monitor看运气。
+2.scan所有分片，不能指定分片。
+redis --scan --pattern "SJ_USERLABEL*"，默认count是10
+1.scan指定分片进行扫描(如果不指定，会选择cluster nodes的第一个分片)
+redis scan 0 match "SJ_USERLABEL*" count 1000000 2786ac9c5e46848fcbd397afc34d241a5e57e7aa # 借助脚本scan指定节点所有内容，直到cursor为0
+```
+
+**Redis集群scan具体分片**
+
+``` shell
+# python语言。
+# 同时扫描所有分片，也可指定分片。
+import redis
+import threading
+def scan_node(node_id, host, port, password):
+    r_thread = redis.Redis(host=host, port=port, password=password, decode_responses=True)
+    all_keys = []
+    cursor = '0'
+    print(f"Starting scan for node: {node_id}")
+    while True:
+        cursor, keys = r_thread.execute_command('SCAN', cursor, 'MATCH', 'SJ_USERLABEL*', 'COUNT', 10000, node_id)
+        all_keys.extend(keys)
+        if cursor == 0:
+            break
+    print(f"Finished scan for node: {node_id}. Total keys found: {len(all_keys)}")
+
+r = redis.Redis(host='192.168.1.44', port=6379, password='jC3cS0sA4mJ3', decode_responses=True)
+nodes_info = r.execute_command('CLUSTER', 'NODES')
+master_nodes = [line.split()[0] for line in nodes_info.split('\n')
+                if 'master' in line and line.strip()]
+print(f"Found {len(master_nodes)} master nodes. Starting scan on {len(master_nodes)} threads.")
+threads = []
+for node_id in master_nodes:
+    thread = threading.Thread(target=scan_node, args=(node_id, '192.168.1.44', 6379, 'jC3cS0sA4mJ3'))
+    threads.append(thread)
+    thread.start()
+
+for thread in threads:
+    thread.join()
+print("\nAll nodes have been scanned.")
+```
 
 ### Redis集群scan所有key
 
@@ -71,7 +134,16 @@ for k in g_msg_list.scan_iter("*"):
         wx.sendmsg('升级消息队列：' + k + " 有%d 条积压"%(queuelen), True)
 ~~~
 
+**分析rdb文件**
 
+``` shell
+# 工具(https://github.com/xueqiu/rdr?tab=readme-ov-file)
+rdr-linux.dms
+# 下载rdb
+wget -O 文件别名 "地址" # 注意是大写-O
+# 就可以通过访问指定的8062端口看到数据
+./rdr-linux.dms show -p 8062 *rdb* # 可以一起看所有的rdb文件
+```
 
 #### **Redis微秒级别验证**
 
@@ -116,11 +188,11 @@ LLEN、SCARD 等命令返回集合或列表的长度，也是整数。
 
 ~~~
 keys是阻塞的，大规模数据不适合
-scan是分批且异步的
+scan是渐进式分批扫描的。
 scan 0 match "b_*" count 38 (0是开始游标，在扫描到的38个结果里筛选出b_*的结果集)
 
 线上用scan 0 match TeamData_* 而不是 keys TeamData_*
-scan基本不会返回所有结果，除非你后边加的COUNT足够大，SCAN 命令允许设置较大的 COUNT 参数，但它仍然会分批返回数据，而不是一次性返回所有匹配的键。
+scan基本不会返回所有结果，除非你后边加的COUNT足够大，SCAN 命令允许设置较大的 COUNT 参数，如果count足够大，就等效于keys *了。
 ~~~
 
 ### 发布订阅
@@ -193,6 +265,9 @@ count：指定要移除的元素数量，有以下三种设置方法
 4. hincrby(strKey , 'version' , 1)  # 给某个字段增加值，不是数字无法增加
 5. hexist key field # 判断是否存在某个字段
 6. hkeys key # 获取所有字段名
+
+# 注意事项
+尽管都是hash编码格式并且字段数量相同，有些对象string比hash占用更高，而有些确是hash比string占用高。
 ~~~
 
 ### zset操作
@@ -250,9 +325,7 @@ redis中命令的处理是 **单线程** **串行**的，所以当一条连接�
 使用scan替换，就像mysql中的游标
 scan 0 match * count 1
 
-处于渐进式rehash阶段**不会**发生扩容缩容的情况
-
-**使用游标 `SCAN` 读取数据时，可能发生扩容或者缩容的情况，数据一定不会遗漏掉，但扩容和缩容都可能会引起重复读取数据。**
+**使用游标 `SCAN` 读取数据时，redis在rehash 扩容，不会重复或者漏掉数据(比如槽位4有一批数据，扩容时，如果rehash的指针还在旧数组上边那就直接完整读取这批数据了， 如果已经rehash指针已经在scan位置之后，那就去读取新数组的这个槽位，但可能此时已经不是完整的一批数据了，部分可能被分配到后边了，但是不会漏，也不会多)。但缩容，可能会造成重复但不会漏掉数据。(同样的道理，比如旧数组的5和9都映射到了新数组的1号槽位(新数组大小为4，5%4=1,9%4=1)，那么1号槽位就会读取多次)**
 
 redis内存分配器(jemalloc，内部是内存池)认为 <= 64字节  是小字符串， >64 是大字符串
 
@@ -334,7 +407,7 @@ zset是一个有序集合, 	用来实现排行榜
 zrank，顺序查找某个 ； zrerank， 逆序
 zrange，顺序排序范围 ; zrevrange 逆序 
 做排行榜，先升到满级的人排第一，zset如果分数相同。默认按照字典序排序，比如先a 再 c 最后b ，顺序排序为 a,b,c 逆序为 c,b,a
-那么这时可以用时间戳来辅助， 用一个很大的值 - 时间戳作为分数，排序规则就用它，需要等级的时候通过逆运算就算出等级即可。
+那么这时可以用时间戳配合一个很大的值来实现(originScore + (BaseTime-float64(timestamp))*1.0/BaseTime)，用这个分数来作为zset的score值。
 zsocre key member得到分数， hash的实现能做到O(1), 发散LRU
 ~~~
 
@@ -984,11 +1057,13 @@ min-slaves-max-lag 10
 知识点
 
 ~~~shell
+7.每个槽(slot)本身并不存储数据，它只是数据的"归属标签"，算出来这个key对应的槽，然后分配到那个分片上进行存储。
+6.使用(哈希算法)CRC16对键进行映射。
 5.云服务的Redis集群一般都是只提供一个入口点(虚拟IP或代理层)，她负责将请求路由到正确的节点。
 4.所有写操作的必须发送到主节点，由主节点处理写请求并将数据同步到其他从节点，对于读操作默认发送主节点，但可以通过配置实现将读操作分发到从节点
 3.请求重定向：客户端可以直接连接到任意节点，客户端会首先向该节点发送命令，如果该节点不是负责该键的节点，它会返回一个MOVED响应，指示客户端重新向负责该哈希槽的节点发送命令。（重定向的情况一般都是槽的映射关系变了）
 2.高可用性：每个主节点都有一个或多个从节点，当主节点发送故障，从节点自动提升为主节点
-1.数据分片：分片是指将数据会分布在多个节点上，每个节点只存储整个数据集的一部分数据，集群有16384个哈希槽，每个节点负责一部分哈希槽，当客户端发送一个命令时，Redis 集群根据键的哈希值确定该键所属的哈希槽，并将命令路由到负责该哈希槽的节点。
+1.数据分片：分片是指将数据会分布在多个节点上，每个节点只存储整个数据集的一部分数据，集群有16384(标准)个哈希槽，每个节点负责一部分哈希槽，当客户端发送一个命令时，Redis 集群根据键的哈希值确定该键所属的哈希槽，并将命令路由到负责该哈希槽的节点。
 ~~~
 
 **常用命令**

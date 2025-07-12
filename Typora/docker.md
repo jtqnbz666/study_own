@@ -275,7 +275,7 @@ docker exec -it mymysql mysql  -u root -p  //连接mysql
 
 ~~~shell
 #-d表示后台运行
-docker run --name conn-redis -v ~/.deploy-tool/dev/conn-redis:/data -p 6381:6379 -d docker.hoxigames.com/redis:6.2.4-alpine3.13
+docker run --name conn-redis -v ~/.deploy-tool/dev/conn-redis:/data -p 6379:6379 -d docker.hoxigames.com/redis:6.2.4-alpine3.13
 
 docker run  --name data-redis -v ~/.deploy-tool/dev/data-redis:/data -p 6380:6379 -d  docker.hoxigames.com/redis:6.2.4-alpine3.13
 ~~~
