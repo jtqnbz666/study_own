@@ -21,10 +21,10 @@
 19.git restore
 
 ~~~shell
-之前是用git checkout来恢复文件的，但git checkout还能切分支，职责不明确所有有了git restore，但有些功能用restore无法实现，比如git checkout b0b2462 hha.txt恢复某个文件到指定节点的状态，git restore主要是在暂存区和工作区间操作。
-# 移除某个未暂存的文件
-git restore a.txt 
-# 移除所有未暂存的文件
+之前是用git checkout来恢复文件的，但git checkout还能切分支，职责不明确所有有了git restore，但有些功能用restore无法实现，比如git checkout b0b2462 hha.txt恢复某个文件到指定节点的状态，git restore主要是在暂存区和工作区间操作。 
+# 移除某个未暂存的文件(比如a.txt在上一层，则得用 ../a.txt)
+git restore a.txt  
+# 移除所有未暂存的文件（这个.在哪层就能递归这层中的所有文件。
 git restore .
 # 移除暂存的文件(即回到工作区)
 git restore --staged .
@@ -44,7 +44,7 @@ git reset . # 重置当前目录下所有文件的暂存区状态和HEAD一样�
 # 2.对整个节点(默认是--mixed)
 git reset 等价于 git reset --mixed HEAD  # 默认是HEAD，表现上把所有git add到暂存区的内容全部放回工作区。
 git reset --mixed fd4259a # fd4259a节点之后的所有提交内容会放到工作区，reset之前的修改内容不管是否在暂存区，会全部一起混合到工作区。
-git reset --soft fd4259a # fd4259a节点之后的所有提交内容会放到暂存区(reset之前暂存区就有内容则会混在一起)，不包含工作区新修改的内容。
+git reset --soft fd4259a # fd4259a节点之后的所有提交内容会放到暂存区(reset之前暂存区就有内容则会混在一起)，工作区新修改的内容保持在工作区不动。
 git reset --hard fd4259a # fd4259a节点之后的所有提交以及当前的工作区/暂存区内容全部被删掉，如果还没有push上去，这个操作就要谨慎点
 ~~~
 
