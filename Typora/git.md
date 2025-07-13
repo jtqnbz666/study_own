@@ -18,6 +18,29 @@
 说明：尝试过revert把test2合并到dev的操作回滚，然后重新test1，其实是不行的，revert相当于逆操作，之前的merge记录还是会存在。
 ```
 
+20.git stash操作
+
+``` shell
+1. 存储
+git stash
+2. 获取列表
+git lish
+3. 应用
+git stash apply 
+4. 应用并且删除
+git stash pop
+5. 指定应用(其他同理，不指定就是最新)
+git stash apply stash@{0}
+6. 删除某个
+git stash drop 
+7. 删除所有
+git stash clear
+8. 查看详情
+git stash show -p stash@{n}
+```
+
+
+
 19.git restore
 
 ~~~shell
