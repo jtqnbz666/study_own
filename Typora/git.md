@@ -49,7 +49,7 @@ git reset . # 重置当前目录下所有文件的暂存区状态和HEAD一样�
 git reset 等价于 git reset --mixed HEAD  # 默认是HEAD，表现上把所有git add到暂存区的内容全部放回工作区。
 git reset --mixed fd4259a # fd4259a节点之后的所有提交内容会放到工作区，reset之前的修改内容不管是否在暂存区，会全部一起混合到工作区。
 git reset --soft fd4259a # fd4259a节点之后的所有提交内容会放到暂存区(reset之前暂存区就有内容则会混在一起)，不包含工作区新修改的内容。
-git reset --hard fd4259a # fd4259a节点之后的所有提交以及当前的工作区/暂存区内容全部被删掉
+git reset --hard fd4259a # fd4259a节点之后的所有提交以及当前的工作区/暂存区内容全部被删掉，如果还没有push上去，这个操作就要谨慎点
 ~~~
 
 17.git checkout
