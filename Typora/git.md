@@ -26,8 +26,8 @@
 git restore a.txt  
 # 移除所有未暂存的文件（这个.在哪层就能递归这层中的所有文件。
 git restore .
-# 移除暂存的文件(即回到工作区)
-git restore --staged .
+# 移除暂存的文件(会放回到工作区中)
+git restore --staged . 
 ~~~
 
 18.git reset操作
