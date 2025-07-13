@@ -1,6 +1,7 @@
 小知识点
 
 ~~~shell
+8.git的头像是跟着邮箱走的，fork的头像就用github的邮箱，尽管是公司邮箱也可以在github注册一下；或者在https://gravatar.com/配置一个头像，这样登录很多网站(如github)都会用这个头像
 7.git reset具体文件虽然不会造成文件的修改，但把该文件reset到某个节点后，此时暂存区的内容就是该节点commit后的文件状态，删除工作区就达到reset目的了，但这种操作有点多余，如果只是想某个文件回到特定节点的状态，直接git checkout b0b2462 hha.txt就行
 6.当修改都在工作区时，git checkout .其实等价于删除工作区的所有修改(新增文件除外)
 5.有时候文件名前边会看到--，其实只是为了区分命令和文件，--后表明一定是文件路径
@@ -33,14 +34,14 @@ git restore .
 git restore --staged .
 ~~~
 
-18.git reset 
+18.git reset操作
 
 ~~~shell
 # 应用场景一般是git add 或 git commit 或 git push后想回退操作
 2.比如执行了git add . 可以用git reset来取消追踪，如果已经执行了git commit，使用git reset --soft HEAD~1，如果已经git push了，还是一样的命令，只是提交时需要强推一下。
 1.--hard、--soft、--mixed是针对整个节点操作时的参数，对指定文件操作时是无效语法。
 
-# 1.对指定文件操作(没有任何实质性影响，只是暂存区中该文件状态会变成该commit节点（默认HEAD）提交时的状态，但工作区+暂存区最终等于reset操作前的内容，即没变)
+# 1.对指定文件操作(没有任何实质性影响，只是暂存区中该文件状态会变成该commit节点（默认HEAD，HEAD就是最新提交节点）提交时的状态，但工作区+暂存区最终等于reset操作前的内容，即没变)
 格式: git reset 节点(默认HEAD) -- 文件 # -- 可不要，节点后带^表示commit前状态
 git reset  a.txt # 重置a.txt的暂存区状态和HEAD一样(即从暂存区移除)
 git reset . # 重置当前目录下所有文件的暂存区状态和HEAD一样，跟git reset 功能上等价，但表达的意思不一样，后者是对整个节点的操作，--hard等参数是有意义的
