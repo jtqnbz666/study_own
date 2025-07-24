@@ -77,6 +77,17 @@ test(*(1, 2, 3), *[4, 5, 6], **{'test':1})
 1.del 变量名 # 删除变量
 ~~~
 
+46.python死循环定位
+
+``` shell
+# 安装
+pip install py-spy
+# 看哪个函数最 耗CPU
+sudo py-spy top --pid 94287
+# 看当前在执行哪行代码
+sudo py-spy dump --pid 94287
+```
+
 46.json操作
 
 ``` python
@@ -114,7 +125,7 @@ import json
 import web
 print("="*50)
 print(f"--- Debugging Request for: {web.ctx.path} ---")
-# 1. 打印所有请求头
+# 1. 打印所有请求头信息
 print("\n[Request Headers]")
 headers = {k: v for k, v in web.ctx.env.items() if k.startswith('HTTP_')}
 print(json.dumps(headers, indent=2))

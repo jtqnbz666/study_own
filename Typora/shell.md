@@ -12,6 +12,20 @@ if [ $? -ne 0 ]; then
 fi
 ~~~
 
+### 批量替换文件名
+
+```shell
+# 比如sj_fkldteamsvrd101.conf 换成 sj_qxgzteamsvrd101.conf
+for file in sj_fkldteamsvrd*; do
+    mv "$file" "${file//fkld/qxgz}"
+done
+
+# 说明:
+${file//fkld/qxgz} //表示把file中的所有fkld都换成qxgz，如果是一个/就是只替换第一个。
+```
+
+
+
 ## 写shell脚本
 
  cat  config.ini.new | awk '!/^#F/' | egrep -n "FIELD" | tail -n
@@ -77,8 +91,6 @@ set jt (date "+%Y%m%d")
 echo {$jt}
 20240104
 ```
-
-
 
 readlink配合dirname获取当前路径名
 
