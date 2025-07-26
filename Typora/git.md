@@ -83,7 +83,7 @@ git checkout 后可以接1.节点/分支，2.文件名，既可作为切换又�
 2.git checkout HEAD 和 git checkout HEAD .
 前者表示去HEAD所在的分支，而后者会用HEAD节点的文件状态覆盖工作区和暂存区，表现是删除所有暂存区和工作区内容
 1.git checkout a.txt和git checkout HEAD a.txt 
-是否加HEAD(或其他commit节点)是有区别的，不加就是暂存区状态覆盖工作区，加了就是指定节点覆盖暂存区和工作区(如果是HEAD可以理解为删除该文件在暂存区和工作区的修改)。
+是否加HEAD(或其他commit节点)是有区别的，不加就是删除工作区(等效于git restore a.txt)，加了就是指定节点覆盖暂存区和工作区(如果是HEAD可以理解为删除该文件在暂存区和工作区的修改，等效于git restore --stage)。
 
 # 对整个节点操作
 1.git checkout commit节点，如果有新文件，但这个commit节点没有，不会删除这个新文件，如果删除了一个文件，并且这个commit节点有，则会恢复，如果是修改某个文件，不能两个分支各自有不同的修改，否则会提示先stash或commit
