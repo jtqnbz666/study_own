@@ -60,7 +60,7 @@ rdb原理：触发bgsave，把生成的rdb文件下载到本地，不会在redis
 2.scan所有分片，不能指定分片。
 redis --scan --pattern "SJ_USERLABEL*"，默认count是10
 1.scan指定分片进行扫描(如果不指定，会选择cluster nodes的第一个分片)
-redis scan 0 match "SJ_USERLABEL*" count 1000000 2786ac9c5e46848fcbd397afc34d241a5e57e7aa # 借助脚本scan指定节点所有内容，直到cursor为0
+redis scan 0 match "SJ_USERLABEL*" count 1000000 2786ac9c5e46848fcbd397afc34d241a5e57e7aa # 借助脚本scan指定节点所有内容，直到cursor为0， 是否要引号不重要，*号必须要有
 ```
 
 **Redis集群scan具体分片**

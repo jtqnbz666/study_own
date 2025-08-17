@@ -72,7 +72,7 @@ git reset --soft fd4259a # fd4259a节点之后的所有提交内容会放到暂�
 git reset --hard fd4259a # fd4259a节点之后的所有提交以及当前的工作区/暂存区内容全部被删掉，如果还没有push上去，这个操作就要谨慎点
 ~~~
 
-17.git checkout
+17.git checkout操作
 
 ~~~shell
 git checkout 后可以接1.节点/分支，2.文件名，既可作为切换又可回退文件，职责不明确，所以后来出现了git restore 和 git switch
@@ -83,7 +83,7 @@ git checkout 后可以接1.节点/分支，2.文件名，既可作为切换又�
 2.git checkout HEAD 和 git checkout HEAD .
 前者表示去HEAD所在的分支，而后者会用HEAD节点的文件状态覆盖工作区和暂存区，表现是删除所有暂存区和工作区内容
 1.git checkout a.txt和git checkout HEAD a.txt 
-是否加HEAD(或其他commit节点)是有区别的，不加就是删除工作区(等效于git restore a.txt)，加了就是指定节点覆盖暂存区和工作区(如果是HEAD可以理解为删除该文件在暂存区和工作区的修改，等效于git restore --stage)。
+是否加HEAD(或其他commit节点)是有区别的，不加就是删除工作区(等效于git restore a.txt)，加了节点就是指定节点覆盖(是覆盖不是混合)暂存区和工作区(如果是HEAD可以理解为删除该文件在暂存区和工作区的修改，和git restore --staged不一样，restore --staged只是从暂存区放到工作区。)。
 
 # 对整个节点操作
 1.git checkout commit节点，如果有新文件，但这个commit节点没有，不会删除这个新文件，如果删除了一个文件，并且这个commit节点有，则会恢复，如果是修改某个文件，不能两个分支各自有不同的修改，否则会提示先stash或commit
@@ -305,8 +305,12 @@ git log操作
 ``` shell
 1.指定看几个
 git log -n 5
-2.指定分支(默认当前分支)
+2.指定分支所有提交，默认当前分支，能看到merge过来的分支的提交信息
 git log master
+3.排除merge提交，能看到merge过来的分支的提交信息
+git log master --no-merges
+3.只看master的提交(全是merge)，忽略合并分支的提交记录。
+git log master --oneline --first-parent -n 5 ，#--oneline表示用一行展示，更简洁。
 ```
 
 git log  查看提交情况， 使用 git reset --hard " hash值" 去到某一个提交的地方，这个命令可以去到以前，也可以回到未来，只需要记住具体哪次提交的hash值。 也可以通过**git reset --hard HEAD^1** , 这个1表示往前回退一个版本， 表示把本地仓库中的那个提交情况同步到**暂存器以及工作区**

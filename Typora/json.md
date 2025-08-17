@@ -12,6 +12,26 @@
 1.json不能有注释，yaml可以有
 ~~~
 
+json路径
+
+```json
+说明：$是json的根对象
+{
+  "freshtime": "2025-08-04T12:34:56",
+  "user": {
+    "name": "Alice",
+    "age": 30
+  }
+}
+
+表达式	结果
+$.freshtime	"2025-08-04T12:34:56"
+$.user.name	"Alice"
+$.user.age	30
+```
+
+
+
 case5
 
 ~~~python
